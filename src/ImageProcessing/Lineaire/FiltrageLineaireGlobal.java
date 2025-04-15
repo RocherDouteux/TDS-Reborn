@@ -3,6 +3,7 @@ package ImageProcessing.Lineaire;
 import ImageProcessing.Complexe.Complexe;
 import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
+import ImageProcessing.Utils.Utils;
 
 public class FiltrageLineaireGlobal {
 
@@ -41,9 +42,7 @@ public class FiltrageLineaireGlobal {
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N; j++) {
                 int val = (int)Math.round(partieReelle[i][j]);
-                if (val < 0) val = 0;
-                if (val > 255) val = 255;
-                resultat[i][j] = val;
+                resultat[i][j] = Utils.clamp(0, 255, val);
             }
         }
 
@@ -84,11 +83,7 @@ public class FiltrageLineaireGlobal {
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N; j++) {
                 int val = (int)Math.round(partieReelle[i][j]);
-                //if (val < 0) val = 255 - val;
-                //if (val > 255) val = val - 255;
-                if (val < 0) val = 0;
-                if (val > 255) val = 255;
-                resultat[i][j] = val;
+                resultat[i][j] = Utils.clamp(0, 255, val);
             }
         }
 
@@ -127,9 +122,12 @@ public class FiltrageLineaireGlobal {
 
         double[][] partieReelle = fComplexe.getPartieReelle();
         int[][] resultat = new int[M][N];
-        for (int i = 0; i < M; i++)
-            for (int j = 0; j < N; j++)
-                resultat[i][j] = (int)Math.round(partieReelle[i][j]);
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                int val = (int)Math.round(partieReelle[i][j]);
+                resultat[i][j] = Utils.clamp(0, 255, val);
+            }
+        }
 
         return resultat;
     }
@@ -166,9 +164,12 @@ public class FiltrageLineaireGlobal {
 
         double[][] partieReelle = fComplexe.getPartieReelle();
         int[][] resultat = new int[M][N];
-        for (int i = 0; i < M; i++)
-            for (int j = 0; j < N; j++)
-                resultat[i][j] = (int)Math.round(partieReelle[i][j]);
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                int val = (int)Math.round(partieReelle[i][j]);
+                resultat[i][j] = Utils.clamp(0, 255, val);
+            }
+        }
 
         return resultat;
     }
