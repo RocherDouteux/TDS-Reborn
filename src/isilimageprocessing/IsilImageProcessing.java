@@ -39,6 +39,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     {
         initComponents();
         
+        // ANTOINE WAS HERE
+        panelResult.setLayout(new BorderLayout());
+        panelResult.add(resultPanel, BorderLayout.CENTER);
+        panelResult.revalidate();
+
+        // IT'S OVER
+        
         imageRGB = null;
         imageNG  = null;
         
@@ -71,6 +78,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void initComponents() {
 
         buttonGroupDessiner = new javax.swing.ButtonGroup();
+        panelResult = new javax.swing.JPanel();
+        resultPanel = new javax.swing.JLabel();
         jScrollPane = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuImage = new javax.swing.JMenu();
@@ -109,6 +118,16 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
+
+        panelResult.setBackground(new java.awt.Color(255, 51, 51));
+        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelResult.setPreferredSize(new java.awt.Dimension(150, 100));
+        panelResult.add(resultPanel);
+
+        getContentPane().add(panelResult, java.awt.BorderLayout.EAST);
+
+        jScrollPane.setBackground(new java.awt.Color(102, 255, 153));
+        getContentPane().add(jScrollPane, java.awt.BorderLayout.CENTER);
 
         jMenuImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Net 13_p1.jpg"))); // NOI18N
         jMenuImage.setText("Image");
@@ -329,27 +348,24 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
         setSize(new java.awt.Dimension(612, 397));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    // ANTOINE WAS HERE
+    private void showResultImage(CImageNG resultImage) {
+        Image img = resultImage.getImage();
+
+        // Scale the image to fit nicely
+        Image scaled = img.getScaledInstance(resultPanel.getWidth(), resultPanel.getHeight(), Image.SCALE_SMOOTH);
+        resultPanel.setIcon(new ImageIcon(scaled));
+
+        resultPanel.revalidate();
+        resultPanel.repaint();
+}
+
+    
+    
     private void jMenuHistogrammeAfficherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHistogrammeAfficherActionPerformed
         int histo[];
         try 
@@ -693,7 +709,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         try {
             int[][] data = FiltrageLineaireGlobal.filtrePasseBasIdeal(this.imageNG.getMatrice(), 10);
             
-            this.imageNG.setMatrice(data);
+            // ANTOINE WAS HERE
+            //this.imageNG.setMatrice(data);
+
+            CImageNG resultImage = new CImageNG(data);
+            showResultImage(resultImage);  
+            // IT'S OVER
+
         }catch (Exception e){
             System.out.print("Well fuck " + e.getMessage());
             e.printStackTrace();
@@ -705,7 +727,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         try {
             int[][] data = FiltrageLineaireGlobal.filtrePasseHautIdeal(this.imageNG.getMatrice(), 10);
             
-            this.imageNG.setMatrice(data);
+            // ANTOINE WAS HERE
+            //this.imageNG.setMatrice(data);
+            CImageNG resultImage = new CImageNG(data);
+            showResultImage(resultImage);
+            // IT'S OVER
+            
         }catch (Exception e){
             System.out.print("Well fuck " + e.getMessage());
             e.printStackTrace();
@@ -868,6 +895,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JPanel panelResult;
+    private javax.swing.JLabel resultPanel;
     // End of variables declaration//GEN-END:variables
     
 }
