@@ -19,7 +19,6 @@ public class FiltrageLineaireGlobal {
         }
 
         MatriceComplexe F = Fourier.Fourier2D(imageDouble);
-
         F = Fourier.decroise(F);
 
         for (int u = 0; u < M; u++) {
@@ -41,8 +40,7 @@ public class FiltrageLineaireGlobal {
         int[][] resultat = new int[M][N];
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N; j++) {
-                int val = (int)Math.round(partieReelle[i][j]);
-                resultat[i][j] = Utils.clamp(0, 255, val);
+                resultat[i][j] = Utils.clamp(0, 255, (int)Math.round(partieReelle[i][j]));
             }
         }
 
@@ -82,8 +80,7 @@ public class FiltrageLineaireGlobal {
         int[][] resultat = new int[M][N];
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N; j++) {
-                int val = (int)Math.round(partieReelle[i][j]);
-                resultat[i][j] = Utils.clamp(0, 255, val);
+                resultat[i][j] = Utils.clamp(0, 255, (int)Math.round(partieReelle[i][j]));
             }
         }
 
@@ -124,8 +121,7 @@ public class FiltrageLineaireGlobal {
         int[][] resultat = new int[M][N];
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N; j++) {
-                int val = (int)Math.round(partieReelle[i][j]);
-                resultat[i][j] = Utils.clamp(0, 255, val);
+                resultat[i][j] = Utils.clamp(0, 255, (int)Math.round(partieReelle[i][j]));
             }
         }
 
@@ -166,8 +162,7 @@ public class FiltrageLineaireGlobal {
         int[][] resultat = new int[M][N];
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N; j++) {
-                int val = (int)Math.round(partieReelle[i][j]);
-                resultat[i][j] = Utils.clamp(0, 255, val);
+                resultat[i][j] = Utils.clamp(0, 255, (int)Math.round(partieReelle[i][j]));
             }
         }
 

@@ -8,9 +8,11 @@ import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
 import ImageProcessing.Lineaire.FiltrageLineaireGlobal;
+import ImageProcessing.Utils.Utils;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
+import java.util.Arrays;
 import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -121,16 +123,17 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         panelResult.setBackground(new java.awt.Color(255, 51, 51));
-        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         panelResult.setPreferredSize(new java.awt.Dimension(150, 100));
         panelResult.add(resultPanel);
 
         getContentPane().add(panelResult, java.awt.BorderLayout.EAST);
 
         panelGrid.setBackground(new java.awt.Color(102, 51, 255));
-        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         panelGrid.setLayout(new java.awt.GridLayout(3, 3));
 
         jLabel9.setText("jLabel9");
@@ -162,10 +165,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         getContentPane().add(panelGrid, java.awt.BorderLayout.CENTER);
 
-        jMenuImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Net 13_p1.jpg"))); // NOI18N
+        jMenuImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Net_13_p1.jpg"))); // NOI18N
         jMenuImage.setText("Image");
 
-        jMenuNouvelle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/File 65_p3.jpg"))); // NOI18N
+        jMenuNouvelle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/File_65_p3.jpg"))); // NOI18N
         jMenuNouvelle.setText("Nouvelle");
 
         jMenuItemNouvelleRGB.setText("Image RGB");
@@ -186,7 +189,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuImage.add(jMenuNouvelle);
 
-        jMenuOuvrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Folder 036_p3.jpg"))); // NOI18N
+        jMenuOuvrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Folder_036_p3.jpg"))); // NOI18N
         jMenuOuvrir.setText("Ouvrir");
 
         jMenuItemOuvrirRGB.setText("Image RGB");
@@ -207,7 +210,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuImage.add(jMenuOuvrir);
 
-        jMenuItemEnregistrerSous.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/DD 27_p3.jpg"))); // NOI18N
+        jMenuItemEnregistrerSous.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/DD_27_p3.jpg"))); // NOI18N
         jMenuItemEnregistrerSous.setText("Enregistrer sous...");
         jMenuItemEnregistrerSous.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,7 +220,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuImage.add(jMenuItemEnregistrerSous);
         jMenuImage.add(jSeparator1);
 
-        jMenuQuitter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/CP 59_p3.jpg"))); // NOI18N
+        jMenuQuitter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/CP_59_p3.jpg"))); // NOI18N
         jMenuQuitter.setText("Quitter");
         jMenuQuitter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,10 +231,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuImage);
 
-        jMenuDessiner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Display 28_p1.jpg"))); // NOI18N
+        jMenuDessiner.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Display_28_p1.jpg"))); // NOI18N
         jMenuDessiner.setText("Dessiner");
 
-        jMenuItemCouleurPinceau.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Display 14_p3.jpg"))); // NOI18N
+        jMenuItemCouleurPinceau.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Display_14_p3.jpg"))); // NOI18N
         jMenuItemCouleurPinceau.setText("Couleur");
         jMenuItemCouleurPinceau.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -291,10 +294,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuDessiner);
 
-        jMenuFourier.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/CP 51_p1.jpg"))); // NOI18N
+        jMenuFourier.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/CP_51_p1.jpg"))); // NOI18N
         jMenuFourier.setText("Fourier");
 
-        jMenuFourierAfficher.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/CP 51_p3.jpg"))); // NOI18N
+        jMenuFourierAfficher.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/CP_51_p3.jpg"))); // NOI18N
         jMenuFourierAfficher.setText("Afficher");
 
         jMenuItemFourierAfficherModule.setText("Module");
@@ -744,7 +747,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemOuvrirRGBActionPerformed
 
     private void jMenuItemFiltrageLineaireGlobalPasseBasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireGlobalPasseBasActionPerformed
-        System.out.println("Hello");
         try {
             // Get the selected image from the grid
             CImage selected = getSelectedImage();
@@ -757,9 +759,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             // Apply filter
             int[][] data = FiltrageLineaireGlobal.filtrePasseBasIdeal(selectedNG.getMatrice(), 10);
-            CImageNG resultImage = new CImageNG(data);
-
+            // Utils.write2DArrayToFile("outputBas.txt", data);
+            
             // Display result
+            CImageNG resultImage = new CImageNG(data);
             showResultImage(resultImage);
 
         } catch (Exception e) {
@@ -769,24 +772,26 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseBasActionPerformed
 
     private void jMenuItemFiltrageLineaireGlobalPasseHautActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireGlobalPasseHautActionPerformed
-        System.out.println("Hello");
         try {
-            // ANTOINE WAS HERE
-           CImage selected = getSelectedImage();
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
             if (selected == null || !(selected instanceof CImageNG)) {
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
                 return;
             }
+
             CImageNG selectedNG = (CImageNG) selected;
+            
+            // Apply filter
             int[][] data = FiltrageLineaireGlobal.filtrePasseHautIdeal(selectedNG.getMatrice(), 10);
+            //Utils.write2DArrayToFile("outputHaut.txt", data);
+
+            // Display result
             CImageNG resultImage = new CImageNG(data);
             showResultImage(resultImage);
-
-          
-            // IT'S OVER
             
         }catch (Exception e){
-            System.out.print("Well fuck " + e.getMessage());
+            System.out.print("Erreur filtre passe-haut: " + e.getMessage());
             e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseHautActionPerformed

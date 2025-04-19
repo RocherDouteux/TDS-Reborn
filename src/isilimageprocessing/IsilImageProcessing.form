@@ -9,7 +9,7 @@
         <Menu class="javax.swing.JMenu" name="jMenuImage">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Icones/Net 13_p1.jpg"/>
+              <Image iconType="3" name="/Icones/Net_13_p1.jpg"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Image"/>
           </Properties>
@@ -17,7 +17,7 @@
             <Menu class="javax.swing.JMenu" name="jMenuNouvelle">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icones/File 65_p3.jpg"/>
+                  <Image iconType="3" name="/Icones/File_65_p3.jpg"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Nouvelle"/>
               </Properties>
@@ -43,7 +43,7 @@
             <Menu class="javax.swing.JMenu" name="jMenuOuvrir">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icones/Folder 036_p3.jpg"/>
+                  <Image iconType="3" name="/Icones/Folder_036_p3.jpg"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ouvrir"/>
               </Properties>
@@ -69,7 +69,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemEnregistrerSous">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icones/DD 27_p3.jpg"/>
+                  <Image iconType="3" name="/Icones/DD_27_p3.jpg"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Enregistrer sous..."/>
               </Properties>
@@ -82,7 +82,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuQuitter">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icones/CP 59_p3.jpg"/>
+                  <Image iconType="3" name="/Icones/CP_59_p3.jpg"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Quitter"/>
               </Properties>
@@ -95,7 +95,7 @@
         <Menu class="javax.swing.JMenu" name="jMenuDessiner">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Icones/Display 28_p1.jpg"/>
+              <Image iconType="3" name="/Icones/Display_28_p1.jpg"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Dessiner"/>
           </Properties>
@@ -103,7 +103,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCouleurPinceau">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icones/Display 14_p3.jpg"/>
+                  <Image iconType="3" name="/Icones/Display_14_p3.jpg"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Couleur"/>
               </Properties>
@@ -166,7 +166,7 @@
         <Menu class="javax.swing.JMenu" name="jMenuFourier">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Icones/CP 51_p1.jpg"/>
+              <Image iconType="3" name="/Icones/CP_51_p1.jpg"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Fourier"/>
           </Properties>
@@ -174,7 +174,7 @@
             <Menu class="javax.swing.JMenu" name="jMenuFourierAfficher">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icones/CP 51_p3.jpg"/>
+                  <Image iconType="3" name="/Icones/CP_51_p3.jpg"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Afficher"/>
               </Properties>
