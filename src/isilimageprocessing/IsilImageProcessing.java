@@ -34,6 +34,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private Color couleurPinceauRGB;
     private int   couleurPinceauNG;
     
+  
+    
     /** Creates new form TestCImage2 */
     public IsilImageProcessing() 
     {
@@ -44,20 +46,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         panelResult.add(resultPanel, BorderLayout.CENTER);
         panelResult.revalidate();
 
+        setupImageGridSlots();
         // IT'S OVER
         
         imageRGB = null;
         imageNG  = null;
         
-        observer = new JLabelBeanCImage();
-        observer.addClicListener(this);
-        observer.addSelectLigneListener(this);
-        observer.addSelectRectListener(this);
-        observer.addSelectRectFillListener(this);
-        observer.addSelectCercleListener(this);
-        observer.addSelectCercleFillListener(this);
-        observer.setMode(JLabelBeanCImage.INACTIF);
-        jScrollPane.setViewportView(observer);
         
         jMenuDessiner.setEnabled(false);
         jMenuFourier.setEnabled(false);
@@ -80,7 +74,16 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         buttonGroupDessiner = new javax.swing.ButtonGroup();
         panelResult = new javax.swing.JPanel();
         resultPanel = new javax.swing.JLabel();
-        jScrollPane = new javax.swing.JScrollPane();
+        panelGrid = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuImage = new javax.swing.JMenu();
         jMenuNouvelle = new javax.swing.JMenu();
@@ -126,8 +129,38 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         getContentPane().add(panelResult, java.awt.BorderLayout.EAST);
 
-        jScrollPane.setBackground(new java.awt.Color(102, 255, 153));
-        getContentPane().add(jScrollPane, java.awt.BorderLayout.CENTER);
+        panelGrid.setBackground(new java.awt.Color(102, 51, 255));
+        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelGrid.setLayout(new java.awt.GridLayout(3, 3));
+
+        jLabel9.setText("jLabel9");
+        panelGrid.add(jLabel9);
+
+        jLabel8.setText("jLabel8");
+        panelGrid.add(jLabel8);
+
+        jLabel7.setText("jLabel7");
+        panelGrid.add(jLabel7);
+
+        jLabel6.setText("jLabel6");
+        panelGrid.add(jLabel6);
+
+        jLabel5.setText("jLabel5");
+        panelGrid.add(jLabel5);
+
+        jLabel4.setText("jLabel4");
+        panelGrid.add(jLabel4);
+
+        jLabel3.setText("jLabel3");
+        panelGrid.add(jLabel3);
+
+        jLabel2.setText("jLabel2");
+        panelGrid.add(jLabel2);
+
+        jLabel1.setText("jLabel1");
+        panelGrid.add(jLabel1);
+
+        getContentPane().add(panelGrid, java.awt.BorderLayout.CENTER);
 
         jMenuImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/Net 13_p1.jpg"))); // NOI18N
         jMenuImage.setText("Image");
@@ -574,29 +607,36 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 	}
     }//GEN-LAST:event_jMenuItemEnregistrerSousActionPerformed
 
+    
+    
     private void jMenuItemOuvrirNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOuvrirNGActionPerformed
-        JFileChooser choix = new JFileChooser();
-	File fichier;
-			
-	choix.setCurrentDirectory(new File ("."));
-	if (choix.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-	{
-            fichier = choix.getSelectedFile();
-            if (fichier != null)
-            {
-                try 
-                {
-                    imageNG = new CImageNG(fichier);
-                    observer.setCImage(imageNG);
-                    imageRGB = null;
-                    activeMenusNG();
-                } 
-                catch (IOException ex) 
-                {
-                    System.err.println("Erreur I/O : " + ex.getMessage());
+    JFileChooser choix = new JFileChooser();
+    File fichier;
+
+    choix.setCurrentDirectory(new File("."));
+    if (choix.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        fichier = choix.getSelectedFile();
+        if (fichier != null) {
+            try {
+                imageNG = new CImageNG(fichier);
+
+                int targetSlot = getSelectedSlotOrFirstEmpty();
+
+                if (targetSlot != -1) {
+                    setImageToSlot(targetSlot, imageNG);
+                    clearAllSelections();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Aucune case disponible !", "Erreur", JOptionPane.WARNING_MESSAGE);
                 }
+
+                imageRGB = null;
+                activeMenusNG();
+            } catch (IOException ex) {
+                System.err.println("Erreur I/O : " + ex.getMessage());
             }
-	}
+        }
+    }
+
     }//GEN-LAST:event_jMenuItemOuvrirNGActionPerformed
 
     private void jMenuItemNouvelleNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNouvelleNGActionPerformed
@@ -680,44 +720,50 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuQuitterActionPerformed
 
     private void jMenuItemOuvrirRGBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOuvrirRGBActionPerformed
-        JFileChooser choix = new JFileChooser();
-	File fichier;
-			
-	choix.setCurrentDirectory(new File ("."));
-	if (choix.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-	{
-            fichier = choix.getSelectedFile();
-            if (fichier != null)
-            {
-                try 
-                {
-                    imageRGB = new CImageRGB(fichier);
-                    observer.setCImage(imageRGB);
-                    imageNG = null;
-                    activeMenusRGB();
-                } 
-                catch (IOException ex) 
-                {
-                    System.err.println("Erreur I/O : " + ex.getMessage());
+    JFileChooser chooser = new JFileChooser();
+    chooser.setCurrentDirectory(new File("."));
+    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        File file = chooser.getSelectedFile();
+        if (file != null) {
+            try {
+                imageRGB = new CImageRGB(file);
+                int targetSlot = getSelectedSlot();
+                if (targetSlot == -1) targetSlot = getFirstAvailableSlot();
+                if (targetSlot != -1) {
+                    setImageToSlot(targetSlot, imageRGB);
+                    clearAllSelections();
                 }
+                observer.setCImage(imageRGB); // Keep existing functionality if observer is used
+                imageNG = null;
+                activeMenusRGB();
+            } catch (IOException ex) {
+                System.err.println("Erreur I/O : " + ex.getMessage());
             }
-	}
+        }
+    }
     }//GEN-LAST:event_jMenuItemOuvrirRGBActionPerformed
 
     private void jMenuItemFiltrageLineaireGlobalPasseBasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireGlobalPasseBasActionPerformed
         System.out.println("Hello");
         try {
-            int[][] data = FiltrageLineaireGlobal.filtrePasseBasIdeal(this.imageNG.getMatrice(), 10);
-            
-            // ANTOINE WAS HERE
-            //this.imageNG.setMatrice(data);
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
 
+            CImageNG selectedNG = (CImageNG) selected;
+
+            // Apply filter
+            int[][] data = FiltrageLineaireGlobal.filtrePasseBasIdeal(selectedNG.getMatrice(), 10);
             CImageNG resultImage = new CImageNG(data);
-            showResultImage(resultImage);  
-            // IT'S OVER
 
-        }catch (Exception e){
-            System.out.print("Well fuck " + e.getMessage());
+            // Display result
+            showResultImage(resultImage);
+
+        } catch (Exception e) {
+            System.out.print("Erreur filtre passe-bas: " + e.getMessage());
             e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseBasActionPerformed
@@ -725,12 +771,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void jMenuItemFiltrageLineaireGlobalPasseHautActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireGlobalPasseHautActionPerformed
         System.out.println("Hello");
         try {
-            int[][] data = FiltrageLineaireGlobal.filtrePasseHautIdeal(this.imageNG.getMatrice(), 10);
-            
             // ANTOINE WAS HERE
-            //this.imageNG.setMatrice(data);
+           CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] data = FiltrageLineaireGlobal.filtrePasseHautIdeal(selectedNG.getMatrice(), 10);
             CImageNG resultImage = new CImageNG(data);
             showResultImage(resultImage);
+
+          
             // IT'S OVER
             
         }catch (Exception e){
@@ -858,6 +910,111 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
     }
     
+   // ANTOINE WAS HERE
+   private void setupImageGridSlots() {
+    panelGrid.removeAll(); // Clear existing labels created by the Designer
+
+    panelGrid.setLayout(new GridLayout(3, 3, 5, 5)); // 3x3 grid with spacing
+
+    for (int i = 0; i < 9; i++) {
+        final int index = i;
+
+        JLabel slot = new JLabel("Slot " + (i + 1), SwingConstants.CENTER);
+        slot.setPreferredSize(new Dimension(150, 150));
+        slot.setOpaque(true);
+        slot.setBackground(Color.WHITE);
+        slot.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        // Click to select/deselect
+        slot.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseClicked(java.awt.event.MouseEvent evt) {
+             selectedSlots[index] = !selectedSlots[index];
+
+             if (selectedSlots[index]) {
+                 slot.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4)); // Thick border for selection
+             } else {
+                 slot.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Normal border
+             }
+         }
+     });
+
+        imageSlots[i] = slot;
+        panelGrid.add(slot);
+    }
+
+    panelGrid.revalidate();
+    panelGrid.repaint();
+}
+
+  private void setImageToSlot(int index, CImage image) {
+    if (index < 0 || index >= 9 || image == null) return;
+
+    imagesInSlots[index] = image;
+
+    Image raw = image.getImage();
+    Image scaled = raw.getScaledInstance(imageSlots[index].getWidth(), imageSlots[index].getHeight(), Image.SCALE_SMOOTH);
+    imageSlots[index].setIcon(new ImageIcon(scaled));
+    imageSlots[index].setText(""); // Clear label text
+    
+    selectedSlots[index] = false;
+    imageSlots[index].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+}
+
+
+   private int getSelectedSlotOrFirstEmpty() {
+    for (int i = 0; i < selectedSlots.length; i++) {
+        if (selectedSlots[i]) {
+            return i; // Use first selected slot
+        }
+    }
+
+    // If no selection, find first empty
+    for (int i = 0; i < imagesInSlots.length; i++) {
+        if (imagesInSlots[i] == null) {
+            return i;
+        }
+    }
+
+    return -1; // No slot available
+}
+private void clearAllSelections() {
+    for (int i = 0; i < selectedSlots.length; i++) {
+        selectedSlots[i] = false;
+        imageSlots[i].setBackground(Color.WHITE);
+    }
+}
+
+private int getSelectedSlot() {
+    for (int i = 0; i < selectedSlots.length; i++) {
+        if (selectedSlots[i]) return i;
+    }
+    return -1; // No slot selected
+}
+
+private int getFirstAvailableSlot() {
+    for (int i = 0; i < imagesInSlots.length; i++) {
+        if (imagesInSlots[i] == null) return i;
+    }
+    return -1; // All slots are filled
+}
+
+// Returns the first selected image or null if none selected
+private CImage getSelectedImage() {
+    for (int i = 0; i < selectedSlots.length; i++) {
+        if (selectedSlots[i] && imagesInSlots[i] != null) {
+            return imagesInSlots[i];
+        }
+    }
+    return null;
+}
+
+    
+    // MY Variable declaration - Antoine
+    private boolean[] selectedSlots = new boolean[9];    // Keep track of selected labels
+    private CImage[] imagesInSlots = new CImage[9];
+    private JLabel[] imageSlots = new JLabel[9];        // The 9 grid labels
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupDessiner;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerCercle;
@@ -866,6 +1023,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerPixel;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectangle;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectanglePlein;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuFourier;
@@ -892,9 +1058,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuNouvelle;
     private javax.swing.JMenu jMenuOuvrir;
     private javax.swing.JMenuItem jMenuQuitter;
-    private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JPanel panelGrid;
     private javax.swing.JPanel panelResult;
     private javax.swing.JLabel resultPanel;
     // End of variables declaration//GEN-END:variables
