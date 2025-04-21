@@ -123,17 +123,16 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
-        getContentPane().setLayout(new java.awt.BorderLayout());
 
         panelResult.setBackground(new java.awt.Color(255, 51, 51));
-        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelResult.setPreferredSize(new java.awt.Dimension(150, 100));
         panelResult.add(resultPanel);
 
         getContentPane().add(panelResult, java.awt.BorderLayout.EAST);
 
         panelGrid.setBackground(new java.awt.Color(102, 51, 255));
-        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelGrid.setLayout(new java.awt.GridLayout(3, 3));
 
         jLabel9.setText("jLabel9");
@@ -373,9 +372,19 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuLineaireGlobal.add(jMenuItemFiltrageLineaireGlobalPasseHaut);
 
         jMenuItemFiltrageLineaireGlobalPasseBasButterworth.setText("Filtrage passe-bas butterworth");
+        jMenuItemFiltrageLineaireGlobalPasseBasButterworth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFiltrageLineaireGlobalPasseBasButterworthActionPerformed(evt);
+            }
+        });
         jMenuLineaireGlobal.add(jMenuItemFiltrageLineaireGlobalPasseBasButterworth);
 
         jMenuItemFiltrageLineaireGlobalPasseHautButterworth.setText("Filtrage passe-haut butterworth");
+        jMenuItemFiltrageLineaireGlobalPasseHautButterworth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFiltrageLineaireGlobalPasseHautButterworthActionPerformed(evt);
+            }
+        });
         jMenuLineaireGlobal.add(jMenuItemFiltrageLineaireGlobalPasseHautButterworth);
 
         jMenuLineaire.add(jMenuLineaireGlobal);
@@ -759,7 +768,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             // Apply filter
             int[][] data = FiltrageLineaireGlobal.filtrePasseBasIdeal(selectedNG.getMatrice(), 10);
-            // Utils.write2DArrayToFile("outputBas.txt", data);
+            data = Utils.normaliserImage(data, 0, 255);
             
             // Display result
             CImageNG resultImage = new CImageNG(data);
@@ -784,7 +793,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             
             // Apply filter
             int[][] data = FiltrageLineaireGlobal.filtrePasseHautIdeal(selectedNG.getMatrice(), 10);
-            //Utils.write2DArrayToFile("outputHaut.txt", data);
+            data = Utils.normaliserImage(data, 0, 255);
 
             // Display result
             CImageNG resultImage = new CImageNG(data);
@@ -795,6 +804,56 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseHautActionPerformed
+
+    private void jMenuItemFiltrageLineaireGlobalPasseBasButterworthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireGlobalPasseBasButterworthActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            // Apply filter
+            int[][] data = FiltrageLineaireGlobal.filtrePasseHautButterworth(selectedNG.getMatrice(), 10, 3);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG resultImage = new CImageNG(data);
+            showResultImage(resultImage);
+            
+        }catch (Exception e){
+            System.out.print("Erreur filtre passe-haut butterworth: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseBasButterworthActionPerformed
+
+    private void jMenuItemFiltrageLineaireGlobalPasseHautButterworthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireGlobalPasseHautButterworthActionPerformed
+                try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            // Apply filter
+            int[][] data = FiltrageLineaireGlobal.filtrePasseBasButterworth(selectedNG.getMatrice(), 10, 3);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG resultImage = new CImageNG(data);
+            showResultImage(resultImage);
+            
+        }catch (Exception e){
+            System.out.print("Erreur filtre passe-bas butterworth: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseHautButterworthActionPerformed
     
     /**
      * @param args the command line arguments

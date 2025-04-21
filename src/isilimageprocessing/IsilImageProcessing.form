@@ -272,11 +272,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Filtrage passe-bas butterworth"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFiltrageLineaireGlobalPasseBasButterworthActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFiltrageLineaireGlobalPasseHautButterworth">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Filtrage passe-haut butterworth"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFiltrageLineaireGlobalPasseHautButterworthActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
