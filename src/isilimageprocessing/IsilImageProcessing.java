@@ -22,6 +22,12 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
+
 
 /**
  *
@@ -36,6 +42,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private Color couleurPinceauRGB;
     private int   couleurPinceauNG;
     
+    private CImage liftedImage = null;
+    private int liftedFromIndex = -1;
+    
+    private enum GridMode { SELECT, MOVE }
+    private GridMode currentGridMode = GridMode.SELECT; // default mode
+    private CImage resultImage;
+
+    
+
   
     
     /** Creates new form TestCImage2 */
@@ -49,6 +64,28 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         panelResult.revalidate();
 
         setupImageGridSlots();
+        
+        resultPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mousePressed(java.awt.event.MouseEvent evt) {
+            if (currentGridMode == GridMode.MOVE && resultImage != null) {
+                clearAllSelections();
+                liftedImage = resultImage;
+                liftedFromIndex = -1;
+                resultPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+            }
+        }
+    });
+
+        
+        // Add move/select toggle manually
+        JCheckBoxMenuItem toggleMoveMode = new JCheckBoxMenuItem("Mode Déplacement");
+        toggleMoveMode.addActionListener(e -> {
+            currentGridMode = toggleMoveMode.isSelected() ? GridMode.MOVE : GridMode.SELECT;
+        });
+        jMenuImage.add(toggleMoveMode);  // add it to the Image menu (or any other menu)
+
+        setupModeToggleUI();
+        
         // IT'S OVER
         
         imageRGB = null;
@@ -398,16 +435,16 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }// </editor-fold>//GEN-END:initComponents
 
     // ANTOINE WAS HERE
-    private void showResultImage(CImageNG resultImage) {
-        Image img = resultImage.getImage();
+private void showResultImage(CImage result) {
+        this.resultImage = result;  // Save the actual image shown in result panel
 
-        // Scale the image to fit nicely
+        Image img = result.getImage();
         Image scaled = img.getScaledInstance(resultPanel.getWidth(), resultPanel.getHeight(), Image.SCALE_SMOOTH);
         resultPanel.setIcon(new ImageIcon(scaled));
-
         resultPanel.revalidate();
         resultPanel.repaint();
-}
+    }
+
 
     
     
@@ -976,8 +1013,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     
    // ANTOINE WAS HERE
    private void setupImageGridSlots() {
-    panelGrid.removeAll(); // Clear existing labels created by the Designer
-
+    panelGrid.removeAll();
+    
     panelGrid.setLayout(new GridLayout(3, 3, 5, 5)); // 3x3 grid with spacing
 
     for (int i = 0; i < 9; i++) {
@@ -991,16 +1028,53 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         // Click to select/deselect
         slot.addMouseListener(new java.awt.event.MouseAdapter() {
-         public void mouseClicked(java.awt.event.MouseEvent evt) {
-             selectedSlots[index] = !selectedSlots[index];
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (currentGridMode == GridMode.MOVE) {
+                    if (liftedImage == null && imagesInSlots[index] != null) {
+                        // LIFT
+                        clearAllSelections();
 
-             if (selectedSlots[index]) {
-                 slot.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4)); // Thick border for selection
-             } else {
-                 slot.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // Normal border
-             }
-         }
-     });
+                        liftedImage = imagesInSlots[index];
+                        liftedFromIndex = index;
+                        imageSlots[index].setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+
+
+                    } else if (liftedImage != null) {
+                        // DROP
+                        clearAllSelections();
+                        if (liftedFromIndex >= 0) {
+                            // Swap images
+                            CImage temp = imagesInSlots[index];
+                            setImageToSlot(index, liftedImage);
+                            setImageToSlot(liftedFromIndex, temp);
+
+                        } else if (liftedFromIndex == -1) {
+                            // Move from result to grid
+                            setImageToSlot(index, liftedImage);
+                            resultPanel.setIcon(null);
+                            resultImage = null;
+                            resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                        }
+
+
+                        liftedImage = null;
+                        liftedFromIndex = -2;
+
+                        clearAllSelections(); // also clear after drop
+                    }
+
+                } else if (currentGridMode == GridMode.SELECT) {
+                    // Toggle selection
+                    selectedSlots[index] = !selectedSlots[index];
+                    if (selectedSlots[index]) {
+                        slot.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
+                    } else {
+                        slot.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                    }
+                }
+            }
+        });
+
 
         imageSlots[i] = slot;
         panelGrid.add(slot);
@@ -1045,24 +1119,27 @@ private void clearAllSelections() {
     for (int i = 0; i < selectedSlots.length; i++) {
         selectedSlots[i] = false;
         imageSlots[i].setBackground(Color.WHITE);
+        imageSlots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // 🟡 reset border too
     }
+
+    resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 }
+
 
 private int getSelectedSlot() {
     for (int i = 0; i < selectedSlots.length; i++) {
         if (selectedSlots[i]) return i;
     }
-    return -1; // No slot selected
+    return -1;
 }
 
 private int getFirstAvailableSlot() {
     for (int i = 0; i < imagesInSlots.length; i++) {
         if (imagesInSlots[i] == null) return i;
     }
-    return -1; // All slots are filled
+    return -1;
 }
 
-// Returns the first selected image or null if none selected
 private CImage getSelectedImage() {
     for (int i = 0; i < selectedSlots.length; i++) {
         if (selectedSlots[i] && imagesInSlots[i] != null) {
@@ -1072,12 +1149,43 @@ private CImage getSelectedImage() {
     return null;
 }
 
+// Add a button and a keybind (default is m) to swap between move and select mode
+private void setupModeToggleUI() {
+    toolBar = new JToolBar();
+    JToggleButton toggleButton = new JToggleButton("Mode Déplacement");
+    toggleButton.setFocusable(false);
+
+    currentGridMode = GridMode.SELECT;
+
+    toggleButton.addActionListener(e -> {
+        currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
+        clearAllSelections();
+    });
+
+    toolBar.add(toggleButton);
+    getContentPane().add(toolBar, BorderLayout.NORTH);
+
+    KeyStroke keyStroke = KeyStroke.getKeyStroke("M");
+    panelGrid.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "toggleMode");
+    panelGrid.getActionMap().put("toggleMode", new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            clearAllSelections();
+            toggleButton.setSelected(!toggleButton.isSelected());
+            currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
+            JOptionPane.showMessageDialog(IsilImageProcessing.this,
+                "Mode changé : " + (currentGridMode == GridMode.MOVE ? "Déplacement" : "Sélection"));
+        }
+    });
+}
+
     
     // MY Variable declaration - Antoine
-    private boolean[] selectedSlots = new boolean[9];    // Keep track of selected labels
+    private boolean[] selectedSlots = new boolean[9];
     private CImage[] imagesInSlots = new CImage[9];
-    private JLabel[] imageSlots = new JLabel[9];        // The 9 grid labels
-    
+    private JLabel[] imageSlots = new JLabel[9];
+    private JToolBar toolBar;
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupDessiner;
