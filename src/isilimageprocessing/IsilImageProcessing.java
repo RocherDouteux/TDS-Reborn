@@ -8,11 +8,12 @@ import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
 import ImageProcessing.Lineaire.FiltrageLineaireGlobal;
+import ImageProcessing.Lineaire.FiltrageLineaireLocal;
+import ImageProcessing.NonLineaire.MorphoElementaire;
 import ImageProcessing.Utils.Utils;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
-import java.util.Arrays;
 import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -29,10 +30,6 @@ import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 
-/**
- *
- * @author  HP_Propri�taire
- */
 public class IsilImageProcessing extends javax.swing.JFrame implements ClicListener,SelectLigneListener,SelectRectListener,SelectRectFillListener,SelectCercleListener,SelectCercleFillListener 
 {
     private CImageRGB imageRGB;
@@ -46,14 +43,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private int liftedFromIndex = -1;
     
     private enum GridMode { SELECT, MOVE }
-    private GridMode currentGridMode = GridMode.SELECT; // default mode
+    private GridMode currentGridMode = GridMode.SELECT;
     private CImage resultImage;
 
     
-
-  
-    
-    /** Creates new form TestCImage2 */
     public IsilImageProcessing() 
     {
         initComponents();
@@ -66,15 +59,16 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         setupImageGridSlots();
         
         resultPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mousePressed(java.awt.event.MouseEvent evt) {
-            if (currentGridMode == GridMode.MOVE && resultImage != null) {
-                clearAllSelections();
-                liftedImage = resultImage;
-                liftedFromIndex = -1;
-                resultPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                if (currentGridMode == GridMode.MOVE && resultImage != null) {
+                    clearAllSelections();
+                    liftedImage = resultImage;
+                    liftedFromIndex = -1;
+                    resultPanel.setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+                }
             }
-        }
-    });
+        });
 
         
         // Add move/select toggle manually
@@ -96,6 +90,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuFourier.setEnabled(false);
         jMenuHistogramme.setEnabled(false);
         jMenuLineaire.setEnabled(false);
+        jMenuTraitement.setEnabled(false);
 
         
         couleurPinceauRGB = Color.BLACK;
@@ -157,6 +152,19 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemFiltrageLineaireGlobalPasseHaut = new javax.swing.JMenuItem();
         jMenuItemFiltrageLineaireGlobalPasseBasButterworth = new javax.swing.JMenuItem();
         jMenuItemFiltrageLineaireGlobalPasseHautButterworth = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItemFiltrageLineaireLocalFiltrageConvolution = new javax.swing.JMenuItem();
+        jMenuItemFiltrageLineaireLocalFiltrageMoyenneur = new javax.swing.JMenuItem();
+        jMenuTraitement = new javax.swing.JMenu();
+        jMenuTraitementElementaire = new javax.swing.JMenu();
+        jMenuItemTraitementLineaireMorphologieElementaireErosion = new javax.swing.JMenuItem();
+        jMenuItemTraitementLineaireMorphologieElementaireDilatation = new javax.swing.JMenuItem();
+        jMenuItemTraitementLineaireMorphologieElementaireOuverture = new javax.swing.JMenuItem();
+        jMenuItemTraitementLineaireMorphologieElementaireFermeture = new javax.swing.JMenuItem();
+        jMenuTraitementComplexe = new javax.swing.JMenu();
+        jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique = new javax.swing.JMenuItem();
+        jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesique = new javax.swing.JMenuItem();
+        jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -387,7 +395,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuBar1.add(jMenuHistogramme);
 
         jMenuLineaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/filtrage_48.png"))); // NOI18N
-        jMenuLineaire.setText("Lineaire");
+        jMenuLineaire.setText("Filtrage Lineaire");
 
         jMenuLineaireGlobal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/filtrage_32.png"))); // NOI18N
         jMenuLineaireGlobal.setText("Global");
@@ -426,16 +434,105 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuLineaire.add(jMenuLineaireGlobal);
 
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/filtrage_32.png"))); // NOI18N
+        jMenu1.setText("Local");
+
+        jMenuItemFiltrageLineaireLocalFiltrageConvolution.setText("Filtrage convolution");
+        jMenuItemFiltrageLineaireLocalFiltrageConvolution.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFiltrageLineaireLocalFiltrageConvolutionActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemFiltrageLineaireLocalFiltrageConvolution);
+
+        jMenuItemFiltrageLineaireLocalFiltrageMoyenneur.setText("Filtrage moyenneur");
+        jMenuItemFiltrageLineaireLocalFiltrageMoyenneur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFiltrageLineaireLocalFiltrageMoyenneurActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemFiltrageLineaireLocalFiltrageMoyenneur);
+
+        jMenuLineaire.add(jMenu1);
+
         jMenuBar1.add(jMenuLineaire);
+
+        jMenuTraitement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/traitement_48.png"))); // NOI18N
+        jMenuTraitement.setText("Traitement Lineaire");
+        jMenuTraitement.setToolTipText("");
+
+        jMenuTraitementElementaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/traitement_32.png"))); // NOI18N
+        jMenuTraitementElementaire.setText("Morphologie Elementaire");
+
+        jMenuItemTraitementLineaireMorphologieElementaireErosion.setText("Erosion");
+        jMenuItemTraitementLineaireMorphologieElementaireErosion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTraitementLineaireMorphologieElementaireErosionActionPerformed(evt);
+            }
+        });
+        jMenuTraitementElementaire.add(jMenuItemTraitementLineaireMorphologieElementaireErosion);
+
+        jMenuItemTraitementLineaireMorphologieElementaireDilatation.setText("Dilatation");
+        jMenuItemTraitementLineaireMorphologieElementaireDilatation.setActionCommand("Dilatation");
+        jMenuItemTraitementLineaireMorphologieElementaireDilatation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTraitementLineaireMorphologieElementaireDilatationActionPerformed(evt);
+            }
+        });
+        jMenuTraitementElementaire.add(jMenuItemTraitementLineaireMorphologieElementaireDilatation);
+
+        jMenuItemTraitementLineaireMorphologieElementaireOuverture.setText("Ouverture");
+        jMenuItemTraitementLineaireMorphologieElementaireOuverture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTraitementLineaireMorphologieElementaireOuvertureActionPerformed(evt);
+            }
+        });
+        jMenuTraitementElementaire.add(jMenuItemTraitementLineaireMorphologieElementaireOuverture);
+
+        jMenuItemTraitementLineaireMorphologieElementaireFermeture.setText("Fermeture");
+        jMenuItemTraitementLineaireMorphologieElementaireFermeture.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTraitementLineaireMorphologieElementaireFermetureActionPerformed(evt);
+            }
+        });
+        jMenuTraitementElementaire.add(jMenuItemTraitementLineaireMorphologieElementaireFermeture);
+
+        jMenuTraitement.add(jMenuTraitementElementaire);
+
+        jMenuTraitementComplexe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/traitement_32.png"))); // NOI18N
+        jMenuTraitementComplexe.setText("Morphologie Complexe");
+
+        jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique.setText("Dilatation Geodesique");
+        jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesiqueActionPerformed(evt);
+            }
+        });
+        jMenuTraitementComplexe.add(jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique);
+
+        jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesique.setText("Reconstruction Geodesique");
+        jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesique.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed(evt);
+            }
+        });
+        jMenuTraitementComplexe.add(jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesique);
+
+        jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian.setText("Filtre Median");
+        jMenuTraitementComplexe.add(jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian);
+
+        jMenuTraitement.add(jMenuTraitementComplexe);
+
+        jMenuBar1.add(jMenuTraitement);
 
         setJMenuBar(jMenuBar1);
 
-        setSize(new java.awt.Dimension(612, 397));
+        setSize(new java.awt.Dimension(1104, 718));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     // ANTOINE WAS HERE
-private void showResultImage(CImage result) {
+    private void showResultImage(CImage result) {
         this.resultImage = result;  // Save the actual image shown in result panel
 
         Image img = result.getImage();
@@ -445,9 +542,6 @@ private void showResultImage(CImage result) {
         resultPanel.repaint();
     }
 
-
-    
-    
     private void jMenuHistogrammeAfficherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHistogrammeAfficherActionPerformed
         int histo[];
         try 
@@ -461,7 +555,7 @@ private void showResultImage(CImage result) {
             return;
         }
         
-        // Cr�ation du dataset
+        // Creation du dataset
         XYSeries serie = new XYSeries("Histo");
         for(int i=0 ; i<256 ; i++) serie.add(i,histo[i]);
         XYSeriesCollection dataset = new XYSeriesCollection();
@@ -475,7 +569,7 @@ private void showResultImage(CImage result) {
         axeX.setRange(0,255);
         plot.setDomainAxis(axeX);
         
-        // creation d'une frame
+        // Creation d'une frame
         ChartFrame frame = new ChartFrame("Histogramme de l'image",chart);
         frame.pack();
         frame.setVisible(true);
@@ -487,6 +581,7 @@ private void showResultImage(CImage result) {
         jMenuFourier.setEnabled(true);
         jMenuHistogramme.setEnabled(true);
         jMenuLineaire.setEnabled(true);
+        jMenuTraitement.setEnabled(true);
     }
     
     private void activeMenusRGB()
@@ -495,6 +590,7 @@ private void showResultImage(CImage result) {
         jMenuFourier.setEnabled(false);
         jMenuHistogramme.setEnabled(false);
         jMenuLineaire.setEnabled(false);
+        jMenuTraitement.setEnabled(false);
     }
     
     private void jCheckBoxMenuItemDessinerCerclePleinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerCerclePleinActionPerformed
@@ -808,12 +904,11 @@ private void showResultImage(CImage result) {
             data = Utils.normaliserImage(data, 0, 255);
             
             // Display result
-            CImageNG resultImage = new CImageNG(data);
-            showResultImage(resultImage);
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
 
-        } catch (Exception e) {
+        } catch (CImageNGException | HeadlessException e) {
             System.out.print("Erreur filtre passe-bas: " + e.getMessage());
-            e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseBasActionPerformed
 
@@ -833,12 +928,11 @@ private void showResultImage(CImage result) {
             data = Utils.normaliserImage(data, 0, 255);
 
             // Display result
-            CImageNG resultImage = new CImageNG(data);
-            showResultImage(resultImage);
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
             
-        }catch (Exception e){
+        }catch (CImageNGException | HeadlessException e){
             System.out.print("Erreur filtre passe-haut: " + e.getMessage());
-            e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseHautActionPerformed
 
@@ -858,17 +952,16 @@ private void showResultImage(CImage result) {
             data = Utils.normaliserImage(data, 0, 255);
 
             // Display result
-            CImageNG resultImage = new CImageNG(data);
-            showResultImage(resultImage);
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
             
-        }catch (Exception e){
+        }catch (CImageNGException | HeadlessException e){
             System.out.print("Erreur filtre passe-haut butterworth: " + e.getMessage());
-            e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseBasButterworthActionPerformed
 
     private void jMenuItemFiltrageLineaireGlobalPasseHautButterworthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireGlobalPasseHautButterworthActionPerformed
-                try {
+        try {
             // Get the selected image from the grid
             CImage selected = getSelectedImage();
             if (selected == null || !(selected instanceof CImageNG)) {
@@ -883,26 +976,198 @@ private void showResultImage(CImage result) {
             data = Utils.normaliserImage(data, 0, 255);
 
             // Display result
-            CImageNG resultImage = new CImageNG(data);
-            showResultImage(resultImage);
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
             
-        }catch (Exception e){
+        }catch (CImageNGException | HeadlessException e){
             System.out.print("Erreur filtre passe-bas butterworth: " + e.getMessage());
-            e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemFiltrageLineaireGlobalPasseHautButterworthActionPerformed
+
+    private void jMenuItemFiltrageLineaireLocalFiltrageConvolutionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireLocalFiltrageConvolutionActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            double k = 1.0 / 9.0;
+            double[][] masque = { { k, k, k }, { k, k, k }, { k, k, k }};
+            
+            int[][] data = FiltrageLineaireLocal.filtreMasqueConvolution(selectedNG.getMatrice(), masque);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+            
+        }catch (CImageNGException | HeadlessException e){
+            System.out.print("Erreur filtre convolution: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemFiltrageLineaireLocalFiltrageConvolutionActionPerformed
+
+    private void jMenuItemFiltrageLineaireLocalFiltrageMoyenneurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltrageLineaireLocalFiltrageMoyenneurActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            int tailleMasque = 3;
+            int[][] data = FiltrageLineaireLocal.filtreMoyenneur(selectedNG.getMatrice(), tailleMasque);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+            
+        }catch (CImageNGException | HeadlessException e){
+            System.out.print("Erreur filtre moyenneur: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemFiltrageLineaireLocalFiltrageMoyenneurActionPerformed
+
+    private void jMenuItemTraitementLineaireMorphologieElementaireErosionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieElementaireErosionActionPerformed
+        try{
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] image = selectedNG.getMatrice();
+            
+            if(Utils.estImageBinaire(image)){
+                image = Utils.convertirBinaireVersNiveauxDeGris(image);
+            }
+            
+            int tailleMasque = 3;
+            int[][] data = MorphoElementaire.erosion(image, tailleMasque);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);            
+            
+        }catch (CImageNGException | HeadlessException e){
+            System.out.print("Erreur morphologie elementaire erosion: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieElementaireErosionActionPerformed
+
+    private void jMenuItemTraitementLineaireMorphologieElementaireDilatationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieElementaireDilatationActionPerformed
+        try{
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] image = selectedNG.getMatrice();
+            
+            if(Utils.estImageBinaire(image)){
+                image = Utils.convertirBinaireVersNiveauxDeGris(image);
+            }
+            
+            int tailleMasque = 3;
+            int[][] data = MorphoElementaire.dilatation(image, tailleMasque);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+                        
+        }catch (CImageNGException | HeadlessException e){
+            System.out.print("Erreur morphologie elementaire dilatation: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieElementaireDilatationActionPerformed
+
+    private void jMenuItemTraitementLineaireMorphologieElementaireOuvertureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieElementaireOuvertureActionPerformed
+        try{
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] image = selectedNG.getMatrice();
+            
+            if(Utils.estImageBinaire(image)){
+                image = Utils.convertirBinaireVersNiveauxDeGris(image);
+            }
+            
+            int tailleMasque = 3;
+            int[][] data = MorphoElementaire.ouverture(image, tailleMasque);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+            
+        }catch (CImageNGException | HeadlessException e){
+            System.out.print("Erreur morphologie elementaire ouverture: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieElementaireOuvertureActionPerformed
+
+    private void jMenuItemTraitementLineaireMorphologieElementaireFermetureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieElementaireFermetureActionPerformed
+        try{
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] image = selectedNG.getMatrice();
+            
+            if(Utils.estImageBinaire(image)){
+                image = Utils.convertirBinaireVersNiveauxDeGris(image);
+            }
+            
+            int tailleMasque = 3;
+            int[][] data = MorphoElementaire.fermeture(image, tailleMasque);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+            
+        }catch (CImageNGException | HeadlessException e){
+            System.out.print("Erreur morphologie elementaire fermeture: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieElementaireFermetureActionPerformed
+
+    private void jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesiqueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesiqueActionPerformed
+
+    private void jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed
     
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new IsilImageProcessing().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new IsilImageProcessing().setVisible(true);
         });
     }
 
+    @Override
     public void ClicDetected(UnClicEvent e) 
     {
         if (jCheckBoxMenuItemDessinerPixel.isSelected())
@@ -921,6 +1186,7 @@ private void showResultImage(CImage result) {
         }
     }
 
+    @Override
     public void SelectLigneDetected(DeuxClicsEvent e) 
     {
         if (jCheckBoxMenuItemDessinerLigne.isSelected())
@@ -939,6 +1205,7 @@ private void showResultImage(CImage result) {
         }
     }
 
+    @Override
     public void SelectRectDetected(DeuxClicsEvent e) 
     {
         if (jCheckBoxMenuItemDessinerRectangle.isSelected())
@@ -957,6 +1224,7 @@ private void showResultImage(CImage result) {
         }
     }
 
+    @Override
     public void SelectCercleDetected(DeuxClicsEvent e) 
     {
         if (jCheckBoxMenuItemDessinerCercle.isSelected())
@@ -975,6 +1243,7 @@ private void showResultImage(CImage result) {
         }
     }
 
+    @Override
     public void SelectCercleFillDetected(DeuxClicsEvent e) 
     {
         if (jCheckBoxMenuItemDessinerCerclePlein.isSelected())
@@ -993,6 +1262,7 @@ private void showResultImage(CImage result) {
         }
     }
 
+    @Override
     public void SelectRectFillDetected(DeuxClicsEvent e) 
     {
         if (jCheckBoxMenuItemDessinerRectanglePlein.isSelected())
@@ -1011,173 +1281,175 @@ private void showResultImage(CImage result) {
         }
     }
     
-   // ANTOINE WAS HERE
-   private void setupImageGridSlots() {
-    panelGrid.removeAll();
-    
-    panelGrid.setLayout(new GridLayout(3, 3, 5, 5)); // 3x3 grid with spacing
+    // ANTOINE WAS HERE
+    private void setupImageGridSlots() {
+        panelGrid.removeAll();
 
-    for (int i = 0; i < 9; i++) {
-        final int index = i;
+        panelGrid.setLayout(new GridLayout(3, 3, 5, 5)); // 3x3 grid with spacing
 
-        JLabel slot = new JLabel("Slot " + (i + 1), SwingConstants.CENTER);
-        slot.setPreferredSize(new Dimension(150, 150));
-        slot.setOpaque(true);
-        slot.setBackground(Color.WHITE);
-        slot.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        for (int i = 0; i < 9; i++) {
+            final int index = i;
 
-        // Click to select/deselect
-        slot.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (currentGridMode == GridMode.MOVE) {
-                    if (liftedImage == null && imagesInSlots[index] != null) {
-                        // LIFT
-                        clearAllSelections();
+            JLabel slot = new JLabel("Slot " + (i + 1), SwingConstants.CENTER);
+            slot.setPreferredSize(new Dimension(150, 150));
+            slot.setOpaque(true);
+            slot.setBackground(Color.WHITE);
+            slot.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-                        liftedImage = imagesInSlots[index];
-                        liftedFromIndex = index;
-                        imageSlots[index].setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
+            // Click to select/deselect
+            slot.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    if (currentGridMode == GridMode.MOVE) {
+                        if (liftedImage == null && imagesInSlots[index] != null) {
+                            // LIFT
+                            clearAllSelections();
+
+                            liftedImage = imagesInSlots[index];
+                            liftedFromIndex = index;
+                            imageSlots[index].setBorder(BorderFactory.createLineBorder(Color.ORANGE, 3));
 
 
-                    } else if (liftedImage != null) {
-                        // DROP
-                        clearAllSelections();
-                        if (liftedFromIndex >= 0) {
-                            // Swap images
-                            CImage temp = imagesInSlots[index];
-                            setImageToSlot(index, liftedImage);
-                            setImageToSlot(liftedFromIndex, temp);
+                        } else if (liftedImage != null) {
+                            // DROP
+                            clearAllSelections();
+                            if (liftedFromIndex >= 0) {
+                                // Swap images
+                                CImage temp = imagesInSlots[index];
+                                setImageToSlot(index, liftedImage);
+                                setImageToSlot(liftedFromIndex, temp);
 
-                        } else if (liftedFromIndex == -1) {
-                            // Move from result to grid
-                            setImageToSlot(index, liftedImage);
-                            resultPanel.setIcon(null);
-                            resultImage = null;
-                            resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                            } else if (liftedFromIndex == -1) {
+                                // Move from result to grid
+                                setImageToSlot(index, liftedImage);
+                                resultPanel.setIcon(null);
+                                resultImage = null;
+                                resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                            }
+
+
+                            liftedImage = null;
+                            liftedFromIndex = -2;
+
+                            clearAllSelections(); // also clear after drop
                         }
 
-
-                        liftedImage = null;
-                        liftedFromIndex = -2;
-
-                        clearAllSelections(); // also clear after drop
-                    }
-
-                } else if (currentGridMode == GridMode.SELECT) {
-                    // Toggle selection
-                    selectedSlots[index] = !selectedSlots[index];
-                    if (selectedSlots[index]) {
-                        slot.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
-                    } else {
-                        slot.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                    } else if (currentGridMode == GridMode.SELECT) {
+                        // Toggle selection
+                        selectedSlots[index] = !selectedSlots[index];
+                        if (selectedSlots[index]) {
+                            slot.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
+                        } else {
+                            slot.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                        }
                     }
                 }
+            });
+
+
+            imageSlots[i] = slot;
+            panelGrid.add(slot);
+        }
+
+        panelGrid.revalidate();
+        panelGrid.repaint();
+    }
+
+    private void setImageToSlot(int index, CImage image) {
+        if (index < 0 || index >= 9 || image == null) return;
+
+        imagesInSlots[index] = image;
+
+        Image raw = image.getImage();
+        Image scaled = raw.getScaledInstance(imageSlots[index].getWidth(), imageSlots[index].getHeight(), Image.SCALE_SMOOTH);
+        imageSlots[index].setIcon(new ImageIcon(scaled));
+        imageSlots[index].setText(""); // Clear label text
+
+        selectedSlots[index] = false;
+        imageSlots[index].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+    }
+
+
+    private int getSelectedSlotOrFirstEmpty() {
+        for (int i = 0; i < selectedSlots.length; i++) {
+            if (selectedSlots[i]) {
+                return i; // Use first selected slot
             }
+        }
+
+        // If no selection, find first empty
+        for (int i = 0; i < imagesInSlots.length; i++) {
+            if (imagesInSlots[i] == null) {
+                return i;
+            }
+        }
+
+        return -1; // No slot available
+    }
+    
+    private void clearAllSelections() {
+        for (int i = 0; i < selectedSlots.length; i++) {
+            selectedSlots[i] = false;
+            imageSlots[i].setBackground(Color.WHITE);
+            imageSlots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // 🟡 reset border too
+        }
+
+        resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+    }
+
+
+    private int getSelectedSlot() {
+        for (int i = 0; i < selectedSlots.length; i++) {
+            if (selectedSlots[i]) return i;
+        }
+        return -1;
+    }
+
+    private int getFirstAvailableSlot() {
+        for (int i = 0; i < imagesInSlots.length; i++) {
+            if (imagesInSlots[i] == null) return i;
+        }
+        return -1;
+    }
+
+    private CImage getSelectedImage() {
+        for (int i = 0; i < selectedSlots.length; i++) {
+            if (selectedSlots[i] && imagesInSlots[i] != null) {
+                return imagesInSlots[i];
+            }
+        }
+        return null;
+    }
+
+    // Add a button and a keybind (default is m) to swap between move and select mode
+    private void setupModeToggleUI() {
+        toolBar = new JToolBar();
+        JToggleButton toggleButton = new JToggleButton("Mode Déplacement");
+        toggleButton.setFocusable(false);
+
+        currentGridMode = GridMode.SELECT;
+
+        toggleButton.addActionListener(e -> {
+            currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
+            clearAllSelections();
         });
 
+        toolBar.add(toggleButton);
+        getContentPane().add(toolBar, BorderLayout.NORTH);
 
-        imageSlots[i] = slot;
-        panelGrid.add(slot);
+        KeyStroke keyStroke = KeyStroke.getKeyStroke("M");
+        panelGrid.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "toggleMode");
+        panelGrid.getActionMap().put("toggleMode", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clearAllSelections();
+                toggleButton.setSelected(!toggleButton.isSelected());
+                currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
+                JOptionPane.showMessageDialog(IsilImageProcessing.this,
+                    "Mode changé : " + (currentGridMode == GridMode.MOVE ? "Déplacement" : "Sélection"));
+            }
+        });
     }
-
-    panelGrid.revalidate();
-    panelGrid.repaint();
-}
-
-  private void setImageToSlot(int index, CImage image) {
-    if (index < 0 || index >= 9 || image == null) return;
-
-    imagesInSlots[index] = image;
-
-    Image raw = image.getImage();
-    Image scaled = raw.getScaledInstance(imageSlots[index].getWidth(), imageSlots[index].getHeight(), Image.SCALE_SMOOTH);
-    imageSlots[index].setIcon(new ImageIcon(scaled));
-    imageSlots[index].setText(""); // Clear label text
-    
-    selectedSlots[index] = false;
-    imageSlots[index].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-}
-
-
-   private int getSelectedSlotOrFirstEmpty() {
-    for (int i = 0; i < selectedSlots.length; i++) {
-        if (selectedSlots[i]) {
-            return i; // Use first selected slot
-        }
-    }
-
-    // If no selection, find first empty
-    for (int i = 0; i < imagesInSlots.length; i++) {
-        if (imagesInSlots[i] == null) {
-            return i;
-        }
-    }
-
-    return -1; // No slot available
-}
-private void clearAllSelections() {
-    for (int i = 0; i < selectedSlots.length; i++) {
-        selectedSlots[i] = false;
-        imageSlots[i].setBackground(Color.WHITE);
-        imageSlots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // 🟡 reset border too
-    }
-
-    resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-}
-
-
-private int getSelectedSlot() {
-    for (int i = 0; i < selectedSlots.length; i++) {
-        if (selectedSlots[i]) return i;
-    }
-    return -1;
-}
-
-private int getFirstAvailableSlot() {
-    for (int i = 0; i < imagesInSlots.length; i++) {
-        if (imagesInSlots[i] == null) return i;
-    }
-    return -1;
-}
-
-private CImage getSelectedImage() {
-    for (int i = 0; i < selectedSlots.length; i++) {
-        if (selectedSlots[i] && imagesInSlots[i] != null) {
-            return imagesInSlots[i];
-        }
-    }
-    return null;
-}
-
-// Add a button and a keybind (default is m) to swap between move and select mode
-private void setupModeToggleUI() {
-    toolBar = new JToolBar();
-    JToggleButton toggleButton = new JToggleButton("Mode Déplacement");
-    toggleButton.setFocusable(false);
-
-    currentGridMode = GridMode.SELECT;
-
-    toggleButton.addActionListener(e -> {
-        currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
-        clearAllSelections();
-    });
-
-    toolBar.add(toggleButton);
-    getContentPane().add(toolBar, BorderLayout.NORTH);
-
-    KeyStroke keyStroke = KeyStroke.getKeyStroke("M");
-    panelGrid.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "toggleMode");
-    panelGrid.getActionMap().put("toggleMode", new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            clearAllSelections();
-            toggleButton.setSelected(!toggleButton.isSelected());
-            currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
-            JOptionPane.showMessageDialog(IsilImageProcessing.this,
-                "Mode changé : " + (currentGridMode == GridMode.MOVE ? "Déplacement" : "Sélection"));
-        }
-    });
-}
 
     
     // MY Variable declaration - Antoine
@@ -1204,6 +1476,7 @@ private void setupModeToggleUI() {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuFourier;
@@ -1217,6 +1490,8 @@ private void setupModeToggleUI() {
     private javax.swing.JMenuItem jMenuItemFiltrageLineaireGlobalPasseBasButterworth;
     private javax.swing.JMenuItem jMenuItemFiltrageLineaireGlobalPasseHaut;
     private javax.swing.JMenuItem jMenuItemFiltrageLineaireGlobalPasseHautButterworth;
+    private javax.swing.JMenuItem jMenuItemFiltrageLineaireLocalFiltrageConvolution;
+    private javax.swing.JMenuItem jMenuItemFiltrageLineaireLocalFiltrageMoyenneur;
     private javax.swing.JMenuItem jMenuItemFourierAfficherModule;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieImaginaire;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieReelle;
@@ -1225,11 +1500,21 @@ private void setupModeToggleUI() {
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
     private javax.swing.JMenuItem jMenuItemOuvrirNG;
     private javax.swing.JMenuItem jMenuItemOuvrirRGB;
+    private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique;
+    private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian;
+    private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesique;
+    private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireDilatation;
+    private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireErosion;
+    private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireFermeture;
+    private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireOuverture;
     private javax.swing.JMenu jMenuLineaire;
     private javax.swing.JMenu jMenuLineaireGlobal;
     private javax.swing.JMenu jMenuNouvelle;
     private javax.swing.JMenu jMenuOuvrir;
     private javax.swing.JMenuItem jMenuQuitter;
+    private javax.swing.JMenu jMenuTraitement;
+    private javax.swing.JMenu jMenuTraitementComplexe;
+    private javax.swing.JMenu jMenuTraitementElementaire;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel panelGrid;

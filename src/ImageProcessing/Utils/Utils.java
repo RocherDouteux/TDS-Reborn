@@ -65,5 +65,36 @@ public class Utils {
 
         return imageNormalisee;
     }
+    
+    public static int[][] convertirBinaireVersNiveauxDeGris(int[][] imageBinaire) {
+        int hauteur = imageBinaire.length;
+        int largeur = imageBinaire[0].length;
+
+        int[][] imageGris = new int[hauteur][largeur];
+
+        for (int y = 0; y < hauteur; y++) {
+            for (int x = 0; x < largeur; x++) {
+                if (imageBinaire[y][x] == 1) {
+                    imageGris[y][x] = 255;
+                } else {
+                    imageGris[y][x] = 0;
+                }
+            }
+        }
+
+        return imageGris;
+    }
+    
+    public static boolean estImageBinaire(int[][] image) {
+        for (int y = 0; y < image.length; y++) {
+            for (int x = 0; x < image[0].length; x++) {
+                int value = image[y][x];
+                if (value != 0 && value != 1) {
+                    return false; // != 0 et 1 donc nv de gris !
+                }
+            }
+        }
+        return true;
+    }
 
 }
