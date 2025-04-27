@@ -741,8 +741,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             {
                 try 
                 {
-                    if (imageRGB != null) imageRGB.enregistreFormatPNG(fichier);
-                    if (imageNG != null) imageNG.enregistreFormatPNG(fichier);
+                    if (resultImage != null) {
+                        resultImage.enregistreFormatPNG(fichier);
+                    } else if (imageRGB != null) {
+                        imageRGB.enregistreFormatPNG(fichier);
+                    } else if (imageNG != null) {
+                        imageNG.enregistreFormatPNG(fichier);
+                    }
                 } 
                 catch (IOException ex) 
                 {
@@ -1421,35 +1426,35 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         return null;
     }
 
-    // Add a button and a keybind (default is m) to swap between move and select mode
+
+        // Add a button and a keybind (default is m) to swap between move and select mode
     private void setupModeToggleUI() {
-        toolBar = new JToolBar();
-        JToggleButton toggleButton = new JToggleButton("Mode Déplacement");
-        toggleButton.setFocusable(false);
+            toolBar = new JToolBar();
+            JToggleButton toggleButton = new JToggleButton("Mode Déplacement");
+            toggleButton.setFocusable(false);
 
-        currentGridMode = GridMode.SELECT;
+            currentGridMode = GridMode.SELECT;
 
-        toggleButton.addActionListener(e -> {
-            currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
-            clearAllSelections();
-        });
-
-        toolBar.add(toggleButton);
-        getContentPane().add(toolBar, BorderLayout.NORTH);
-
-        KeyStroke keyStroke = KeyStroke.getKeyStroke("M");
-        panelGrid.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "toggleMode");
-        panelGrid.getActionMap().put("toggleMode", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                clearAllSelections();
-                toggleButton.setSelected(!toggleButton.isSelected());
+            toggleButton.addActionListener(e -> {
                 currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
-                JOptionPane.showMessageDialog(IsilImageProcessing.this,
-                    "Mode changé : " + (currentGridMode == GridMode.MOVE ? "Déplacement" : "Sélection"));
-            }
-        });
-    }
+                clearAllSelections();
+            });
+
+            toolBar.add(toggleButton);
+            getContentPane().add(toolBar, BorderLayout.NORTH);
+
+            KeyStroke keyStroke = KeyStroke.getKeyStroke("M");
+            panelGrid.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, "toggleMode");
+            panelGrid.getActionMap().put("toggleMode", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    clearAllSelections();
+                    toggleButton.setSelected(!toggleButton.isSelected());
+                    currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
+                }
+            });
+        }
+
 
     
     // MY Variable declaration - Antoine
