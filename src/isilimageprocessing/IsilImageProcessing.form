@@ -342,7 +342,6 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemTraitementLineaireMorphologieElementaireDilatation">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Dilatation"/>
-                    <Property name="actionCommand" type="java.lang.String" value="Dilatation"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemTraitementLineaireMorphologieElementaireDilatationActionPerformed"/>
@@ -373,6 +372,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Morphologie Complexe"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuTraitementComplexeActionPerformed"/>
+              </Events>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique">
                   <Properties>

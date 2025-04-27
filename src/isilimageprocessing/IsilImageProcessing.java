@@ -10,6 +10,7 @@ import ImageProcessing.Histogramme.Histogramme;
 import ImageProcessing.Lineaire.FiltrageLineaireGlobal;
 import ImageProcessing.Lineaire.FiltrageLineaireLocal;
 import ImageProcessing.NonLineaire.MorphoElementaire;
+import ImageProcessing.NonLineaire.MorphoComplexe;
 import ImageProcessing.Utils.Utils;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
@@ -45,6 +46,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private enum GridMode { SELECT, MOVE }
     private GridMode currentGridMode = GridMode.SELECT;
     private CImage resultImage;
+    
+    private JTextField inputField;
 
     
     public IsilImageProcessing() 
@@ -473,7 +476,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuTraitementElementaire.add(jMenuItemTraitementLineaireMorphologieElementaireErosion);
 
         jMenuItemTraitementLineaireMorphologieElementaireDilatation.setText("Dilatation");
-        jMenuItemTraitementLineaireMorphologieElementaireDilatation.setActionCommand("Dilatation");
         jMenuItemTraitementLineaireMorphologieElementaireDilatation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemTraitementLineaireMorphologieElementaireDilatationActionPerformed(evt);
@@ -501,6 +503,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuTraitementComplexe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/traitement_32.png"))); // NOI18N
         jMenuTraitementComplexe.setText("Morphologie Complexe");
+        jMenuTraitementComplexe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuTraitementComplexeActionPerformed(evt);
+            }
+        });
 
         jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique.setText("Dilatation Geodesique");
         jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique.addActionListener(new java.awt.event.ActionListener() {
@@ -1156,12 +1163,60 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieElementaireFermetureActionPerformed
 
     private void jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesiqueActionPerformed
-        // TODO add your handling code here:
+    try {
+        CImage[] selectedImages = getAllSelectedImages();
+
+        if (selectedImages == null || selectedImages.length != 2) {
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner exactement deux images NG.");
+            return;
+        }
+
+        for (int i = 0; i < selectedImages.length; i++) {
+            if (!(selectedImages[i] instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Les deux images doivent être de type NG.");
+                return;
+            }
+        }
+
+        // Extract images
+        CImageNG imgInit = (CImageNG) selectedImages[0]; // Image à dilater
+        CImageNG imgMasque = (CImageNG) selectedImages[1]; // Masque géodésique
+
+        int[][] image = imgInit.getMatrice();
+        int[][] masqueGeodesique = imgMasque.getMatrice();
+
+        // nbIter est InputField
+        int nbIter = 1;
+        try {
+            nbIter = Integer.parseInt(inputField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("No value found, using default nbIter = 1");
+        }
+
+        int[][] data = MorphoComplexe.dilatationGeodesique(image, masqueGeodesique, nbIter);
+        data = Utils.normaliserImage(data, 0, 255);
+
+        // Display result
+        CImageNG updatedImage = new CImageNG(data);
+        showResultImage(updatedImage);
+
+    } catch (CImageNGException | HeadlessException e) { // <--- FIX: Catch CImageNGException too
+        System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
+    }
+        
     }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesiqueActionPerformed
 
     private void jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed
-        // TODO add your handling code here:
+        try {
+            System.out.println(Integer.parseInt(inputField.getText()));
+        } catch (NumberFormatException e) {
+            System.out.println("No Value Found");
+        }        
     }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed
+
+    private void jMenuTraitementComplexeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuTraitementComplexeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuTraitementComplexeActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1409,6 +1464,32 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
         return -1;
     }
+    
+    private CImage[] getAllSelectedImages() {
+        int count = 0;
+        for (int i = 0; i < selectedSlots.length; i++) {
+            if (selectedSlots[i] && imagesInSlots[i] != null) {
+                count++;
+            }
+        }
+
+        if (count == 0) {
+            return null; // No valid image selected
+        }
+
+        CImage[] selectedImages = new CImage[count];
+        int index = 0;
+
+        for (int i = 0; i < selectedSlots.length; i++) {
+            if (selectedSlots[i] && imagesInSlots[i] != null) {
+                selectedImages[index++] = imagesInSlots[i];
+            }
+        }
+
+        return selectedImages;
+    }
+    
+
 
     private int getFirstAvailableSlot() {
         for (int i = 0; i < imagesInSlots.length; i++) {
@@ -1453,8 +1534,22 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                     currentGridMode = toggleButton.isSelected() ? GridMode.MOVE : GridMode.SELECT;
                 }
             });
+            
+            // Add the input field button
+            setupValueUI();
         }
 
+
+     // Add an Input field at the top between MIN & MAX, the value can be called with Integer.parseInt(inputField.getText())
+    void setupValueUI() {
+
+        // Create the input field
+        inputField = new JTextField(5);
+        inputField.setMaximumSize(new Dimension(50, 25));
+
+        toolBar.add(new JLabel(" Valeur : "));
+        toolBar.add(inputField);
+    }
 
     
     // MY Variable declaration - Antoine
