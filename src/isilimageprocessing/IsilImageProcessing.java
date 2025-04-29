@@ -149,6 +149,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemFourierAfficherPartieImaginaire = new javax.swing.JMenuItem();
         jMenuHistogramme = new javax.swing.JMenu();
         jMenuHistogrammeAfficher = new javax.swing.JMenuItem();
+        jMenuAfficherLesParametres = new javax.swing.JMenuItem();
         jMenuLineaire = new javax.swing.JMenu();
         jMenuLineaireGlobal = new javax.swing.JMenu();
         jMenuItemFiltrageLineaireGlobalPasseBas = new javax.swing.JMenuItem();
@@ -394,6 +395,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
         });
         jMenuHistogramme.add(jMenuHistogrammeAfficher);
+
+        jMenuAfficherLesParametres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/metadata_32.png"))); // NOI18N
+        jMenuAfficherLesParametres.setText("Afficher les paramètres de l'image");
+        jMenuAfficherLesParametres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuAfficherLesParametresActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuAfficherLesParametres);
 
         jMenuBar1.add(jMenuHistogramme);
 
@@ -1253,38 +1263,66 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuTraitementComplexeActionPerformed
 
     private void jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed
-  try {
-        CImage selectedImage = getSelectedImage();
-
-       
-        if (!(selectedImage instanceof CImageNG)) {
-            JOptionPane.showMessageDialog(this, "L'images doit être de type NG.");
-            return;
-        }
-
-        // Change selectedImage -> CImageNG
-        CImageNG selectedImageNG = (CImageNG) selectedImage;
-        int[][] image = selectedImageNG.getMatrice();
-
-        // nbIter est InputField et doit etre non Null
-        int maskSize = 3;
         try {
-            maskSize = Integer.parseInt(inputField.getText());
-        } catch (NumberFormatException e) {
-            System.out.println("No value found, using default nbIter = 3");
+            CImage selectedImage = getSelectedImage();
+
+
+            if (!(selectedImage instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "L'images doit être de type NG.");
+                return;
+            }
+
+            // Change selectedImage -> CImageNG
+            CImageNG selectedImageNG = (CImageNG) selectedImage;
+            int[][] image = selectedImageNG.getMatrice();
+
+            // nbIter est InputField et doit etre non Null
+            int maskSize = 3;
+            try {
+                maskSize = Integer.parseInt(inputField.getText());
+            } catch (NumberFormatException e) {
+                System.out.println("No value found, using default nbIter = 3");
+            }
+
+            int[][] data = MorphoComplexe.filtreMedian(image, maskSize);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+          System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
         }
-
-        int[][] data = MorphoComplexe.filtreMedian(image, maskSize);
-        data = Utils.normaliserImage(data, 0, 255);
-
-        // Display result
-        CImageNG updatedImage = new CImageNG(data);
-        showResultImage(updatedImage);
-
-    } catch (CImageNGException | HeadlessException e) {
-        System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
-    }
     }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed
+
+    private void jMenuAfficherLesParametresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAfficherLesParametresActionPerformed
+        try {
+            CImage selectedImage = getSelectedImage();
+
+            if (!(selectedImage instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "L'images doit être de type NG.");
+                return;
+            }
+
+            // Change selectedImage -> CImageNG
+            CImageNG selectedImageNG = (CImageNG) selectedImage;
+            int[][] image = selectedImageNG.getMatrice();
+
+            int min = Histogramme.minimum(image);
+            int max = Histogramme.maximum(image);
+            int lum = Histogramme.luminance(image);
+            
+            double contraste1 = Histogramme.contraste1(image);
+            double contraste2 = Histogramme.contraste2(image);
+            
+            JDialogAfficheInformationImage dialog = new JDialogAfficheInformationImage(new javax.swing.JFrame(), true, min, max, lum, contraste1, contraste2);
+            dialog.setVisible(true);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuAfficherLesParametresActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1645,6 +1683,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuAfficherLesParametres;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuFourier;

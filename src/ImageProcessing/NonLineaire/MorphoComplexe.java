@@ -4,7 +4,7 @@
  */
 package ImageProcessing.NonLineaire;
 
-import java.util.Arrays;
+import ImageProcessing.Utils.Utils;
 
 /**
  *
@@ -25,7 +25,7 @@ public class MorphoComplexe {
      */
     public static int[][] dilatationGeodesique(int[][] image, int[][] masqueGeodesique, int nbIter) {
         // Deep copy pour ne pas modifier l'image d'origine
-        int[][] outputImage = deepCopy(image);
+        int[][] outputImage = Utils.deepCopy(image);
 
         // Vérifie que les 2 images sont de même tailles, si pas le cas rejete
         if (image.length != masqueGeodesique.length || image[0].length != masqueGeodesique[0].length) {
@@ -66,7 +66,7 @@ public class MorphoComplexe {
             throw new IllegalArgumentException("Les deux images doivent avoir la même taille !");
         }
 
-        int[][] previous = deepCopy(image);
+        int[][] previous = Utils.deepCopy(image);
         int[][] current;
 
         boolean changed;
@@ -143,23 +143,4 @@ public class MorphoComplexe {
 
         return result;
     }
-
-    // Petite dilatation simple pour la géodésique 
-    // UTILISE LA DILATATION ELEMENTAIRE
-    private static int[][] dilatation(int[][] image) {
-        System.out.println("Not Implemented");
-        return image;
-    }
-
-    // Permet de créer une nouvelle image indépendante de celle copier != shallow copy
-    private static int[][] deepCopy(int[][] image) {
-        int[][] copy = new int[image.length][image[0].length];
-
-        for (int i = 0; i < image.length; i++) {
-            copy[i] = Arrays.copyOf(image[i], image[i].length);
-        }
-
-        return copy;
-    }
-    
 }

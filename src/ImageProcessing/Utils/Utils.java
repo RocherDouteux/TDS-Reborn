@@ -96,5 +96,15 @@ public class Utils {
         }
         return true;
     }
+    
+    public static int[][] deepCopy(int[][] image) {
+        int[][] copy = new int[image.length][image[0].length];
+
+        for (int i = 0; i < image.length; i++) {
+            copy[i] = Arrays.copyOf(image[i], image[i].length);
+        }
+
+        return copy;
+    }
 
 }
