@@ -11,63 +11,77 @@ import ImageProcessing.Lineaire.FiltrageLineaireLocal;
  * @author fred
  */
 public class MorphoElementaire {
-    // Si tous les pixels voisins sont blancs, alors on reste blanc sinon noir
+    
     public static int[][] erosion(int[][] image, int tailleMasque){
         if(tailleMasque % 2 == 0){
             System.out.println("Le masque doit être de taille impaire !");
             return image;
         }
-        
-        double[][] masque = new double[tailleMasque][tailleMasque];
-        
-        for(int i = 0; i < tailleMasque; i++){
-            for(int j = 0; j < tailleMasque; j++){
-                masque[i][j] = 1.0;
+
+        int imageHeight = image.length;
+        int imageWidth = image[0].length;
+        int offset = tailleMasque / 2;
+
+        int[][] output = new int[imageHeight][imageWidth];
+
+        for (int imageY = 0; imageY < imageHeight; imageY++) {
+            for (int imageX = 0; imageX < imageWidth; imageX++) {
+                int minValue = 255;
+
+                for (int offsetY = -offset; offsetY <= offset; offsetY++) {
+                    for (int offsetX = -offset; offsetX <= offset; offsetX++) {
+                        int pixelY = imageY + offsetY;
+                        int pixelX = imageX + offsetX;
+
+                        if (pixelY >= 0 && pixelY < imageHeight && pixelX >= 0 && pixelX < imageWidth) {
+                            minValue = Math.min(minValue, image[pixelY][pixelX]);
+                        }
+                    }
+                }
+
+                output[imageY][imageX] = minValue;
             }
         }
-        
-        int[][] convolutionImage = FiltrageLineaireLocal.filtreMasqueConvolution(image, masque);
-        
-        int seuil = tailleMasque * tailleMasque * 255;
-        int[][] outputImage = new int[image.length][image[0].length];
-        
-        for(int i = 0; i < convolutionImage.length; i++){
-            for(int j = 0; j < convolutionImage[i].length; j++){
-                outputImage[i][j] = (convolutionImage[i][j] >= seuil) ? 255 : 0;
-            }
-        }
-        
-        return outputImage;
+
+        return output;
     }
+
     
-    // Si tous les pixels voisins sont noirs, alors on reste noir sinon blanc
+    
     public static int[][] dilatation(int[][] image, int tailleMasque){
         if(tailleMasque % 2 == 0){
             System.out.println("Le masque doit être de taille impaire !");
             return image;
         }
-        
-        double[][] masque = new double[tailleMasque][tailleMasque];
-        
-        for(int i = 0; i < tailleMasque; i++){
-            for(int j = 0; j < tailleMasque; j++){
-                masque[i][j] = 1.0;
+
+        int imageHeight = image.length;
+        int imageWidth = image[0].length;
+        int offset = tailleMasque / 2;
+
+        int[][] output = new int[imageHeight][imageWidth];
+
+        for (int imageY = 0; imageY < imageHeight; imageY++) {
+            for (int imageX = 0; imageX < imageWidth; imageX++) {
+                int maxVal = 0;
+
+                for (int offsetY = -offset; offsetY <= offset; offsetY++) {
+                    for (int offsetX = -offset; offsetX <= offset; offsetX++) {
+                        int pixelY = imageY + offsetY;
+                        int pixelX = imageX + offsetX;
+
+                        if (pixelY >= 0 && pixelY < imageHeight && pixelX >= 0 && pixelX < imageWidth) {
+                            maxVal = Math.max(maxVal, image[pixelY][pixelX]);
+                        }
+                    }
+                }
+
+                output[imageY][imageX] = maxVal;
             }
         }
-        
-        int[][] convolutionImage = FiltrageLineaireLocal.filtreMasqueConvolution(image, masque);
-        
-        int seuil = 255;
-        int[][] outputImage = new int[image.length][image[0].length];
-        
-        for(int i = 0; i < convolutionImage.length; i++){
-            for(int j = 0; j < convolutionImage[i].length; j++){
-                outputImage[i][j] = (convolutionImage[i][j] >= seuil) ? 255 : 0;
-            }
-        }
-        
-        return outputImage;
+
+        return output;
     }
+
     
     public static int[][] ouverture(int[][] image, int tailleMasque){
         // Fermeture = dilatation + erosion
