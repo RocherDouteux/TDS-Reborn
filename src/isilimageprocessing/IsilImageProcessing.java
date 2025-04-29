@@ -526,6 +526,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuTraitementComplexe.add(jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesique);
 
         jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian.setText("Filtre Median");
+        jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed(evt);
+            }
+        });
         jMenuTraitementComplexe.add(jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian);
 
         jMenuTraitement.add(jMenuTraitementComplexe);
@@ -1185,7 +1190,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         int[][] image = imgInit.getMatrice();
         int[][] masqueGeodesique = imgMasque.getMatrice();
 
-        // nbIter est InputField
+        // nbIter est InputField et doit etre non Null
         int nbIter = 1;
         try {
             nbIter = Integer.parseInt(inputField.getText());
@@ -1200,7 +1205,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         CImageNG updatedImage = new CImageNG(data);
         showResultImage(updatedImage);
 
-    } catch (CImageNGException | HeadlessException e) { // <--- FIX: Catch CImageNGException too
+    } catch (CImageNGException | HeadlessException e) {
         System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
     }
         
@@ -1208,15 +1213,78 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     private void jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed
         try {
-            System.out.println(Integer.parseInt(inputField.getText()));
-        } catch (NumberFormatException e) {
-            System.out.println("No Value Found");
-        }        
-    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed
+            CImage[] selectedImages = getAllSelectedImages();
 
+            if (selectedImages == null || selectedImages.length != 2) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner exactement deux images NG.");
+                return;
+            }
+
+            for (int i = 0; i < selectedImages.length; i++) {
+                if (!(selectedImages[i] instanceof CImageNG)) {
+                    JOptionPane.showMessageDialog(this, "Les deux images doivent être de type NG.");
+                    return;
+                }
+            }
+
+            // Extract images
+            CImageNG imgInit = (CImageNG) selectedImages[0]; // Image à dilater
+            CImageNG imgMasque = (CImageNG) selectedImages[1]; // Masque géodésique
+
+            int[][] image = imgInit.getMatrice();
+            int[][] masqueGeodesique = imgMasque.getMatrice();
+
+
+            int[][] data = MorphoComplexe.reconstructionGeodesique(image, masqueGeodesique);
+            data = Utils.normaliserImage(data, 0, 255);
+
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
+        }
+            
+    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesiqueActionPerformed
+    
     private void jMenuTraitementComplexeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuTraitementComplexeActionPerformed
-        // TODO add your handling code here:
+        //
     }//GEN-LAST:event_jMenuTraitementComplexeActionPerformed
+
+    private void jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed
+  try {
+        CImage selectedImage = getSelectedImage();
+
+       
+        if (!(selectedImage instanceof CImageNG)) {
+            JOptionPane.showMessageDialog(this, "L'images doit être de type NG.");
+            return;
+        }
+
+        // Change selectedImage -> CImageNG
+        CImageNG selectedImageNG = (CImageNG) selectedImage;
+        int[][] image = selectedImageNG.getMatrice();
+
+        // nbIter est InputField et doit etre non Null
+        int maskSize = 3;
+        try {
+            maskSize = Integer.parseInt(inputField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("No value found, using default nbIter = 3");
+        }
+
+        int[][] data = MorphoComplexe.filtreMedian(image, maskSize);
+        data = Utils.normaliserImage(data, 0, 255);
+
+        // Display result
+        CImageNG updatedImage = new CImageNG(data);
+        showResultImage(updatedImage);
+
+    } catch (CImageNGException | HeadlessException e) {
+        System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
+    }
+    }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed
     
     /**
      * @param args the command line arguments

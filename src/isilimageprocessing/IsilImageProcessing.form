@@ -396,6 +396,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Filtre Median"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
