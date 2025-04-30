@@ -149,7 +149,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemFourierAfficherPartieImaginaire = new javax.swing.JMenuItem();
         jMenuHistogramme = new javax.swing.JMenu();
         jMenuHistogrammeAfficher = new javax.swing.JMenuItem();
-        jMenuAfficherLesParametres = new javax.swing.JMenuItem();
+        jMenuAfficherParametresImage = new javax.swing.JMenuItem();
         jMenuLineaire = new javax.swing.JMenu();
         jMenuLineaireGlobal = new javax.swing.JMenu();
         jMenuItemFiltrageLineaireGlobalPasseBas = new javax.swing.JMenuItem();
@@ -396,14 +396,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuHistogramme.add(jMenuHistogrammeAfficher);
 
-        jMenuAfficherLesParametres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/metadata_32.png"))); // NOI18N
-        jMenuAfficherLesParametres.setText("Afficher les paramètres de l'image");
-        jMenuAfficherLesParametres.addActionListener(new java.awt.event.ActionListener() {
+        jMenuAfficherParametresImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/metadata_32.png"))); // NOI18N
+        jMenuAfficherParametresImage.setText("Afficher les paramètres de l'image");
+        jMenuAfficherParametresImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuAfficherLesParametresActionPerformed(evt);
+                jMenuAfficherParametresImageActionPerformed(evt);
             }
         });
-        jMenuHistogramme.add(jMenuAfficherLesParametres);
+        jMenuHistogramme.add(jMenuAfficherParametresImage);
 
         jMenuBar1.add(jMenuHistogramme);
 
@@ -925,9 +925,17 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
 
             CImageNG selectedNG = (CImageNG) selected;
+            
+            JDialogFiltrageLineaire dialog = new JDialogFiltrageLineaire(this, true, false);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int frequenceDeCoupure = dialog.getFrequenceDeCoupure();
 
             // Apply filter
-            int[][] data = FiltrageLineaireGlobal.filtrePasseBasIdeal(selectedNG.getMatrice(), 10);
+            int[][] data = FiltrageLineaireGlobal.filtrePasseBasIdeal(selectedNG.getMatrice(), frequenceDeCoupure);
             data = Utils.normaliserImage(data, 0, 255);
             
             // Display result
@@ -950,8 +958,16 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
+            JDialogFiltrageLineaire dialog = new JDialogFiltrageLineaire(this, true, false);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int frequenceDeCoupure = dialog.getFrequenceDeCoupure();
+            
             // Apply filter
-            int[][] data = FiltrageLineaireGlobal.filtrePasseHautIdeal(selectedNG.getMatrice(), 10);
+            int[][] data = FiltrageLineaireGlobal.filtrePasseHautIdeal(selectedNG.getMatrice(), frequenceDeCoupure);
             data = Utils.normaliserImage(data, 0, 255);
 
             // Display result
@@ -974,8 +990,17 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
+            JDialogFiltrageLineaire dialog = new JDialogFiltrageLineaire(this, true, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int frequenceDeCoupure = dialog.getFrequenceDeCoupure();
+            int ordre = dialog.getOrdre();
+            
             // Apply filter
-            int[][] data = FiltrageLineaireGlobal.filtrePasseHautButterworth(selectedNG.getMatrice(), 10, 3);
+            int[][] data = FiltrageLineaireGlobal.filtrePasseHautButterworth(selectedNG.getMatrice(), frequenceDeCoupure, ordre);
             data = Utils.normaliserImage(data, 0, 255);
 
             // Display result
@@ -998,8 +1023,17 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
+            JDialogFiltrageLineaire dialog = new JDialogFiltrageLineaire(this, true, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int frequenceDeCoupure = dialog.getFrequenceDeCoupure();
+            int ordre = dialog.getOrdre();
+            
             // Apply filter
-            int[][] data = FiltrageLineaireGlobal.filtrePasseBasButterworth(selectedNG.getMatrice(), 10, 3);
+            int[][] data = FiltrageLineaireGlobal.filtrePasseBasButterworth(selectedNG.getMatrice(), frequenceDeCoupure, ordre);
             data = Utils.normaliserImage(data, 0, 255);
 
             // Display result
@@ -1296,7 +1330,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
     }//GEN-LAST:event_jMenuItemTraitementLineaireMorphologieComplexeFiltreMedianActionPerformed
 
-    private void jMenuAfficherLesParametresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAfficherLesParametresActionPerformed
+    private void jMenuAfficherParametresImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAfficherParametresImageActionPerformed
         try {
             CImage selectedImage = getSelectedImage();
 
@@ -1316,13 +1350,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             double contraste1 = Histogramme.contraste1(image);
             double contraste2 = Histogramme.contraste2(image);
             
-            JDialogAfficheInformationImage dialog = new JDialogAfficheInformationImage(new javax.swing.JFrame(), true, min, max, lum, contraste1, contraste2);
+            JDialogAfficheInformationImage dialog = new JDialogAfficheInformationImage(this, true, min, max, lum, contraste1, contraste2);
             dialog.setVisible(true);
 
         } catch (CImageNGException | HeadlessException e) {
             System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
         }
-    }//GEN-LAST:event_jMenuAfficherLesParametresActionPerformed
+    }//GEN-LAST:event_jMenuAfficherParametresImageActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1683,7 +1717,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuItem jMenuAfficherLesParametres;
+    private javax.swing.JMenuItem jMenuAfficherParametresImage;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuFourier;
