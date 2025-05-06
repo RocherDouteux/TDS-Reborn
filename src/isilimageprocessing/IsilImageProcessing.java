@@ -926,7 +926,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
-            JDialogFiltrageLineaire dialog = new JDialogFiltrageLineaire(this, true, false);
+            JDialogFiltrageLineaireGlobal dialog = new JDialogFiltrageLineaireGlobal(this, true, false);
             dialog.setVisible(true);
             
             if(!dialog.isFilled())
@@ -958,7 +958,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
-            JDialogFiltrageLineaire dialog = new JDialogFiltrageLineaire(this, true, false);
+            JDialogFiltrageLineaireGlobal dialog = new JDialogFiltrageLineaireGlobal(this, true, false);
             dialog.setVisible(true);
             
             if(!dialog.isFilled())
@@ -990,7 +990,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
-            JDialogFiltrageLineaire dialog = new JDialogFiltrageLineaire(this, true, true);
+            JDialogFiltrageLineaireGlobal dialog = new JDialogFiltrageLineaireGlobal(this, true, true);
             dialog.setVisible(true);
             
             if(!dialog.isFilled())
@@ -1023,7 +1023,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
-            JDialogFiltrageLineaire dialog = new JDialogFiltrageLineaire(this, true, true);
+            JDialogFiltrageLineaireGlobal dialog = new JDialogFiltrageLineaireGlobal(this, true, true);
             dialog.setVisible(true);
             
             if(!dialog.isFilled())
@@ -1056,8 +1056,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
-            double k = 1.0 / 9.0;
-            double[][] masque = { { k, k, k }, { k, k, k }, { k, k, k }};
+            JDialogFiltrageLineaireLocal choixMasque = new JDialogFiltrageLineaireLocal(this, true, false);
+            choixMasque.setVisible(true);
+            
+            if(!choixMasque.isFilled())
+                return;
+            
+            double[][] masque = choixMasque.getMasque();
             
             int[][] data = FiltrageLineaireLocal.filtreMasqueConvolution(selectedNG.getMatrice(), masque);
             data = Utils.normaliserImage(data, 0, 255);
@@ -1082,7 +1087,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             CImageNG selectedNG = (CImageNG) selected;
             
-            int tailleMasque = 3;
+            JDialogFiltrageLineaireLocal choixMasque = new JDialogFiltrageLineaireLocal(this, true, true);
+            choixMasque.setVisible(true);
+            
+            if(!choixMasque.isFilled())
+                return;
+            
+            int tailleMasque = choixMasque.getTailleMasque();
+           
             int[][] data = FiltrageLineaireLocal.filtreMoyenneur(selectedNG.getMatrice(), tailleMasque);
             data = Utils.normaliserImage(data, 0, 255);
 
@@ -1111,7 +1123,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 image = Utils.convertirBinaireVersNiveauxDeGris(image);
             }
             
-            int tailleMasque = 3;
+            JDialogMorpho morpho = new JDialogMorpho(this, true, true);
+            morpho.setVisible(true);
+            
+            if(!morpho.isFilled())
+                return;
+            
+            int tailleMasque = morpho.getTailleMasque();
+            
             int[][] data = MorphoElementaire.erosion(image, tailleMasque);
             data = Utils.normaliserImage(data, 0, 255);
 
@@ -1140,7 +1159,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 image = Utils.convertirBinaireVersNiveauxDeGris(image);
             }
             
-            int tailleMasque = 3;
+            JDialogMorpho morpho = new JDialogMorpho(this, true, true);
+            morpho.setVisible(true);
+            
+            if(!morpho.isFilled())
+                return;
+            
+            int tailleMasque = morpho.getTailleMasque();
+            
             int[][] data = MorphoElementaire.dilatation(image, tailleMasque);
             data = Utils.normaliserImage(data, 0, 255);
 
@@ -1169,7 +1195,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 image = Utils.convertirBinaireVersNiveauxDeGris(image);
             }
             
-            int tailleMasque = 3;
+            JDialogMorpho morpho = new JDialogMorpho(this, true, true);
+            morpho.setVisible(true);
+            
+            if(!morpho.isFilled())
+                return;
+            
+            int tailleMasque = morpho.getTailleMasque();
+            
             int[][] data = MorphoElementaire.ouverture(image, tailleMasque);
             data = Utils.normaliserImage(data, 0, 255);
 
@@ -1198,7 +1231,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 image = Utils.convertirBinaireVersNiveauxDeGris(image);
             }
             
-            int tailleMasque = 3;
+            JDialogMorpho morpho = new JDialogMorpho(this, true, true);
+            morpho.setVisible(true);
+            
+            if(!morpho.isFilled())
+                return;
+            
+            int tailleMasque = morpho.getTailleMasque();
+            
             int[][] data = MorphoElementaire.fermeture(image, tailleMasque);
             data = Utils.normaliserImage(data, 0, 255);
 
@@ -1233,14 +1273,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         int[][] image = imgInit.getMatrice();
         int[][] masqueGeodesique = imgMasque.getMatrice();
-
-        // nbIter est InputField et doit etre non Null
-        int nbIter = 1;
-        try {
-            nbIter = Integer.parseInt(inputField.getText());
-        } catch (NumberFormatException e) {
-            System.out.println("No value found, using default nbIter = 1");
-        }
+        
+        JDialogMorpho morpho = new JDialogMorpho(this, true, true);
+        morpho.setVisible(true);
+            
+        if(!morpho.isFilled())
+            return;
+            
+        int nbIter = morpho.getIter();
 
         int[][] data = MorphoComplexe.dilatationGeodesique(image, masqueGeodesique, nbIter);
         data = Utils.normaliserImage(data, 0, 255);
@@ -1278,7 +1318,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             int[][] image = imgInit.getMatrice();
             int[][] masqueGeodesique = imgMasque.getMatrice();
 
-
             int[][] data = MorphoComplexe.reconstructionGeodesique(image, masqueGeodesique);
             data = Utils.normaliserImage(data, 0, 255);
 
@@ -1310,15 +1349,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             CImageNG selectedImageNG = (CImageNG) selectedImage;
             int[][] image = selectedImageNG.getMatrice();
 
-            // nbIter est InputField et doit etre non Null
-            int maskSize = 3;
-            try {
-                maskSize = Integer.parseInt(inputField.getText());
-            } catch (NumberFormatException e) {
-                System.out.println("No value found, using default nbIter = 3");
-            }
+            JDialogMorpho morpho = new JDialogMorpho(this, true, true);
+            morpho.setVisible(true);
 
-            int[][] data = MorphoComplexe.filtreMedian(image, maskSize);
+            if(!morpho.isFilled())
+                return;
+
+            int tailleMasque = morpho.getTailleMasque();
+
+            int[][] data = MorphoComplexe.filtreMedian(image, tailleMasque);
             data = Utils.normaliserImage(data, 0, 255);
 
             // Display result

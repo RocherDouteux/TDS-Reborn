@@ -8,7 +8,7 @@ package isilimageprocessing.Dialogues;
  *
  * @author Admin
  */
-public class JDialogFiltrageLineaire extends javax.swing.JDialog {
+public class JDialogFiltrageLineaireGlobal extends javax.swing.JDialog {
 
     private int frequenceDeCoupure;
     private int ordre;
@@ -22,7 +22,7 @@ public class JDialogFiltrageLineaire extends javax.swing.JDialog {
      * @param modal
      * @param hasOrdre
      */
-    public JDialogFiltrageLineaire(java.awt.Frame parent, boolean modal, boolean hasOrdre) {
+    public JDialogFiltrageLineaireGlobal(java.awt.Frame parent, boolean modal, boolean hasOrdre) {
         super(parent, modal);
         
         this.frequenceDeCoupure = 0;
