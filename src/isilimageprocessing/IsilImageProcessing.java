@@ -4,6 +4,7 @@ import CImage.*;
 import CImage.Exceptions.*;
 import CImage.Observers.*;
 import CImage.Observers.Events.*;
+import ImageProcessing.Contours.ContoursLineaire;
 import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
@@ -94,6 +95,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuHistogramme.setEnabled(false);
         jMenuLineaire.setEnabled(false);
         jMenuTraitement.setEnabled(false);
+        jMenuContours.setEnabled(false);
 
         
         couleurPinceauRGB = Color.BLACK;
@@ -169,19 +171,26 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique = new javax.swing.JMenuItem();
         jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesique = new javax.swing.JMenuItem();
         jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian = new javax.swing.JMenuItem();
+        jMenuContours = new javax.swing.JMenu();
+        jMenuContoursLineaire = new javax.swing.JMenu();
+        jMenuItemContoursLineairePrewitt = new javax.swing.JMenuItem();
+        jMenuItemContoursLineaireSobel = new javax.swing.JMenuItem();
+        jMenuItemContoursLineaireLaplacien4 = new javax.swing.JMenuItem();
+        jMenuItemContoursLineaireLaplacien8 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         panelResult.setBackground(new java.awt.Color(255, 51, 51));
-        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         panelResult.setPreferredSize(new java.awt.Dimension(150, 100));
         panelResult.add(resultPanel);
 
         getContentPane().add(panelResult, java.awt.BorderLayout.EAST);
 
         panelGrid.setBackground(new java.awt.Color(102, 51, 255));
-        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         panelGrid.setLayout(new java.awt.GridLayout(3, 3));
 
         jLabel9.setText("jLabel9");
@@ -547,6 +556,48 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuTraitement);
 
+        jMenuContours.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/contours_48.png"))); // NOI18N
+        jMenuContours.setText("Contours");
+
+        jMenuContoursLineaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/contours_48.png"))); // NOI18N
+        jMenuContoursLineaire.setText("Linéaire");
+
+        jMenuItemContoursLineairePrewitt.setText("Prewitt");
+        jMenuItemContoursLineairePrewitt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemContoursLineairePrewittActionPerformed(evt);
+            }
+        });
+        jMenuContoursLineaire.add(jMenuItemContoursLineairePrewitt);
+
+        jMenuItemContoursLineaireSobel.setText("Sobel");
+        jMenuItemContoursLineaireSobel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemContoursLineaireSobelActionPerformed(evt);
+            }
+        });
+        jMenuContoursLineaire.add(jMenuItemContoursLineaireSobel);
+
+        jMenuItemContoursLineaireLaplacien4.setText("Laplacien 4");
+        jMenuItemContoursLineaireLaplacien4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemContoursLineaireLaplacien4ActionPerformed(evt);
+            }
+        });
+        jMenuContoursLineaire.add(jMenuItemContoursLineaireLaplacien4);
+
+        jMenuItemContoursLineaireLaplacien8.setText("Laplacien 8");
+        jMenuItemContoursLineaireLaplacien8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemContoursLineaireLaplacien8ActionPerformed(evt);
+            }
+        });
+        jMenuContoursLineaire.add(jMenuItemContoursLineaireLaplacien8);
+
+        jMenuContours.add(jMenuContoursLineaire);
+
+        jMenuBar1.add(jMenuContours);
+
         setJMenuBar(jMenuBar1);
 
         setSize(new java.awt.Dimension(1104, 718));
@@ -604,6 +655,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuHistogramme.setEnabled(true);
         jMenuLineaire.setEnabled(true);
         jMenuTraitement.setEnabled(true);
+        jMenuContours.setEnabled(true);
     }
     
     private void activeMenusRGB()
@@ -613,6 +665,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuHistogramme.setEnabled(false);
         jMenuLineaire.setEnabled(false);
         jMenuTraitement.setEnabled(false);
+        jMenuContours.setEnabled(false);
     }
     
     private void jCheckBoxMenuItemDessinerCerclePleinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerCerclePleinActionPerformed
@@ -1396,6 +1449,50 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             System.out.println("Erreur Dilatation Géodésique: " + e.getMessage());
         }
     }//GEN-LAST:event_jMenuAfficherParametresImageActionPerformed
+
+    private void jMenuItemContoursLineairePrewittActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursLineairePrewittActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            JDialogContoursLineaire dialog = new JDialogContoursLineaire(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int dir = dialog.getDir();
+
+            // Apply filter
+            int[][] data = ContoursLineaire.gradientPrewitt(selectedNG.getMatrice(), dir);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Gradient Prewitt: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemContoursLineairePrewittActionPerformed
+
+    private void jMenuItemContoursLineaireSobelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursLineaireSobelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemContoursLineaireSobelActionPerformed
+
+    private void jMenuItemContoursLineaireLaplacien4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursLineaireLaplacien4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemContoursLineaireLaplacien4ActionPerformed
+
+    private void jMenuItemContoursLineaireLaplacien8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursLineaireLaplacien8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemContoursLineaireLaplacien8ActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1758,12 +1855,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuAfficherParametresImage;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuContours;
+    private javax.swing.JMenu jMenuContoursLineaire;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuFourier;
     private javax.swing.JMenu jMenuFourierAfficher;
     private javax.swing.JMenu jMenuHistogramme;
     private javax.swing.JMenuItem jMenuHistogrammeAfficher;
     private javax.swing.JMenu jMenuImage;
+    private javax.swing.JMenuItem jMenuItemContoursLineaireLaplacien4;
+    private javax.swing.JMenuItem jMenuItemContoursLineaireLaplacien8;
+    private javax.swing.JMenuItem jMenuItemContoursLineairePrewitt;
+    private javax.swing.JMenuItem jMenuItemContoursLineaireSobel;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemFiltrageLineaireGlobalPasseBas;
