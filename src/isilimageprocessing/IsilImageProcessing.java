@@ -5,6 +5,7 @@ import CImage.Exceptions.*;
 import CImage.Observers.*;
 import CImage.Observers.Events.*;
 import ImageProcessing.Contours.ContoursLineaire;
+import ImageProcessing.Contours.ContoursNonLineaire;
 import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
@@ -1641,19 +1642,99 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemContoursLineaireLaplacien8ActionPerformed
 
     private void jMenuItemContoursNonLineaireErosionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursNonLineaireErosionActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+
+            // Apply filter
+            int[][] data = ContoursNonLineaire.gradientErosion(selectedNG.getMatrice());
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Erosion: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemContoursNonLineaireErosionActionPerformed
 
     private void jMenuItemContoursNonLineaireLaplacienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursNonLineaireLaplacienActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+
+            // Apply filter
+            int[][] data = ContoursNonLineaire.laplacienNonLineaire(selectedNG.getMatrice());
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Laplacien: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemContoursNonLineaireLaplacienActionPerformed
 
     private void jMenuItemContoursNonLineaireDilatationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursNonLineaireDilatationActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+
+            // Apply filter
+            int[][] data = ContoursNonLineaire.gradientDilatation(selectedNG.getMatrice());
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Dilatation: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemContoursNonLineaireDilatationActionPerformed
 
     private void jMenuItemContoursNonLineaireBeucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursNonLineaireBeucherActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+
+            // Apply filter
+            int[][] data = ContoursNonLineaire.gradientBeucher(selectedNG.getMatrice());
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Beucher: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemContoursNonLineaireBeucherActionPerformed
 
     private void jMenuItemSeuillageDoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageDoubleActionPerformed
