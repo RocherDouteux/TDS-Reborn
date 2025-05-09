@@ -15,16 +15,16 @@ public class ContoursLineaire {
         if (dir == 1) {
             // Masque Horizontale
             masque = new int[][]{
-                {1, 1, 1},
+                {-1, -1, -1},
                 {0, 0, 0},
-                {-1, -1, -1}
+                {1, 1, 1}
             };
         } else if (dir == 2) {
             // Masque Verticale
             masque = new int[][]{
-                {1, 0, -1},
-                {1, 0, -1},
-                {1, 0, -1}
+                {-1, 0, 1},
+                {-1, 0, 1},
+                {-1, 0, 1}
             };
         } else {
             throw new IllegalArgumentException("dir doit etre 1 (horizontal) ou 2 (vertical)");
