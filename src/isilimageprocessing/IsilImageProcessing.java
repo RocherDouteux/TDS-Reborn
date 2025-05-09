@@ -1483,15 +1483,83 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemContoursLineairePrewittActionPerformed
 
     private void jMenuItemContoursLineaireSobelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursLineaireSobelActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            JDialogContoursLineaire dialog = new JDialogContoursLineaire(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int dir = dialog.getDir();
+
+            // Apply filter
+            int[][] data = ContoursLineaire.gradientSobel(selectedNG.getMatrice(), dir);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Gradient Sobel: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemContoursLineaireSobelActionPerformed
 
     private void jMenuItemContoursLineaireLaplacien4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursLineaireLaplacien4ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+
+            // Apply filter
+            int[][] data = ContoursLineaire.laplacien4(selectedNG.getMatrice());
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Laplacien 4: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemContoursLineaireLaplacien4ActionPerformed
 
     private void jMenuItemContoursLineaireLaplacien8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursLineaireLaplacien8ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+
+            // Apply filter
+            int[][] data = ContoursLineaire.laplacien8(selectedNG.getMatrice());
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Laplacien 8: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemContoursLineaireLaplacien8ActionPerformed
     
     /**
