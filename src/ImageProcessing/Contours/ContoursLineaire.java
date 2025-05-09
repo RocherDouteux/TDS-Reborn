@@ -124,9 +124,9 @@ public class ContoursLineaire {
         int[][] masque;
         
         masque = new int[][]{
-                {0, 1, 0},
+                {1, 1, 1},
                 {1, -8, 1},
-                {0, 1, 0}
+                {1, 1, 1}
         };
         
         int imageHeight = image.length;
