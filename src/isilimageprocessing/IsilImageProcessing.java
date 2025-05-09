@@ -1985,23 +1985,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 }
             });
             
-            // Add the input field button
-            setupValueUI();
         }
 
 
-     // Add an Input field at the top between MIN & MAX, the value can be called with Integer.parseInt(inputField.getText())
-    void setupValueUI() {
-
-        // Create the input field
-        inputField = new JTextField(5);
-        inputField.setMaximumSize(new Dimension(50, 25));
-
-        toolBar.add(new JLabel(" Valeur : "));
-        toolBar.add(inputField);
-    }
-
-    
     // MY Variable declaration - Antoine
     private boolean[] selectedSlots = new boolean[9];
     private CImage[] imagesInSlots = new CImage[9];
