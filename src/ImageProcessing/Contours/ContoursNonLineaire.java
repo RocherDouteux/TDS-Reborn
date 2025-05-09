@@ -38,16 +38,24 @@ public class ContoursNonLineaire {
         return output;
     }
     
-    public static int[][] gradientBeucher(int[][] image) {
+    public static int[][] gradientBeucher(int[][] image, boolean inverse) {
         int[][] eroded = MorphoElementaire.erosion(image, 3);
         int[][] dilated = MorphoElementaire.dilatation(image, 3);
         int imageHeight = image.length;
         int imageWidth = image[0].length;
         int[][] output = new int[imageHeight][imageWidth];
         
-        for (int i = 0; i < imageHeight; i++) {
+        if (inverse) {
+            for (int i = 0; i < imageHeight; i++) {
+            for (int j = 0; j < imageWidth; j++) {
+                output[i][j] = eroded[i][j] - dilated[i][j];
+                }
+            }
+        } else {
+            for (int i = 0; i < imageHeight; i++) {
             for (int j = 0; j < imageWidth; j++) {
                 output[i][j] = dilated[i][j] - eroded[i][j];
+                }
             }
         }
         return output;

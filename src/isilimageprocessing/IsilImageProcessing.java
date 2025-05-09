@@ -1723,9 +1723,17 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
 
             CImageNG selectedNG = (CImageNG) selected;
+            
+            JDialogContoursNonLineaire dialog = new JDialogContoursNonLineaire(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            boolean inverse = dialog.getInverse();
 
             // Apply filter
-            int[][] data = ContoursNonLineaire.gradientBeucher(selectedNG.getMatrice());
+            int[][] data = ContoursNonLineaire.gradientBeucher(selectedNG.getMatrice(), inverse);
             data = Utils.normaliserImage(data, 0, 255);
             
             // Display result

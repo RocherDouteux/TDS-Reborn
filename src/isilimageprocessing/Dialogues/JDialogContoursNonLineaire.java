@@ -8,25 +8,27 @@ package isilimageprocessing.Dialogues;
  *
  * @author Axel
  */
-public class JDialogContoursLineaire extends javax.swing.JDialog {
-    private int dir;
+public class JDialogContoursNonLineaire extends javax.swing.JDialog {
+    
+    private boolean inverse;
     private boolean filled;
-    
-    
+
     /**
-     * Creates new form JDialogContoursLineaire
+     * Creates new form JDialogContoursNonLineaire
      * @param parent
      * @param modal
      */
-    public JDialogContoursLineaire(java.awt.Frame parent, boolean modal) {
+    public JDialogContoursNonLineaire(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
         this.filled = false;
+        jCheckBoxNormal.setSelected(true);
+        
     }
     
-    public int getDir(){
-        return this.dir;
+    public boolean getInverse(){
+        return this.inverse;
     }
     
     public boolean isFilled(){
@@ -42,29 +44,30 @@ public class JDialogContoursLineaire extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jCheckBoxHorizontale = new javax.swing.JCheckBox();
-        jCheckBoxVerticale = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
+        jCheckBoxNormal = new javax.swing.JCheckBox();
+        jCheckBoxInverse = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(331, 203));
 
-        jCheckBoxHorizontale.setText("Horizontale");
-        jCheckBoxHorizontale.addActionListener(new java.awt.event.ActionListener() {
+        jLabel1.setText("Choix Inverse");
+
+        jCheckBoxNormal.setText("Normal");
+        jCheckBoxNormal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxHorizontaleActionPerformed(evt);
+                jCheckBoxNormalActionPerformed(evt);
             }
         });
 
-        jCheckBoxVerticale.setText("Verticale");
-        jCheckBoxVerticale.addActionListener(new java.awt.event.ActionListener() {
+        jCheckBoxInverse.setText("Inverse");
+        jCheckBoxInverse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxVerticaleActionPerformed(evt);
+                jCheckBoxInverseActionPerformed(evt);
             }
         });
-
-        jLabel1.setText("Choix Direction");
 
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -95,61 +98,61 @@ public class JDialogContoursLineaire extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(123, 123, 123)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(129, 129, 129))
+                .addGap(49, 49, 49)
+                .addComponent(jCheckBoxNormal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                .addComponent(jCheckBoxInverse)
+                .addGap(60, 60, 60))
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jCheckBoxHorizontale)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addComponent(jCheckBoxVerticale, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45))
+                .addGap(125, 125, 125)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(8, 8, 8)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(24, 24, 24)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxHorizontale)
-                    .addComponent(jCheckBoxVerticale))
-                .addGap(32, 32, 32)
+                    .addComponent(jCheckBoxNormal)
+                    .addComponent(jCheckBoxInverse))
+                .addGap(37, 37, 37)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBoxHorizontaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxHorizontaleActionPerformed
-        if (jCheckBoxHorizontale.isSelected()){
-            jCheckBoxVerticale.setSelected(false);   
-        }
-    }//GEN-LAST:event_jCheckBoxHorizontaleActionPerformed
-
-    private void jCheckBoxVerticaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxVerticaleActionPerformed
-        if (jCheckBoxVerticale.isSelected()){
-            jCheckBoxHorizontale.setSelected(false);
-        }
-    }//GEN-LAST:event_jCheckBoxVerticaleActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (jCheckBoxHorizontale.isSelected()){
-            this.dir = (int) 1;
+        if (jCheckBoxNormal.isSelected()){
+            this.inverse = false;
             this.dispose();
-        } else if (jCheckBoxVerticale.isSelected()){
-            this.dir = (int) 2;
+        } else if (jCheckBoxInverse.isSelected()){
+            this.inverse = true;
             this.dispose();
         } else {
             System.out.println("Aucune option sélectionnée");
         }
         this.filled = true;
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jCheckBoxNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxNormalActionPerformed
+        if (jCheckBoxNormal.isSelected()){
+            jCheckBoxInverse.setSelected(false);   
+        }
+    }//GEN-LAST:event_jCheckBoxNormalActionPerformed
+
+    private void jCheckBoxInverseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxInverseActionPerformed
+        if (jCheckBoxInverse.isSelected()){
+            jCheckBoxNormal.setSelected(false);   
+        }
+    }//GEN-LAST:event_jCheckBoxInverseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -168,20 +171,20 @@ public class JDialogContoursLineaire extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JDialogContoursLineaire.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogContoursNonLineaire.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JDialogContoursLineaire.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogContoursNonLineaire.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JDialogContoursLineaire.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogContoursNonLineaire.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JDialogContoursLineaire.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogContoursNonLineaire.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JDialogContoursLineaire dialog = new JDialogContoursLineaire(new javax.swing.JFrame(), true);
+                JDialogContoursNonLineaire dialog = new JDialogContoursNonLineaire(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -195,8 +198,8 @@ public class JDialogContoursLineaire extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBoxHorizontale;
-    private javax.swing.JCheckBox jCheckBoxVerticale;
+    private javax.swing.JCheckBox jCheckBoxInverse;
+    private javax.swing.JCheckBox jCheckBoxNormal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
