@@ -96,6 +96,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuLineaire.setEnabled(false);
         jMenuTraitement.setEnabled(false);
         jMenuContours.setEnabled(false);
+        jMenuSeuillage.setEnabled(false);
 
         
         couleurPinceauRGB = Color.BLACK;
@@ -182,6 +183,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemContoursNonLineaireDilatation = new javax.swing.JMenuItem();
         jMenuItemContoursNonLineaireBeucher = new javax.swing.JMenuItem();
         jMenuItemContoursNonLineaireLaplacien = new javax.swing.JMenuItem();
+        jMenuSeuillage = new javax.swing.JMenu();
+        jMenuItemSeuillageSimple = new javax.swing.JMenuItem();
+        jMenuItemSeuillageDouble = new javax.swing.JMenuItem();
+        jMenuItemSeuillageAutomatique = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -640,6 +645,35 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuContours);
 
+        jMenuSeuillage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/seuillage_48.png"))); // NOI18N
+        jMenuSeuillage.setText("Seuillage");
+
+        jMenuItemSeuillageSimple.setText("Simple");
+        jMenuItemSeuillageSimple.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSeuillageSimpleActionPerformed(evt);
+            }
+        });
+        jMenuSeuillage.add(jMenuItemSeuillageSimple);
+
+        jMenuItemSeuillageDouble.setText("Double");
+        jMenuItemSeuillageDouble.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSeuillageDoubleActionPerformed(evt);
+            }
+        });
+        jMenuSeuillage.add(jMenuItemSeuillageDouble);
+
+        jMenuItemSeuillageAutomatique.setText("Automatique");
+        jMenuItemSeuillageAutomatique.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSeuillageAutomatiqueActionPerformed(evt);
+            }
+        });
+        jMenuSeuillage.add(jMenuItemSeuillageAutomatique);
+
+        jMenuBar1.add(jMenuSeuillage);
+
         setJMenuBar(jMenuBar1);
 
         setSize(new java.awt.Dimension(1104, 718));
@@ -698,6 +732,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuLineaire.setEnabled(true);
         jMenuTraitement.setEnabled(true);
         jMenuContours.setEnabled(true);
+        jMenuSeuillage.setEnabled(true);
     }
     
     private void activeMenusRGB()
@@ -708,6 +743,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuLineaire.setEnabled(false);
         jMenuTraitement.setEnabled(false);
         jMenuContours.setEnabled(false);
+        jMenuSeuillage.setEnabled(false);
     }
     
     private void jCheckBoxMenuItemDessinerCerclePleinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerCerclePleinActionPerformed
@@ -1619,6 +1655,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void jMenuItemContoursNonLineaireBeucherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContoursNonLineaireBeucherActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemContoursNonLineaireBeucherActionPerformed
+
+    private void jMenuItemSeuillageDoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageDoubleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemSeuillageDoubleActionPerformed
+
+    private void jMenuItemSeuillageAutomatiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageAutomatiqueActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemSeuillageAutomatiqueActionPerformed
+
+    private void jMenuItemSeuillageSimpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageSimpleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemSeuillageSimpleActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2014,6 +2062,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
     private javax.swing.JMenuItem jMenuItemOuvrirNG;
     private javax.swing.JMenuItem jMenuItemOuvrirRGB;
+    private javax.swing.JMenuItem jMenuItemSeuillageAutomatique;
+    private javax.swing.JMenuItem jMenuItemSeuillageDouble;
+    private javax.swing.JMenuItem jMenuItemSeuillageSimple;
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieComplexeDilatationGeodesique;
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieComplexeFiltreMedian;
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieComplexeReconstructionGeodesique;
@@ -2026,6 +2077,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuNouvelle;
     private javax.swing.JMenu jMenuOuvrir;
     private javax.swing.JMenuItem jMenuQuitter;
+    private javax.swing.JMenu jMenuSeuillage;
     private javax.swing.JMenu jMenuTraitement;
     private javax.swing.JMenu jMenuTraitementComplexe;
     private javax.swing.JMenu jMenuTraitementElementaire;
