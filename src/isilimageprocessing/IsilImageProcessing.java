@@ -1783,7 +1783,35 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemSeuillageAutomatiqueActionPerformed
 
     private void jMenuItemSeuillageSimpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageSimpleActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            JDialogSeuillageSimple dialog = new JDialogSeuillageSimple(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int seuil = dialog.getSeuil();
+
+            // Apply filter
+            int[][] data = Seuillage.seuillageSimple(selectedNG.getMatrice(), seuil);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Seuillage Simple: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemSeuillageSimpleActionPerformed
     
     /**
