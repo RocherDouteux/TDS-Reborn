@@ -61,16 +61,24 @@ public class ContoursNonLineaire {
         return output;
     }
     
-    public static int[][] laplacienNonLineaire(int[][] image) {
+    public static int[][] laplacienNonLineaire(int[][] image, boolean inverse) {
         int[][] gradienterosion = gradientErosion(image);
         int[][] gradientdilatation = gradientDilatation(image);
         int imageHeight = image.length;
         int imageWidth = image[0].length;
         int[][] output = new int[imageHeight][imageWidth];
         
-        for (int i = 0; i < imageHeight; i++) {
+        if (inverse) {
+            for (int i = 0; i < imageHeight; i++) {
+            for (int j = 0; j < imageWidth; j++) {
+                output[i][j] = gradienterosion[i][j] - gradientdilatation[i][j];
+                }
+            }
+        } else {
+            for (int i = 0; i < imageHeight; i++) {
             for (int j = 0; j < imageWidth; j++) {
                 output[i][j] = gradientdilatation[i][j] - gradienterosion[i][j];
+                }
             }
         }
         return output;
