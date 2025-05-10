@@ -192,17 +192,16 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
-        getContentPane().setLayout(new java.awt.BorderLayout());
 
         panelResult.setBackground(new java.awt.Color(255, 51, 51));
-        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        panelResult.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelResult.setPreferredSize(new java.awt.Dimension(150, 100));
         panelResult.add(resultPanel);
 
         getContentPane().add(panelResult, java.awt.BorderLayout.EAST);
 
         panelGrid.setBackground(new java.awt.Color(102, 51, 255));
-        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        panelGrid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelGrid.setLayout(new java.awt.GridLayout(3, 3));
 
         jLabel9.setText("jLabel9");
@@ -492,7 +491,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuBar1.add(jMenuLineaire);
 
         jMenuTraitement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/traitement_48.png"))); // NOI18N
-        jMenuTraitement.setText("Traitement Lineaire");
+        jMenuTraitement.setText("Traitement Non-Lineaire");
         jMenuTraitement.setToolTipText("");
 
         jMenuTraitementElementaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/traitement_32.png"))); // NOI18N
