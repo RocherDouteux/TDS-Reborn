@@ -65,6 +65,7 @@ public class JDialogFiltrageLineaireGlobal extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Information");
+        setResizable(false);
 
         jLabelCoupure.setText("Coupure");
 

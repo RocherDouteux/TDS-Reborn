@@ -9,9 +9,9 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author Axel
  */
-public class JDialogSeuillageSimple extends javax.swing.JDialog {
+public class JDialogCourbeTonaleGamma extends javax.swing.JDialog {
     
-    private int seuil;
+    private double gamma;
     private boolean filled;
 
     /**
@@ -19,18 +19,18 @@ public class JDialogSeuillageSimple extends javax.swing.JDialog {
      * @param parent
      * @param modal
      */
-    public JDialogSeuillageSimple(java.awt.Frame parent, boolean modal) {
+    public JDialogCourbeTonaleGamma(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
-        SpinnerNumberModel spinnerSeuil = new SpinnerNumberModel(0, 0, 255, 1);
+        SpinnerNumberModel spinnerSeuil = new SpinnerNumberModel(0.7, 0, 1, 0.1);
         jSpinnerSeuil.setModel(spinnerSeuil);
         
         this.filled = false;
     }
     
-    public int getSeuil(){
-        return this.seuil;
+    public double getGamma(){
+        return this.gamma;
     }
     
     public boolean isFilled(){
@@ -49,7 +49,6 @@ public class JDialogSeuillageSimple extends javax.swing.JDialog {
         jToggleButton1 = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
         jSpinnerSeuil = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         jToggleButton1.setText("jToggleButton1");
@@ -57,9 +56,7 @@ public class JDialogSeuillageSimple extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        jLabel1.setText("Choix du Seuil");
-
-        jLabel2.setText("Seuil entre 0 - 255");
+        jLabel1.setText("Gamma");
 
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -73,39 +70,33 @@ public class JDialogSeuillageSimple extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(123, 123, 123)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSpinnerSeuil)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(124, 124, 124)
-                        .addComponent(jButton1)))
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jSpinnerSeuil, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(102, 102, 102)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addComponent(jSpinnerSeuil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(32, 32, 32)
+                .addGap(64, 64, 64)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jSpinnerSeuil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.seuil = (int)this.jSpinnerSeuil.getValue();
+        this.gamma = (double)this.jSpinnerSeuil.getValue();
         this.dispose();
         this.filled = true; 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -127,20 +118,21 @@ public class JDialogSeuillageSimple extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JDialogSeuillageSimple.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogCourbeTonaleGamma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JDialogSeuillageSimple.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogCourbeTonaleGamma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JDialogSeuillageSimple.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogCourbeTonaleGamma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JDialogSeuillageSimple.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JDialogCourbeTonaleGamma.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JDialogSeuillageSimple dialog = new JDialogSeuillageSimple(new javax.swing.JFrame(), true);
+                JDialogCourbeTonaleGamma dialog = new JDialogCourbeTonaleGamma(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -155,7 +147,6 @@ public class JDialogSeuillageSimple extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JSpinner jSpinnerSeuil;
     private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables

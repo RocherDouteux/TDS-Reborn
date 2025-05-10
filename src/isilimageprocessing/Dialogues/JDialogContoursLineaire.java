@@ -49,6 +49,7 @@ public class JDialogContoursLineaire extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jCheckBoxHorizontale.setText("Horizontale");
         jCheckBoxHorizontale.addActionListener(new java.awt.event.ActionListener() {

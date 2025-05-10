@@ -94,6 +94,7 @@ public class JDialogFiltrageLineaireLocal extends javax.swing.JDialog {
         jLabelMode = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jTableMasque.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

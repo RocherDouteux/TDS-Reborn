@@ -48,6 +48,7 @@ public class JDialogAfficheInformationImage extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Informations sur l'image");
+        setResizable(false);
 
         jLabelMinimum.setText("Minimum");
 
@@ -94,7 +95,7 @@ public class JDialogAfficheInformationImage extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(76, 76, 76)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelMinimum)
                     .addComponent(jLabelMiniumValue))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -106,11 +107,11 @@ public class JDialogAfficheInformationImage extends javax.swing.JDialog {
                     .addComponent(jLabelLuminance)
                     .addComponent(jLabelLuminanceValue))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelContraste1)
                     .addComponent(jLabelContraste1Value))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelContraste2)
                     .addComponent(jLabelContraste2Value))
                 .addContainerGap(72, Short.MAX_VALUE))

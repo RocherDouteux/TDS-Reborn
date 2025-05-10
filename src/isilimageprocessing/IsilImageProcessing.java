@@ -154,6 +154,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuHistogramme = new javax.swing.JMenu();
         jMenuHistogrammeAfficher = new javax.swing.JMenuItem();
         jMenuAfficherParametresImage = new javax.swing.JMenuItem();
+        jMenuItemCourbeTonaleLineaireSansSaturation = new javax.swing.JMenuItem();
+        jMenuItemCourbeTonaleLineaireAvecSaturation = new javax.swing.JMenuItem();
+        jMenuItemCourbeTonaleGamma = new javax.swing.JMenuItem();
+        jMenuItemCourbeTonaleNegatif = new javax.swing.JMenuItem();
+        jMenuItemCourbeTonaleEgalisation = new javax.swing.JMenuItem();
         jMenuLineaire = new javax.swing.JMenu();
         jMenuLineaireGlobal = new javax.swing.JMenu();
         jMenuItemFiltrageLineaireGlobalPasseBas = new javax.swing.JMenuItem();
@@ -407,7 +412,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuHistogramme.setText("Histogramme");
 
         jMenuHistogrammeAfficher.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/report_32_hot.jpg"))); // NOI18N
-        jMenuHistogrammeAfficher.setText("Afficher");
+        jMenuHistogrammeAfficher.setText("Afficher l'histogramme");
         jMenuHistogrammeAfficher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuHistogrammeAfficherActionPerformed(evt);
@@ -415,7 +420,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuHistogramme.add(jMenuHistogrammeAfficher);
 
-        jMenuAfficherParametresImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/metadata_32.png"))); // NOI18N
+        jMenuAfficherParametresImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/report_32_hot.jpg"))); // NOI18N
         jMenuAfficherParametresImage.setText("Afficher les paramètres de l'image");
         jMenuAfficherParametresImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -423,6 +428,51 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
         });
         jMenuHistogramme.add(jMenuAfficherParametresImage);
+
+        jMenuItemCourbeTonaleLineaireSansSaturation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/courbe_32.png"))); // NOI18N
+        jMenuItemCourbeTonaleLineaireSansSaturation.setText("CT Linéaire sans saturation");
+        jMenuItemCourbeTonaleLineaireSansSaturation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCourbeTonaleLineaireSansSaturationActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemCourbeTonaleLineaireSansSaturation);
+
+        jMenuItemCourbeTonaleLineaireAvecSaturation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/courbe_32.png"))); // NOI18N
+        jMenuItemCourbeTonaleLineaireAvecSaturation.setText("CT Linéaire avec saturation");
+        jMenuItemCourbeTonaleLineaireAvecSaturation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCourbeTonaleLineaireAvecSaturationActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemCourbeTonaleLineaireAvecSaturation);
+
+        jMenuItemCourbeTonaleGamma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/courbe_32.png"))); // NOI18N
+        jMenuItemCourbeTonaleGamma.setText("CT Gamma");
+        jMenuItemCourbeTonaleGamma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCourbeTonaleGammaActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemCourbeTonaleGamma);
+
+        jMenuItemCourbeTonaleNegatif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/courbe_32.png"))); // NOI18N
+        jMenuItemCourbeTonaleNegatif.setText("CT Negatif");
+        jMenuItemCourbeTonaleNegatif.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCourbeTonaleNegatifActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemCourbeTonaleNegatif);
+
+        jMenuItemCourbeTonaleEgalisation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/courbe_32.png"))); // NOI18N
+        jMenuItemCourbeTonaleEgalisation.setText("CT Egalisation");
+        jMenuItemCourbeTonaleEgalisation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCourbeTonaleEgalisationActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuItemCourbeTonaleEgalisation);
 
         jMenuBar1.add(jMenuHistogramme);
 
@@ -648,6 +698,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuSeuillage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/seuillage_48.png"))); // NOI18N
         jMenuSeuillage.setText("Seuillage");
 
+        jMenuItemSeuillageSimple.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/seuillage_32.png"))); // NOI18N
         jMenuItemSeuillageSimple.setText("Simple");
         jMenuItemSeuillageSimple.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -656,6 +707,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuSeuillage.add(jMenuItemSeuillageSimple);
 
+        jMenuItemSeuillageDouble.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/seuillage_32.png"))); // NOI18N
         jMenuItemSeuillageDouble.setText("Double");
         jMenuItemSeuillageDouble.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -664,6 +716,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuSeuillage.add(jMenuItemSeuillageDouble);
 
+        jMenuItemSeuillageAutomatique.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/seuillage_32.png"))); // NOI18N
         jMenuItemSeuillageAutomatique.setText("Automatique");
         jMenuItemSeuillageAutomatique.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1840,6 +1893,160 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             System.out.print("Erreur Seuillage Simple: " + e.getMessage());
         }
     }//GEN-LAST:event_jMenuItemSeuillageSimpleActionPerformed
+
+    private void jMenuItemCourbeTonaleLineaireSansSaturationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCourbeTonaleLineaireSansSaturationActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            int[][] image = selectedNG.getMatrice();
+            int min = Histogramme.minimum(image);
+            int max = Histogramme.maximum(image);
+            int[] courbeTonale = Histogramme.creeCourbeTonaleLineaireSaturation(min, max);
+            
+            // Apply filter
+            int[][] data = Histogramme.rehaussement(image, courbeTonale);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Courbe Tonale Linéaire sans Saturation: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemCourbeTonaleLineaireSansSaturationActionPerformed
+
+    private void jMenuItemCourbeTonaleLineaireAvecSaturationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCourbeTonaleLineaireAvecSaturationActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            int[][] image = selectedNG.getMatrice();
+                        
+            JDialogCourbeTonaleLineaire dialog = new JDialogCourbeTonaleLineaire(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int min = dialog.getSeuilMin();
+            int max = dialog.getSeuilMax();
+            int[] courbeTonale = Histogramme.creeCourbeTonaleLineaireSaturation(min, max);
+            
+            // Apply filter
+            int[][] data = Histogramme.rehaussement(image, courbeTonale);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Courbe Tonale Linéaire avec Saturation: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemCourbeTonaleLineaireAvecSaturationActionPerformed
+
+    private void jMenuItemCourbeTonaleGammaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCourbeTonaleGammaActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            int[][] image = selectedNG.getMatrice();
+            
+            JDialogCourbeTonaleGamma dialog = new JDialogCourbeTonaleGamma(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            double gamma = dialog.getGamma();
+            int[] courbeTonale = Histogramme.creeCourbeTonaleGamma(gamma);
+            
+            // Apply filter
+            int[][] data = Histogramme.rehaussement(image, courbeTonale);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Courbe Tonale Gamma: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemCourbeTonaleGammaActionPerformed
+
+    private void jMenuItemCourbeTonaleNegatifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCourbeTonaleNegatifActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            int[][] image = selectedNG.getMatrice();
+            int[] courbeTonale = Histogramme.creeCourbeTonaleNegatif();
+            
+            // Apply filter
+            int[][] data = Histogramme.rehaussement(image, courbeTonale);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Courbe Tonale Negatif: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemCourbeTonaleNegatifActionPerformed
+
+    private void jMenuItemCourbeTonaleEgalisationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCourbeTonaleEgalisationActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            int[][] image = selectedNG.getMatrice();
+            int[] courbeTonale = Histogramme.creeCourbeTonaleEgalisation(image);
+            
+            // Apply filter
+            int[][] data = Histogramme.rehaussement(image, courbeTonale);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Courbe Tonale Egalisation: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemCourbeTonaleEgalisationActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2206,6 +2413,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemContoursNonLineaireErosion;
     private javax.swing.JMenuItem jMenuItemContoursNonLineaireLaplacien;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
+    private javax.swing.JMenuItem jMenuItemCourbeTonaleEgalisation;
+    private javax.swing.JMenuItem jMenuItemCourbeTonaleGamma;
+    private javax.swing.JMenuItem jMenuItemCourbeTonaleLineaireAvecSaturation;
+    private javax.swing.JMenuItem jMenuItemCourbeTonaleLineaireSansSaturation;
+    private javax.swing.JMenuItem jMenuItemCourbeTonaleNegatif;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemFiltrageLineaireGlobalPasseBas;
     private javax.swing.JMenuItem jMenuItemFiltrageLineaireGlobalPasseBasButterworth;

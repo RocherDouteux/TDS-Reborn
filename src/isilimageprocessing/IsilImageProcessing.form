@@ -228,7 +228,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/Icones/report_32_hot.jpg"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Afficher"/>
+                <Property name="text" type="java.lang.String" value="Afficher l&apos;histogramme"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuHistogrammeAfficherActionPerformed"/>
@@ -237,12 +237,67 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuAfficherParametresImage">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icones/metadata_32.png"/>
+                  <Image iconType="3" name="/Icones/report_32_hot.jpg"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Afficher les param&#xe8;tres de l&apos;image"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuAfficherParametresImageActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCourbeTonaleLineaireSansSaturation">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/courbe_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="CT Lin&#xe9;aire sans saturation"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCourbeTonaleLineaireSansSaturationActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCourbeTonaleLineaireAvecSaturation">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/courbe_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="CT Lin&#xe9;aire avec saturation"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCourbeTonaleLineaireAvecSaturationActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCourbeTonaleGamma">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/courbe_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="CT Gamma"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCourbeTonaleGammaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCourbeTonaleNegatif">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/courbe_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="CT Negatif"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCourbeTonaleNegatifActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCourbeTonaleEgalisation">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/courbe_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="CT Egalisation"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCourbeTonaleEgalisationActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -519,6 +574,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSeuillageSimple">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/seuillage_32.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Simple"/>
               </Properties>
               <Events>
@@ -527,6 +585,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSeuillageDouble">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/seuillage_32.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Double"/>
               </Properties>
               <Events>
@@ -535,6 +596,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSeuillageAutomatique">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/seuillage_32.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Automatique"/>
               </Properties>
               <Events>
