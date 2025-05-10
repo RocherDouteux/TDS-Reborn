@@ -82,7 +82,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         toggleMoveMode.addActionListener(e -> {
             currentGridMode = toggleMoveMode.isSelected() ? GridMode.MOVE : GridMode.SELECT;
         });
-        jMenuImage.add(toggleMoveMode);  // add it to the Image menu (or any other menu)
 
         setupModeToggleUI();
         

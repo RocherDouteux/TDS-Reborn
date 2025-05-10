@@ -138,4 +138,23 @@ public class Histogramme
         return courbeTonale;
     }
     
+    public static int[] creeCourbeTonaleEgalisation(int[][] image){
+        int[] histogram = Histogramme.Histogramme256(image);
+        int totalPixels = image.length * image[0].length;
+
+        // Calcul de l'histogramme cumulé
+        int[] cumulativeHistogram = new int[256];
+        cumulativeHistogram[0] = histogram[0];
+        for (int i = 1; i < 256; i++) {
+            cumulativeHistogram[i] = cumulativeHistogram[i - 1] + histogram[i];
+        }
+
+        int[] tonalCurve = new int[256];
+        for (int i = 0; i < 256; i++) {
+            tonalCurve[i] = (int) (((double) cumulativeHistogram[i] / totalPixels) * 255);
+        }
+
+        return tonalCurve;
+    }
+    
 }
