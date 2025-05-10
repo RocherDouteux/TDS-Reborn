@@ -1755,7 +1755,36 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemContoursNonLineaireBeucherActionPerformed
 
     private void jMenuItemSeuillageDoubleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageDoubleActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            
+            JDialogSeuillageDouble dialog = new JDialogSeuillageDouble(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            int seuil1 = dialog.getSeuil1();
+            int seuil2 = dialog.getSeuil2();
+
+            // Apply filter
+            int[][] data = Seuillage.seuillageDouble(selectedNG.getMatrice(), seuil1, seuil2);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Seuillage Double: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemSeuillageDoubleActionPerformed
 
     private void jMenuItemSeuillageAutomatiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageAutomatiqueActionPerformed
