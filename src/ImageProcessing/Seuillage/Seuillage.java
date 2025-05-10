@@ -17,7 +17,7 @@ public class Seuillage {
         
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
-                output[i][j] = image[i][j] >= seuil ? 1 : 0;
+                output[i][j] = image[i][j] >= seuil ? 255 : 0;
             }
         }
         
@@ -47,8 +47,60 @@ public class Seuillage {
         return output;
     }
     
+    public static double moyenne(int[][] image) {
+        int somme = 0;
+        int total = 0;
+        
+        for (int[] ligne : image) {
+            for (int pixel : ligne) {
+                somme += pixel;
+                total++;
+            }
+        }
+        return (total == 0) ? 0 : somme / total;
+    }
+    
     public static int[][] seuillageAutomatique(int[][] image){
-        // TODO: implement this
-        throw new UnsupportedOperationException("seuillageAutomatique n'est pas encore implémenté.");
+        int imageHeight = image.length;
+        int imageWidth = image[0].length;
+        
+        // Calcule de la moyenne
+        int T = (int) moyenne(image);
+        
+        boolean converged = false;
+        while (!converged) {
+            int groupe1 = 0, groupe2 = 0;
+            int count1 = 0 , count2 = 0;
+            
+            // Séparation des pixels en 2 groupes
+            for (int i = 0; i < imageHeight; i++) {
+                for (int j = 0; j < imageWidth; j++) {
+                    int pixel = image[i][j];
+                    if (pixel >= T) {
+                        groupe1 += pixel;
+                        count1++;
+                    } else {
+                        groupe2 += pixel;
+                        count2++;
+                    }
+                }
+            }
+            
+            // Calcule des moyennes
+            int moyenne1 = (count1 == 0) ? 0 : groupe1 / count1;
+            int moyenne2 = (count2 == 0) ? 0 : groupe2 / count2;
+            
+            // Mise à jour du T
+            int newT = (moyenne1 + moyenne2) / 2;
+            
+            // Verification de la convergence
+            if (newT == T) {
+                converged = true;
+            } else {
+                T = newT;
+            }
+        }
+        // Seuillage final
+        return seuillageSimple(image, T);
     }
 }

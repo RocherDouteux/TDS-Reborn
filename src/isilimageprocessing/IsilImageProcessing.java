@@ -13,6 +13,7 @@ import ImageProcessing.Lineaire.FiltrageLineaireGlobal;
 import ImageProcessing.Lineaire.FiltrageLineaireLocal;
 import ImageProcessing.NonLineaire.MorphoElementaire;
 import ImageProcessing.NonLineaire.MorphoComplexe;
+import ImageProcessing.Seuillage.Seuillage;
 import ImageProcessing.Utils.Utils;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
@@ -1758,7 +1759,27 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemSeuillageDoubleActionPerformed
 
     private void jMenuItemSeuillageAutomatiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageAutomatiqueActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+
+            // Apply filter
+            int[][] data = Seuillage.seuillageAutomatique(selectedNG.getMatrice());
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.print("Erreur Seuillage Automatique: " + e.getMessage());
+        }
     }//GEN-LAST:event_jMenuItemSeuillageAutomatiqueActionPerformed
 
     private void jMenuItemSeuillageSimpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSeuillageSimpleActionPerformed
