@@ -748,7 +748,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         int histo[];
         try 
         {
-            int f_int[][] = imageNG.getMatrice();
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] f_int = selectedNG.getMatrice();
             histo = Histogramme.Histogramme256(f_int);
         } 
         catch (CImageNGException ex) 
@@ -830,10 +837,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void jMenuItemFourierAfficherPartieImaginaireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFourierAfficherPartieImaginaireActionPerformed
         try 
         {
-            int f_int[][] = imageNG.getMatrice();
-            double f[][] = new double[imageNG.getLargeur()][imageNG.getHauteur()];
-            for(int i=0 ; i<imageNG.getLargeur() ; i++)
-                for(int j=0 ; j<imageNG.getHauteur() ; j++) f[i][j] = (double)(f_int[i][j]);
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] f_int = selectedNG.getMatrice();
+            
+            double[][] f = new double[selectedNG.getLargeur()][selectedNG.getHauteur()];
+            for(int i=0 ; i<selectedNG.getLargeur() ; i++)
+                for(int j=0 ; j<selectedNG.getHauteur() ; j++) f[i][j] = (double)(f_int[i][j]);
             
             System.out.println("Debut Fourier");
             MatriceComplexe fourier = Fourier.Fourier2D(f);
@@ -853,10 +868,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void jMenuItemFourierAfficherPartieReelleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFourierAfficherPartieReelleActionPerformed
         try 
         {
-            int f_int[][] = imageNG.getMatrice();
-            double f[][] = new double[imageNG.getLargeur()][imageNG.getHauteur()];
-            for(int i=0 ; i<imageNG.getLargeur() ; i++)
-                for(int j=0 ; j<imageNG.getHauteur() ; j++) f[i][j] = (double)(f_int[i][j]);
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] f_int = selectedNG.getMatrice();
+            
+            double[][] f = new double[selectedNG.getLargeur()][selectedNG.getHauteur()];
+            for(int i=0 ; i<selectedNG.getLargeur() ; i++)
+                for(int j=0 ; j<selectedNG.getHauteur() ; j++) f[i][j] = (double)(f_int[i][j]);
             
             System.out.println("Debut Fourier");
             MatriceComplexe fourier = Fourier.Fourier2D(f);
@@ -877,10 +900,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void jMenuItemFourierAfficherPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFourierAfficherPhaseActionPerformed
         try 
         {
-            int f_int[][] = imageNG.getMatrice();
-            double f[][] = new double[imageNG.getLargeur()][imageNG.getHauteur()];
-            for(int i=0 ; i<imageNG.getLargeur() ; i++)
-                for(int j=0 ; j<imageNG.getHauteur() ; j++) f[i][j] = (double)(f_int[i][j]);
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] f_int = selectedNG.getMatrice();
+            
+            double[][] f = new double[selectedNG.getLargeur()][selectedNG.getHauteur()];
+            for(int i=0 ; i<selectedNG.getLargeur() ; i++)
+                for(int j=0 ; j<selectedNG.getHauteur() ; j++) f[i][j] = (double)(f_int[i][j]);
             
             System.out.println("Debut Fourier");
             MatriceComplexe fourier = Fourier.Fourier2D(f);
@@ -901,10 +932,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void jMenuItemFourierAfficherModuleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFourierAfficherModuleActionPerformed
         try 
         {
-            int f_int[][] = imageNG.getMatrice();
-            double f[][] = new double[imageNG.getLargeur()][imageNG.getHauteur()];
-            for(int i=0 ; i<imageNG.getLargeur() ; i++)
-                for(int j=0 ; j<imageNG.getHauteur() ; j++) f[i][j] = (double)(f_int[i][j]);
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG selectedNG = (CImageNG) selected;
+            int[][] f_int = selectedNG.getMatrice();
+            
+            double[][] f = new double[selectedNG.getLargeur()][selectedNG.getHauteur()];
+            for(int i=0 ; i<selectedNG.getLargeur() ; i++)
+                for(int j=0 ; j<selectedNG.getHauteur() ; j++) f[i][j] = (double)(f_int[i][j]);
             
             System.out.println("Debut Fourier");
             MatriceComplexe fourier = Fourier.Fourier2D(f);
@@ -947,13 +986,22 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             {
                 try 
                 {
-                    if (resultImage != null) {
-                        resultImage.enregistreFormatPNG(fichier);
-                    } else if (imageRGB != null) {
-                        imageRGB.enregistreFormatPNG(fichier);
-                    } else if (imageNG != null) {
-                        imageNG.enregistreFormatPNG(fichier);
+                    
+                    CImage selected = getSelectedImage();
+                    if (selected == null || !(selected instanceof CImageNG) || !(selected instanceof CImageRGB)) {
+                        JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image.");
+                        return;
                     }
+                    
+                    if(selected instanceof CImageNG selectedNG){
+                        selectedNG.enregistreFormatPNG(fichier);
+                    }
+                    
+                    if(selected instanceof CImageRGB selectedRGB){
+                        selectedRGB.enregistreFormatPNG(fichier);
+                    }
+
+                    
                 } 
                 catch (IOException ex) 
                 {
@@ -2336,7 +2384,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
         return null;
     }
-
+    
 
         // Add a button and a keybind (default is m) to swap between move and select mode
     private void setupModeToggleUI() {
