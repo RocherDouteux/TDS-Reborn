@@ -106,5 +106,35 @@ public class Utils {
 
         return copy;
     }
+    
+    public static int[][] addition(int[][] image1, int[][] image2) {
+        int imageHeight = image1.length;
+        int imageWidth = image1[0].length;
+        
+        int[][] output = new int[imageHeight][imageWidth];
+        
+        for (int i = 0; i < imageHeight; i++) {
+            for (int j = 0; j < imageWidth; j++) {
+                int somme = image1[i][j] + image2[i][j];
+                output[i][j] = Math.min(somme, 255);
+            }
+        }
+        return output;
+    }
+    
+    public static int[][] soustraction(int[][] image1, int[][] image2) {
+        int imageHeight = image1.length;
+        int imageWidth = image1[0].length;
+        
+        int[][] output = new int[imageHeight][imageWidth];
+        
+        for (int i = 0; i < imageHeight; i++) {
+            for (int j = 0; j < imageWidth; j++) {
+                int diff = image1[i][j] - image2[i][j];
+                output[i][j] = Math.max(diff, 0);
+            }
+        }
+        return output;
+    }
 
 }

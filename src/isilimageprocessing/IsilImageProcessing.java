@@ -98,6 +98,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuTraitement.setEnabled(false);
         jMenuContours.setEnabled(false);
         jMenuSeuillage.setEnabled(false);
+        jMenuUtils.setEnabled(false);
+        jMenuApplication.setEnabled(false);
 
         
         couleurPinceauRGB = Color.BLACK;
@@ -159,6 +161,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemCourbeTonaleGamma = new javax.swing.JMenuItem();
         jMenuItemCourbeTonaleNegatif = new javax.swing.JMenuItem();
         jMenuItemCourbeTonaleEgalisation = new javax.swing.JMenuItem();
+        jMenuUtils = new javax.swing.JMenu();
+        jMenuItemUtilsAddition = new javax.swing.JMenuItem();
+        jMenuItemUtilsSoustraction = new javax.swing.JMenuItem();
         jMenuLineaire = new javax.swing.JMenu();
         jMenuLineaireGlobal = new javax.swing.JMenu();
         jMenuItemFiltrageLineaireGlobalPasseBas = new javax.swing.JMenuItem();
@@ -193,6 +198,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemSeuillageSimple = new javax.swing.JMenuItem();
         jMenuItemSeuillageDouble = new javax.swing.JMenuItem();
         jMenuItemSeuillageAutomatique = new javax.swing.JMenuItem();
+        jMenuApplication = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -476,6 +482,29 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuHistogramme);
 
+        jMenuUtils.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/utils_48.png"))); // NOI18N
+        jMenuUtils.setText("Utils");
+
+        jMenuItemUtilsAddition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/plus_32.png"))); // NOI18N
+        jMenuItemUtilsAddition.setText("Addition");
+        jMenuItemUtilsAddition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemUtilsAdditionActionPerformed(evt);
+            }
+        });
+        jMenuUtils.add(jMenuItemUtilsAddition);
+
+        jMenuItemUtilsSoustraction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/moins_32.png"))); // NOI18N
+        jMenuItemUtilsSoustraction.setText("Soustraction");
+        jMenuItemUtilsSoustraction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemUtilsSoustractionActionPerformed(evt);
+            }
+        });
+        jMenuUtils.add(jMenuItemUtilsSoustraction);
+
+        jMenuBar1.add(jMenuUtils);
+
         jMenuLineaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/filtrage_48.png"))); // NOI18N
         jMenuLineaire.setText("Filtrage Lineaire");
 
@@ -727,9 +756,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuSeuillage);
 
+        jMenuApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/application_48.png"))); // NOI18N
+        jMenuApplication.setText("Application");
+        jMenuBar1.add(jMenuApplication);
+
         setJMenuBar(jMenuBar1);
 
-        setSize(new java.awt.Dimension(1104, 718));
+        setSize(new java.awt.Dimension(1302, 782));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -793,6 +826,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuTraitement.setEnabled(true);
         jMenuContours.setEnabled(true);
         jMenuSeuillage.setEnabled(true);
+        jMenuUtils.setEnabled(true);
+        jMenuApplication.setEnabled(true);
     }
     
     private void activeMenusRGB()
@@ -804,6 +839,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuTraitement.setEnabled(false);
         jMenuContours.setEnabled(false);
         jMenuSeuillage.setEnabled(false);
+        jMenuUtils.setEnabled(true);
+        jMenuApplication.setEnabled(true);
     }
     
     private void jCheckBoxMenuItemDessinerCerclePleinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerCerclePleinActionPerformed
@@ -2095,6 +2132,70 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             System.out.print("Erreur Courbe Tonale Egalisation: " + e.getMessage());
         }
     }//GEN-LAST:event_jMenuItemCourbeTonaleEgalisationActionPerformed
+
+    private void jMenuItemUtilsAdditionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUtilsAdditionActionPerformed
+        try {
+        CImage[] selectedImages = getAllSelectedImages();
+
+        if (selectedImages == null || selectedImages.length != 2) {
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner exactement deux images NG.");
+            return;
+        }
+        
+        for (CImage selectedImage : selectedImages) {
+            if (!(selectedImage instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Les deux images doivent être de type NG.");
+                return;
+            }
+        }
+
+        // Extract images
+        CImageNG image1 = (CImageNG) selectedImages[0]; // Image à dilater
+        CImageNG image2 = (CImageNG) selectedImages[1]; // Masque géodésique
+
+        int[][] data = Utils.addition(image1.getMatrice(), image2.getMatrice());
+        data = Utils.normaliserImage(data, 0, 255);
+
+        // Display result
+        CImageNG updatedImage = new CImageNG(data);
+        showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.println("Erreur Addition de 2 images: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemUtilsAdditionActionPerformed
+
+    private void jMenuItemUtilsSoustractionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUtilsSoustractionActionPerformed
+        try {
+        CImage[] selectedImages = getAllSelectedImages();
+
+        if (selectedImages == null || selectedImages.length != 2) {
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner exactement deux images NG.");
+            return;
+        }
+        
+        for (CImage selectedImage : selectedImages) {
+            if (!(selectedImage instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Les deux images doivent être de type NG.");
+                return;
+            }
+        }
+
+        // Extract images
+        CImageNG image1 = (CImageNG) selectedImages[0]; // Image à dilater
+        CImageNG image2 = (CImageNG) selectedImages[1]; // Masque géodésique
+
+        int[][] data = Utils.soustraction(image1.getMatrice(), image2.getMatrice());
+        data = Utils.normaliserImage(data, 0, 255);
+
+        // Display result
+        CImageNG updatedImage = new CImageNG(data);
+        showResultImage(updatedImage);
+
+        } catch (CImageNGException | HeadlessException e) {
+            System.out.println("Erreur Soustraction de 2 images: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemUtilsSoustractionActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2442,6 +2543,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuAfficherParametresImage;
+    private javax.swing.JMenu jMenuApplication;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuContours;
     private javax.swing.JMenu jMenuContoursLineaire;
@@ -2491,6 +2593,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireErosion;
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireFermeture;
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireOuverture;
+    private javax.swing.JMenuItem jMenuItemUtilsAddition;
+    private javax.swing.JMenuItem jMenuItemUtilsSoustraction;
     private javax.swing.JMenu jMenuLineaire;
     private javax.swing.JMenu jMenuLineaireGlobal;
     private javax.swing.JMenu jMenuNouvelle;
@@ -2500,6 +2604,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuTraitement;
     private javax.swing.JMenu jMenuTraitementComplexe;
     private javax.swing.JMenu jMenuTraitementElementaire;
+    private javax.swing.JMenu jMenuUtils;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel panelGrid;
