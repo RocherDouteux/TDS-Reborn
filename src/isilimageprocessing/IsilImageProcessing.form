@@ -646,6 +646,64 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Application"/>
           </Properties>
+          <SubComponents>
+            <Menu class="javax.swing.JMenu" name="jMenuApplication1">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/1_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Question 1"/>
+              </Properties>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenuApplication2">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/2_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Question 2"/>
+              </Properties>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenuApplication3">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/3_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Question 3"/>
+              </Properties>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenuApplication4">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/4_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Question 4"/>
+              </Properties>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenuApplication5">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/5_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Question 5"/>
+              </Properties>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenuApplication6">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/6_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Question 6"/>
+              </Properties>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenuApplication7">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/7_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Question 7"/>
+              </Properties>
+            </Menu>
+          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>

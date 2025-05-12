@@ -115,8 +115,7 @@ public class Utils {
         
         for (int i = 0; i < imageHeight; i++) {
             for (int j = 0; j < imageWidth; j++) {
-                int somme = image1[i][j] + image2[i][j];
-                output[i][j] = Math.min(somme, 255);
+                output[i][j] = image1[i][j] + image2[i][j];
             }
         }
         return output;
@@ -130,8 +129,7 @@ public class Utils {
         
         for (int i = 0; i < imageHeight; i++) {
             for (int j = 0; j < imageWidth; j++) {
-                int diff = image1[i][j] - image2[i][j];
-                output[i][j] = Math.max(diff, 0);
+                output[i][j] = image1[i][j] - image2[i][j];
             }
         }
         return output;

@@ -199,6 +199,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemSeuillageDouble = new javax.swing.JMenuItem();
         jMenuItemSeuillageAutomatique = new javax.swing.JMenuItem();
         jMenuApplication = new javax.swing.JMenu();
+        jMenuApplication1 = new javax.swing.JMenu();
+        jMenuApplication2 = new javax.swing.JMenu();
+        jMenuApplication3 = new javax.swing.JMenu();
+        jMenuApplication4 = new javax.swing.JMenu();
+        jMenuApplication5 = new javax.swing.JMenu();
+        jMenuApplication6 = new javax.swing.JMenu();
+        jMenuApplication7 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -758,6 +765,35 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuApplication.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/application_48.png"))); // NOI18N
         jMenuApplication.setText("Application");
+
+        jMenuApplication1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/1_32.png"))); // NOI18N
+        jMenuApplication1.setText("Question 1");
+        jMenuApplication.add(jMenuApplication1);
+
+        jMenuApplication2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/2_32.png"))); // NOI18N
+        jMenuApplication2.setText("Question 2");
+        jMenuApplication.add(jMenuApplication2);
+
+        jMenuApplication3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/3_32.png"))); // NOI18N
+        jMenuApplication3.setText("Question 3");
+        jMenuApplication.add(jMenuApplication3);
+
+        jMenuApplication4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/4_32.png"))); // NOI18N
+        jMenuApplication4.setText("Question 4");
+        jMenuApplication.add(jMenuApplication4);
+
+        jMenuApplication5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/5_32.png"))); // NOI18N
+        jMenuApplication5.setText("Question 5");
+        jMenuApplication.add(jMenuApplication5);
+
+        jMenuApplication6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/6_32.png"))); // NOI18N
+        jMenuApplication6.setText("Question 6");
+        jMenuApplication.add(jMenuApplication6);
+
+        jMenuApplication7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/7_32.png"))); // NOI18N
+        jMenuApplication7.setText("Question 7");
+        jMenuApplication.add(jMenuApplication7);
+
         jMenuBar1.add(jMenuApplication);
 
         setJMenuBar(jMenuBar1);
@@ -2544,6 +2580,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuAfficherParametresImage;
     private javax.swing.JMenu jMenuApplication;
+    private javax.swing.JMenu jMenuApplication1;
+    private javax.swing.JMenu jMenuApplication2;
+    private javax.swing.JMenu jMenuApplication3;
+    private javax.swing.JMenu jMenuApplication4;
+    private javax.swing.JMenu jMenuApplication5;
+    private javax.swing.JMenu jMenuApplication6;
+    private javax.swing.JMenu jMenuApplication7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuContours;
     private javax.swing.JMenu jMenuContoursLineaire;
