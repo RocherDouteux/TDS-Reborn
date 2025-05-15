@@ -49,8 +49,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private enum GridMode { SELECT, MOVE }
     private GridMode currentGridMode = GridMode.SELECT;
     private CImage resultImage;
-    
-    private JTextField inputField;
+   
 
     
     public IsilImageProcessing() 
@@ -82,8 +81,20 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         toggleMoveMode.addActionListener(e -> {
             currentGridMode = toggleMoveMode.isSelected() ? GridMode.MOVE : GridMode.SELECT;
         });
-
         setupModeToggleUI();
+        
+        // DELETE THE SELECTED IMAGES
+        InputMap inputMap = panelGrid.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = panelGrid.getActionMap();
+
+        inputMap.put(KeyStroke.getKeyStroke('d'), "deleteSelectedImages");
+        actionMap.put("deleteSelectedImages", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteSelectedImages();
+                System.out.print("DELETE");
+            }
+        });
         
         // IT'S OVER
         
@@ -2445,6 +2456,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }
 
 
+    // SELECT PARTS
     private int getSelectedSlotOrFirstEmpty() {
         for (int i = 0; i < selectedSlots.length; i++) {
             if (selectedSlots[i]) {
@@ -2466,7 +2478,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         for (int i = 0; i < selectedSlots.length; i++) {
             selectedSlots[i] = false;
             imageSlots[i].setBackground(Color.WHITE);
-            imageSlots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); // 🟡 reset border too
+            imageSlots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         }
 
         resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -2521,9 +2533,43 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
         return null;
     }
-    
 
-        // Add a button and a keybind (default is m) to swap between move and select mode
+    // DELETE PARTS
+    private void clearAllImages() {
+        for (int i = 0; i < imagesInSlots.length; i++) {
+            imagesInSlots[i] = null;
+            selectedSlots[i] = false;
+            imageSlots[i].setIcon(null);
+            imageSlots[i].setText("Slot " + (i + 1)); // Restore default label
+            imageSlots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        }
+
+        resultImage = null;
+        resultPanel.setIcon(null);
+        resultPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        panelGrid.repaint();
+    }
+
+
+    private void deleteSelectedImages() {
+        for (int i = 0; i < selectedSlots.length; i++) {
+            if (selectedSlots[i]) {
+                imagesInSlots[i] = null;
+                selectedSlots[i] = false;
+                imageSlots[i].setIcon(null);
+                imageSlots[i].setText("Slot " + (i + 1)); // Restore label text
+                imageSlots[i].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            }
+        }
+
+        panelGrid.repaint();
+    }
+
+
+    // Button UI
+    
+        // Add a button and a keybind (m) to swap between move and select mode
+        // Add a button and to delete all the images in the grid
     private void setupModeToggleUI() {
             toolBar = new JToolBar();
             JToggleButton toggleButton = new JToggleButton("Mode Déplacement");
@@ -2537,6 +2583,21 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             });
 
             toolBar.add(toggleButton);
+            toolBar.add(Box.createHorizontalStrut(10));
+            
+            JButton clearGridButton = new JButton("Effacer toutes les images");
+            clearGridButton.setFocusable(false);
+            clearGridButton.addActionListener(e -> {
+                int confirm = JOptionPane.showConfirmDialog(this,
+                        "Voulez-vous vraiment effacer toutes les images de la grille ?",
+                        "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    clearAllImages();
+                }
+            });
+            toolBar.add(clearGridButton);
+
+            
             getContentPane().add(toolBar, BorderLayout.NORTH);
 
             KeyStroke keyStroke = KeyStroke.getKeyStroke("M");
