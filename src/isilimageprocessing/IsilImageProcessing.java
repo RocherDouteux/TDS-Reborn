@@ -1,5 +1,6 @@
 package isilimageprocessing;
 
+import Application.Application;
 import CImage.*;
 import CImage.Exceptions.*;
 import CImage.Observers.Events.*;
@@ -29,6 +30,10 @@ import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import java.awt.event.ActionEvent;
+import java.util.Queue;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
@@ -43,11 +48,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private GridMode currentGridMode = GridMode.SELECT;
     private CImage resultImage;
    
-
+    private final Logger logger;
     
     public IsilImageProcessing() 
     {
         initComponents();
+        
+        logger = Logger.getLogger(IsilImageProcessing.class.getName());
         
         // ANTOINE WAS HERE
         panelResult.setLayout(new BorderLayout());
@@ -99,7 +106,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuContours.setEnabled(false);
         jMenuSeuillage.setEnabled(false);
         jMenuUtils.setEnabled(false);
-        jMenuApplication.setEnabled(false);
+        jMenuApplication.setEnabled(true);
     }
     
     /** This method is called from within the constructor to
@@ -196,6 +203,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemSeuillageAutomatique = new javax.swing.JMenuItem();
         jMenuApplication = new javax.swing.JMenu();
         jMenuApplication1 = new javax.swing.JMenu();
+        jMenuItemQuestion1A = new javax.swing.JMenuItem();
         jMenuApplication2 = new javax.swing.JMenu();
         jMenuApplication3 = new javax.swing.JMenu();
         jMenuApplication4 = new javax.swing.JMenu();
@@ -764,6 +772,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuApplication1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/1_32.png"))); // NOI18N
         jMenuApplication1.setText("Question 1");
+
+        jMenuItemQuestion1A.setText("A");
+        jMenuItemQuestion1A.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemQuestion1AActionPerformed(evt);
+            }
+        });
+        jMenuApplication1.add(jMenuItemQuestion1A);
+
         jMenuApplication.add(jMenuApplication1);
 
         jMenuApplication2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/2_32.png"))); // NOI18N
@@ -872,6 +889,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuContours.setEnabled(false);
         jMenuSeuillage.setEnabled(false);
         jMenuUtils.setEnabled(true);
+        jMenuApplication.setEnabled(true);
+    }
+    
+    private void desactiveMenus(){
+        jMenuDessiner.setEnabled(false);
+        jMenuFourier.setEnabled(false);
+        jMenuHistogramme.setEnabled(false);
+        jMenuLineaire.setEnabled(false);
+        jMenuTraitement.setEnabled(false);
+        jMenuContours.setEnabled(false);
+        jMenuSeuillage.setEnabled(false);
+        jMenuUtils.setEnabled(false);
         jMenuApplication.setEnabled(true);
     }
     
@@ -2140,9 +2169,36 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         showResultImage(updatedImage);
 
         } catch (CImageNGException | HeadlessException e) {
-            System.out.println("Erreur Soustraction de 2 images: " + e.getMessage());
+            logger.log(Level.SEVERE, "Erreur Soustraction de 2 images: {0}", e.getMessage());
         }
     }//GEN-LAST:event_jMenuItemUtilsSoustractionActionPerformed
+
+    private void jMenuItemQuestion1AActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion1AActionPerformed
+        try{
+            
+            LoadingDialog loadingDialog = new LoadingDialog(this, "Question 1A");
+            
+            Callable<Queue<CImage>> task = () -> {
+                clearAllImages();
+                CImage source = new CImageNG(new File("res/Images/ImagesEtape5/imageBruitee1.png"));
+                return Application.question1A(source);
+            };
+            
+            Queue<CImage> sequence = loadingDialog.executeTask(task);
+            
+            CImage current = sequence.poll();
+            while (current != null){
+                
+                int firstAvailableSlot = getFirstAvailableSlot();
+                setImageToSlot(firstAvailableSlot, current);
+                current = sequence.poll();
+            }
+            
+        }catch(Exception ex){
+            logger.log(Level.SEVERE, null, ex);
+        }
+       
+    }//GEN-LAST:event_jMenuItemQuestion1AActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2358,6 +2414,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     // DELETE PARTS
     private void clearAllImages() {
+        desactiveMenus();
         for (int i = 0; i < imagesInSlots.length; i++) {
             imagesInSlots[i] = null;
             selectedSlots[i] = false;
@@ -2509,6 +2566,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
     private javax.swing.JMenuItem jMenuItemOuvrirNG;
     private javax.swing.JMenuItem jMenuItemOuvrirRGB;
+    private javax.swing.JMenuItem jMenuItemQuestion1A;
     private javax.swing.JMenuItem jMenuItemSeuillageAutomatique;
     private javax.swing.JMenuItem jMenuItemSeuillageDouble;
     private javax.swing.JMenuItem jMenuItemSeuillageSimple;
