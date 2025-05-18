@@ -2,7 +2,6 @@ package isilimageprocessing;
 
 import CImage.*;
 import CImage.Exceptions.*;
-import CImage.Observers.*;
 import CImage.Observers.Events.*;
 import ImageProcessing.Contours.ContoursLineaire;
 import ImageProcessing.Contours.ContoursNonLineaire;
@@ -36,13 +35,7 @@ import javax.swing.KeyStroke;
 
 public class IsilImageProcessing extends javax.swing.JFrame implements ClicListener,SelectLigneListener,SelectRectListener,SelectRectFillListener,SelectCercleListener,SelectCercleFillListener 
 {
-    private CImageRGB imageRGB;
-    private CImageNG  imageNG;
-    
-    private JLabelBeanCImage observer;
-    private Color couleurPinceauRGB;
-    private int   couleurPinceauNG;
-    
+
     private CImage liftedImage = null;
     private int liftedFromIndex = -1;
     
@@ -97,11 +90,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         
         // IT'S OVER
-        
-        imageRGB = null;
-        imageNG  = null;
-        
-        
+       
         jMenuDessiner.setEnabled(false);
         jMenuFourier.setEnabled(false);
         jMenuHistogramme.setEnabled(false);
@@ -111,10 +100,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuSeuillage.setEnabled(false);
         jMenuUtils.setEnabled(false);
         jMenuApplication.setEnabled(false);
-
-        
-        couleurPinceauRGB = Color.BLACK;
-        couleurPinceauNG = 0;
     }
     
     /** This method is called from within the constructor to
@@ -866,7 +851,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
     private void activeMenusNG()
     {
-        jMenuDessiner.setEnabled(true);
+        jMenuDessiner.setEnabled(false);
         jMenuFourier.setEnabled(true);
         jMenuHistogramme.setEnabled(true);
         jMenuLineaire.setEnabled(true);
@@ -879,7 +864,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     
     private void activeMenusRGB()
     {
-        jMenuDessiner.setEnabled(true);
+        jMenuDessiner.setEnabled(false);
         jMenuFourier.setEnabled(false);
         jMenuHistogramme.setEnabled(false);
         jMenuLineaire.setEnabled(false);
@@ -891,31 +876,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }
     
     private void jCheckBoxMenuItemDessinerCerclePleinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerCerclePleinActionPerformed
-        if (!jCheckBoxMenuItemDessinerCerclePlein.isSelected()) observer.setMode(JLabelBeanCImage.INACTIF);
-        else
-        {
-            jCheckBoxMenuItemDessinerPixel.setSelected(false);
-            jCheckBoxMenuItemDessinerLigne.setSelected(false);
-            jCheckBoxMenuItemDessinerRectangle.setSelected(false);
-            jCheckBoxMenuItemDessinerRectanglePlein.setSelected(false);
-            jCheckBoxMenuItemDessinerCercle.setSelected(false);
-            jCheckBoxMenuItemDessinerCerclePlein.setSelected(true);
-            observer.setMode(JLabelBeanCImage.SELECT_CERCLE_FILL);
-        }
+        
     }//GEN-LAST:event_jCheckBoxMenuItemDessinerCerclePleinActionPerformed
 
     private void jCheckBoxMenuItemDessinerCercleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerCercleActionPerformed
-        if (!jCheckBoxMenuItemDessinerCercle.isSelected()) observer.setMode(JLabelBeanCImage.INACTIF);
-        else
-        {
-            jCheckBoxMenuItemDessinerPixel.setSelected(false);
-            jCheckBoxMenuItemDessinerLigne.setSelected(false);
-            jCheckBoxMenuItemDessinerRectangle.setSelected(false);
-            jCheckBoxMenuItemDessinerRectanglePlein.setSelected(false);
-            jCheckBoxMenuItemDessinerCercle.setSelected(true);
-            jCheckBoxMenuItemDessinerCerclePlein.setSelected(false);
-            observer.setMode(JLabelBeanCImage.SELECT_CERCLE);
-        }
+        
     }//GEN-LAST:event_jCheckBoxMenuItemDessinerCercleActionPerformed
 
     private void jMenuItemFourierAfficherPartieImaginaireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFourierAfficherPartieImaginaireActionPerformed
@@ -1045,17 +1010,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemFourierAfficherModuleActionPerformed
 
     private void jCheckBoxMenuItemDessinerPixelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerPixelActionPerformed
-        if (!jCheckBoxMenuItemDessinerPixel.isSelected()) observer.setMode(JLabelBeanCImage.INACTIF);
-        else
-        {
-            jCheckBoxMenuItemDessinerPixel.setSelected(true);
-            jCheckBoxMenuItemDessinerLigne.setSelected(false);
-            jCheckBoxMenuItemDessinerRectangle.setSelected(false);
-            jCheckBoxMenuItemDessinerRectanglePlein.setSelected(false);
-            jCheckBoxMenuItemDessinerCercle.setSelected(false);
-            jCheckBoxMenuItemDessinerCerclePlein.setSelected(false);
-            observer.setMode(JLabelBeanCImage.CLIC);
-        }
+
     }//GEN-LAST:event_jCheckBoxMenuItemDessinerPixelActionPerformed
 
     private void jMenuItemEnregistrerSousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEnregistrerSousActionPerformed
@@ -1106,7 +1061,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         fichier = choix.getSelectedFile();
         if (fichier != null) {
             try {
-                imageNG = new CImageNG(fichier);
+                CImageNG imageNG = new CImageNG(fichier);
 
                 int targetSlot = getSelectedSlotOrFirstEmpty();
 
@@ -1117,7 +1072,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                     JOptionPane.showMessageDialog(this, "Aucune case disponible !", "Erreur", JOptionPane.WARNING_MESSAGE);
                 }
 
-                imageRGB = null;
                 activeMenusNG();
             } catch (IOException ex) {
                 System.err.println("Erreur I/O : " + ex.getMessage());
@@ -1128,79 +1082,27 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemOuvrirNGActionPerformed
 
     private void jMenuItemNouvelleNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNouvelleNGActionPerformed
-        JDialogNouvelleCImageNG dialog = new JDialogNouvelleCImageNG(this,true);
-        dialog.setVisible(true);
-        imageNG = dialog.getCImageNG();
-        observer.setCImage(imageNG);
-        imageRGB = null;
-        activeMenusNG();
+
     }//GEN-LAST:event_jMenuItemNouvelleNGActionPerformed
 
     private void jMenuItemCouleurPinceauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCouleurPinceauActionPerformed
-        if (imageRGB != null)
-        {
-            Color newC = JColorChooser.showDialog(this,"Couleur du pinceau",couleurPinceauRGB);
-            if (newC != null) couleurPinceauRGB = newC;
-            observer.setCouleurPinceau(couleurPinceauRGB);
-        }
-        
-        if (imageNG != null)
-        {
-            JDialogChoixCouleurNG dialog = new JDialogChoixCouleurNG(this,true,couleurPinceauNG);
-            dialog.setVisible(true);
-            couleurPinceauNG = dialog.getCouleur();
-        }
+
     }//GEN-LAST:event_jMenuItemCouleurPinceauActionPerformed
 
     private void jCheckBoxMenuItemDessinerRectanglePleinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerRectanglePleinActionPerformed
-        if (!jCheckBoxMenuItemDessinerRectanglePlein.isSelected()) observer.setMode(JLabelBeanCImage.INACTIF);
-        else
-        {
-            jCheckBoxMenuItemDessinerPixel.setSelected(false);
-            jCheckBoxMenuItemDessinerLigne.setSelected(false);
-            jCheckBoxMenuItemDessinerRectangle.setSelected(false);
-            jCheckBoxMenuItemDessinerRectanglePlein.setSelected(true);
-            jCheckBoxMenuItemDessinerCercle.setSelected(false);
-            jCheckBoxMenuItemDessinerCerclePlein.setSelected(false);
-            observer.setMode(JLabelBeanCImage.SELECT_RECT_FILL);
-        }
+
     }//GEN-LAST:event_jCheckBoxMenuItemDessinerRectanglePleinActionPerformed
 
     private void jCheckBoxMenuItemDessinerRectangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerRectangleActionPerformed
-        if (!jCheckBoxMenuItemDessinerRectangle.isSelected()) observer.setMode(JLabelBeanCImage.INACTIF);
-        else
-        {
-            jCheckBoxMenuItemDessinerPixel.setSelected(false);
-            jCheckBoxMenuItemDessinerLigne.setSelected(false);
-            jCheckBoxMenuItemDessinerRectangle.setSelected(true);
-            jCheckBoxMenuItemDessinerRectanglePlein.setSelected(false);
-            jCheckBoxMenuItemDessinerCercle.setSelected(false);
-            jCheckBoxMenuItemDessinerCerclePlein.setSelected(false);
-            observer.setMode(JLabelBeanCImage.SELECT_RECT);
-        }
+
     }//GEN-LAST:event_jCheckBoxMenuItemDessinerRectangleActionPerformed
 
     private void jCheckBoxMenuItemDessinerLigneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemDessinerLigneActionPerformed
-        if (!jCheckBoxMenuItemDessinerLigne.isSelected()) observer.setMode(JLabelBeanCImage.INACTIF);
-        else
-        {
-            jCheckBoxMenuItemDessinerPixel.setSelected(false);
-            jCheckBoxMenuItemDessinerLigne.setSelected(true);
-            jCheckBoxMenuItemDessinerRectangle.setSelected(false);
-            jCheckBoxMenuItemDessinerRectanglePlein.setSelected(false);
-            jCheckBoxMenuItemDessinerCercle.setSelected(false);
-            jCheckBoxMenuItemDessinerCerclePlein.setSelected(false);
-            observer.setMode(JLabelBeanCImage.SELECT_LIGNE);
-        }
+
     }//GEN-LAST:event_jCheckBoxMenuItemDessinerLigneActionPerformed
 
     private void jMenuItemNouvelleRGBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNouvelleRGBActionPerformed
-        JDialogNouvelleCImageRGB dialog = new JDialogNouvelleCImageRGB(this,true);
-        dialog.setVisible(true);
-        imageRGB = dialog.getCImageRGB();
-        observer.setCImage(imageRGB);
-        imageNG = null;
-        activeMenusRGB();
+
     }//GEN-LAST:event_jMenuItemNouvelleRGBActionPerformed
 
     private void jMenuQuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuQuitterActionPerformed
@@ -1214,15 +1116,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         File file = chooser.getSelectedFile();
         if (file != null) {
             try {
-                imageRGB = new CImageRGB(file);
+                CImageRGB imageRGB = new CImageRGB(file);
                 int targetSlot = getSelectedSlot();
                 if (targetSlot == -1) targetSlot = getFirstAvailableSlot();
                 if (targetSlot != -1) {
                     setImageToSlot(targetSlot, imageRGB);
                     clearAllSelections();
                 }
-                observer.setCImage(imageRGB); // Keep existing functionality if observer is used
-                imageNG = null;
                 activeMenusRGB();
             } catch (IOException ex) {
                 System.err.println("Erreur I/O : " + ex.getMessage());
@@ -2256,115 +2156,37 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     @Override
     public void ClicDetected(UnClicEvent e) 
     {
-        if (jCheckBoxMenuItemDessinerPixel.isSelected())
-        {   
-            try 
-            {
-                if (imageRGB != null) 
-                    imageRGB.setPixel(e.getX(),e.getY(),couleurPinceauRGB);
-                if (imageNG != null) 
-                    imageNG.setPixel(e.getX(),e.getY(),couleurPinceauNG);
-            } 
-            catch (CImageRGBException ex) 
-            { System.out.println("Erreur RGB : " + ex.getMessage()); }
-            catch (CImageNGException ex) 
-            { System.out.println("Erreur NG : " + ex.getMessage()); }
-        }
+
     }
 
     @Override
     public void SelectLigneDetected(DeuxClicsEvent e) 
     {
-        if (jCheckBoxMenuItemDessinerLigne.isSelected())
-        {   
-            try 
-            {
-                if (imageRGB != null) 
-                    imageRGB.DessineLigne(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauRGB);
-                if (imageNG != null) 
-                    imageNG.DessineLigne(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauNG);
-            } 
-            catch (CImageRGBException ex) 
-            { System.out.println("Erreur RGB : " + ex.getMessage()); }
-            catch (CImageNGException ex) 
-            { System.out.println("Erreur NG : " + ex.getMessage()); }
-        }
+
     }
 
     @Override
     public void SelectRectDetected(DeuxClicsEvent e) 
     {
-        if (jCheckBoxMenuItemDessinerRectangle.isSelected())
-        {   
-            try 
-            {
-                if (imageRGB != null)
-                    imageRGB.DessineRect(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauRGB);
-                if (imageNG != null)
-                    imageNG.DessineRect(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauNG);
-            } 
-            catch (CImageRGBException ex) 
-            { System.out.println("Erreur RGB : " + ex.getMessage()); }
-            catch (CImageNGException ex) 
-            { System.out.println("Erreur NG : " + ex.getMessage()); }
-        }
+
     }
 
     @Override
     public void SelectCercleDetected(DeuxClicsEvent e) 
     {
-        if (jCheckBoxMenuItemDessinerCercle.isSelected())
-        {   
-            try 
-            {
-                if (imageRGB != null)
-                    imageRGB.DessineCercle(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauRGB);
-                if (imageNG != null)
-                    imageNG.DessineCercle(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauNG);
-            } 
-            catch (CImageRGBException ex) 
-            { System.out.println("Erreur RGB : " + ex.getMessage()); }
-            catch (CImageNGException ex) 
-            { System.out.println("Erreur NG : " + ex.getMessage()); }
-        }
+
     }
 
     @Override
     public void SelectCercleFillDetected(DeuxClicsEvent e) 
     {
-        if (jCheckBoxMenuItemDessinerCerclePlein.isSelected())
-        {   
-            try 
-            {
-                if (imageRGB != null)
-                    imageRGB.RemplitCercle(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauRGB);
-                if (imageNG != null)
-                    imageNG.RemplitCercle(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauNG);
-            } 
-            catch (CImageRGBException ex) 
-            { System.out.println("Erreur RGB : " + ex.getMessage()); }
-            catch (CImageNGException ex) 
-            { System.out.println("Erreur NG : " + ex.getMessage()); }
-        }
+
     }
 
     @Override
     public void SelectRectFillDetected(DeuxClicsEvent e) 
     {
-        if (jCheckBoxMenuItemDessinerRectanglePlein.isSelected())
-        {   
-            try 
-            {
-                if (imageRGB != null) 
-                    imageRGB.RemplitRect(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauRGB);
-                if (imageNG != null) 
-                    imageNG.RemplitRect(e.getX1(),e.getY1(),e.getX2(),e.getY2(),couleurPinceauNG);
-            } 
-            catch (CImageRGBException ex) 
-            { System.out.println("Erreur RGB : " + ex.getMessage()); }
-            catch (CImageNGException ex) 
-            { System.out.println("Erreur NG : " + ex.getMessage()); }
-        }
+
     }
     
     // ANTOINE WAS HERE
