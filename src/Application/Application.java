@@ -51,9 +51,12 @@ public class Application {
             if(image instanceof CImageNG cImageNG){
                 int[][] data = cImageNG.getMatrice();
                 
-                
-                int[][] output = MorphoComplexe.filtreMedian(data, 9);
+                int[][] output = MorphoComplexe.filtreMedian(data, 5);
                 sequence.add(new CImageNG(output));
+                
+                output = MorphoComplexe.filtreMedian(data, 9);
+                sequence.add(new CImageNG(output));
+
             }
             
         } catch (CImageNGException ex) {
