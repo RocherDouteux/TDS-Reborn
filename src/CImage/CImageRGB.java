@@ -156,7 +156,7 @@ public class CImageRGB extends CImage
         {
             pg.grabPixels();
             ColorModel cm = pg.getColorModel();
-        
+            
             int r = cm.getRed(pixels[0]);
             int g = cm.getGreen(pixels[0]);
             int b = cm.getBlue(pixels[0]);
@@ -350,7 +350,7 @@ public class CImageRGB extends CImage
         {
             pg.grabPixels();
             ColorModel cm = pg.getColorModel();
-        
+            
             for(int y=0 ; y<hauteur ; y++)
                 for(int x=0 ; x<largeur ; x++)
                 {
@@ -358,77 +358,77 @@ public class CImageRGB extends CImage
                     if (green != null) green[x][y] = cm.getGreen(pixels[y*largeur+x]);
                     if (blue != null) blue[x][y] = cm.getBlue(pixels[y*largeur+x]);
                 }
-        } 
-        catch (InterruptedException ex) 
-        {
-            throw new CImageRGBException("Probleme avec PixelGrabber");
-        }
-    }
-    
-    public void setMatricesRGB(int[][] red,int[][] green,int[][] blue) throws CImageRGBException
-    {
-        // Verification des param�tres
-        if (red != null)
-        {
-            if (red.length != largeur || red[0].length != hauteur)
-                throw new CImageRGBException("La taille de la matrice Red n'est pas valide");
-        }
-        if (green != null)
-        {
-            if (green.length != largeur || green[0].length != hauteur)
-                throw new CImageRGBException("La taille de la matrice Green n'est pas valide");
-        }
-        if (blue != null)
-        {
-            if (blue.length != largeur || blue[0].length != hauteur)
-                throw new CImageRGBException("La taille de la matrice Blue n'est pas valide");
-        }
-
-        // Matrices null ?
-        if (red == null && green == null && blue == null) return;
-        if (red == null || green == null || blue == null)
-        {
-            int[][] redOld = new int[largeur][hauteur];
-            int[][] greenOld = new int[largeur][hauteur];
-            int[][] blueOld = new int[largeur][hauteur];
-            getMatricesRGB(redOld,greenOld,blueOld);
-            if (red == null) red = redOld;
-            if (green == null) green = greenOld;
-            if (blue == null) blue = blueOld;
+            } 
+            catch (InterruptedException ex) 
+            {
+                throw new CImageRGBException("Probleme avec PixelGrabber");
+            }
         }
         
+        public void setMatricesRGB(int[][] red,int[][] green,int[][] blue) throws CImageRGBException
+        {
+        // Verification des param�tres
+            if (red != null)
+            {
+                if (red.length != largeur || red[0].length != hauteur)
+                    throw new CImageRGBException("La taille de la matrice Red n'est pas valide");
+            }
+            if (green != null)
+            {
+                if (green.length != largeur || green[0].length != hauteur)
+                    throw new CImageRGBException("La taille de la matrice Green n'est pas valide");
+            }
+            if (blue != null)
+            {
+                if (blue.length != largeur || blue[0].length != hauteur)
+                    throw new CImageRGBException("La taille de la matrice Blue n'est pas valide");
+            }
+
+        // Matrices null ?
+            if (red == null && green == null && blue == null) return;
+            if (red == null || green == null || blue == null)
+            {
+                int[][] redOld = new int[largeur][hauteur];
+                int[][] greenOld = new int[largeur][hauteur];
+                int[][] blueOld = new int[largeur][hauteur];
+                getMatricesRGB(redOld,greenOld,blueOld);
+                if (red == null) red = redOld;
+                if (green == null) green = greenOld;
+                if (blue == null) blue = blueOld;
+            }
+            
         // Mise � jour de l'image
-        for(int i=0 ; i<largeur ; i++)
-            for(int j=0 ; j<hauteur ; j++)
-            {
-                if (red[i][j] < 0 || red[i][j] > 255)
-                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
-                if (green[i][j] < 0 || green[i][j] > 255)
-                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
-                if (blue[i][j] < 0 || blue[i][j] > 255)
-                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
-                Color c = new Color(red[i][j],green[i][j],blue[i][j]);
-                setPixel(i,j,c);
+            for(int i=0 ; i<largeur ; i++)
+                for(int j=0 ; j<hauteur ; j++)
+                {
+                    if (red[i][j] < 0 || red[i][j] > 255)
+                        throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
+                    if (green[i][j] < 0 || green[i][j] > 255)
+                        throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
+                    if (blue[i][j] < 0 || blue[i][j] > 255)
+                        throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
+                    Color c = new Color(red[i][j],green[i][j],blue[i][j]);
+                    setPixel(i,j,c);
+                }
+                if (observer != null) observer.update();
             }
-        if (observer != null) observer.update();
-    }
-    
-    public CImageNG getCImageNG()
-    {
-        int[][] red = new int[largeur][hauteur];
-        int[][] green = new int[largeur][hauteur];
-        int[][] blue = new int[largeur][hauteur];
-        try { getMatricesRGB(red,green,blue); } 
-        catch (CImageRGBException ex) { System.out.println("Erreur interne inexpliquee..."); }
-        int[][] matrice = new int[largeur][hauteur];
-        for(int x=0 ; x<largeur ; x++)
-            for(int y=0 ; y<hauteur ; y++)
+            
+            public CImageNG getCImageNG()
             {
-                int val = (int)(((double)(red[x][y] + green[x][y] + blue[x][y]))/3.0);
-                matrice[x][y] = val;
+                int[][] red = new int[largeur][hauteur];
+                int[][] green = new int[largeur][hauteur];
+                int[][] blue = new int[largeur][hauteur];
+                try { getMatricesRGB(red,green,blue); } 
+                catch (CImageRGBException ex) { System.out.println("Erreur interne inexpliquee..."); }
+                int[][] matrice = new int[largeur][hauteur];
+                for(int x=0 ; x<largeur ; x++)
+                    for(int y=0 ; y<hauteur ; y++)
+                    {
+                        int val = (int)(((double)(red[x][y] + green[x][y] + blue[x][y]))/3.0);
+                        matrice[x][y] = val;
+                    }
+                    try { return new CImageNG(matrice); } 
+                    catch (CImageNGException ex) { System.out.println("Erreur interne inexpliquee..."); }
+                    return null;
+                }
             }
-        try { return new CImageNG(matrice); } 
-        catch (CImageNGException ex) { System.out.println("Erreur interne inexpliquee..."); }
-        return null;
-    }
-}

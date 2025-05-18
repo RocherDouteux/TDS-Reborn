@@ -13,148 +13,148 @@ public class Histogramme
         for(int i=0 ; i<M ; i++)
             for(int j=0 ; j<N ; j++)
                 if ((mat[i][j] >= 0) && (mat[i][j]<=255)) histo[mat[i][j]]++;
-        
-        return histo;
-    }
-    
-    public static int minimum(int[][] image){
-        int height = image.length;
-        int width = image[0].length;
-        
-        int min = 256;
-        for(int i = 0; i < height; i++){
-            for(int j = 0; j < width; j++){
-                min = Math.min(min, image[i][j]);
-            }
+            
+            return histo;
         }
-        return min;
-    }
-    
-    public static int maximum(int[][] image){
-        int height = image.length;
-        int width = image[0].length;
         
-        int max = 0;
-        for(int i = 0; i < height; i++){
-            for(int j = 0; j < width; j++){
-                max = Math.max(max, image[i][j]);
+        public static int minimum(int[][] image){
+            int height = image.length;
+            int width = image[0].length;
+            
+            int min = 256;
+            for(int i = 0; i < height; i++){
+                for(int j = 0; j < width; j++){
+                    min = Math.min(min, image[i][j]);
+                }
             }
+            return min;
         }
-        return max;
-    }
-    
+        
+        public static int maximum(int[][] image){
+            int height = image.length;
+            int width = image[0].length;
+            
+            int max = 0;
+            for(int i = 0; i < height; i++){
+                for(int j = 0; j < width; j++){
+                    max = Math.max(max, image[i][j]);
+                }
+            }
+            return max;
+        }
+        
     // Moyenne des pixels
-    public static int luminance(int[][] image){
-        int height = image.length;
-        int width = image[0].length;
-        
-        int sum = 0;
-        for(int i = 0; i < height; i++){
-            for(int j = 0; j < width; j++){
-                sum += image[i][j];
+        public static int luminance(int[][] image){
+            int height = image.length;
+            int width = image[0].length;
+            
+            int sum = 0;
+            for(int i = 0; i < height; i++){
+                for(int j = 0; j < width; j++){
+                    sum += image[i][j];
+                }
             }
+            return sum / (height * width);
         }
-        return sum / (height * width);
-    }
-    
+        
     // Ecart quadratic à la moyenne
-    public static double contraste1(int[][] image){
-        int lum = Histogramme.luminance(image);
-        
-        int height = image.length;
-        int width = image[0].length;
-        
-        double sum = 0.0;
-        for(int i = 0; i < height; i++){
-            for(int j = 0; j < width; j++){
-                sum += Math.pow(image[i][j] - lum, 2);
+        public static double contraste1(int[][] image){
+            int lum = Histogramme.luminance(image);
+            
+            int height = image.length;
+            int width = image[0].length;
+            
+            double sum = 0.0;
+            for(int i = 0; i < height; i++){
+                for(int j = 0; j < width; j++){
+                    sum += Math.pow(image[i][j] - lum, 2);
+                }
             }
+            return Math.sqrt(sum / (height * width));
         }
-        return Math.sqrt(sum / (height * width));
-    }
-    
-    public static double contraste2(int[][] image){
-        double min = (double) Histogramme.minimum(image);
-        double max = (double) Histogramme.maximum(image);
         
-        return (max - min) / (max + min);
-    }
-    
-    public static int[][] rehaussement(int[][] image, int[] courbeTonale){
-        int height = image.length;
-        int width = image[0].length;
+        public static double contraste2(int[][] image){
+            double min = (double) Histogramme.minimum(image);
+            double max = (double) Histogramme.maximum(image);
+            
+            return (max - min) / (max + min);
+        }
         
-        int[][] result = new int[height][width];
+        public static int[][] rehaussement(int[][] image, int[] courbeTonale){
+            int height = image.length;
+            int width = image[0].length;
+            
+            int[][] result = new int[height][width];
+            
+            for(int i = 0; i < height; i++){
+                for(int j = 0; j < width; j++){
+                    int pixel = image[i][j];
+                    
+                    result[i][j] = courbeTonale[pixel];
+                }
+            }
+            
+            return result;
+        }
         
-        for(int i = 0; i < height; i++){
-            for(int j = 0; j < width; j++){
-                int pixel = image[i][j];
+        public static int[] creeCourbeTonaleLineaireSaturation(int smin, int smax){
+            int[] courbeTonale = new int[256];
+            
+            for(int i = 0; i < 256; i++){
+                if(i < smin){
+                    courbeTonale[i] = 0;
+                    continue;
+                }
                 
-                result[i][j] = courbeTonale[pixel];
-            }
-        }
-        
-        return result;
-    }
-    
-    public static int[] creeCourbeTonaleLineaireSaturation(int smin, int smax){
-        int[] courbeTonale = new int[256];
-        
-        for(int i = 0; i < 256; i++){
-            if(i < smin){
-                courbeTonale[i] = 0;
-                continue;
+                if(i > smax){
+                    courbeTonale[i] = 255;
+                    continue;
+                }
+                
+                courbeTonale[i] = (int) Math.round(255.0 * (i - smin) / (smax - smin));
             }
             
-            if(i > smax){
-                courbeTonale[i] = 255;
-                continue;
+            return courbeTonale;
+        }
+        
+        
+        public static int[] creeCourbeTonaleGamma(double gamma){
+            int[] courbeTonale = new int[256];
+            
+            for(int i = 0; i < 256; i++){
+                courbeTonale[i] = (int) Math.round(255.0 * Math.pow(i / 255.0, 1.0 / gamma));
             }
             
-            courbeTonale[i] = (int) Math.round(255.0 * (i - smin) / (smax - smin));
+            return courbeTonale;
         }
         
-        return courbeTonale;
-    }
-    
-    
-    public static int[] creeCourbeTonaleGamma(double gamma){
-        int[] courbeTonale = new int[256];
-        
-        for(int i = 0; i < 256; i++){
-            courbeTonale[i] = (int) Math.round(255.0 * Math.pow(i / 255.0, 1.0 / gamma));
+        public static int[] creeCourbeTonaleNegatif(){
+            int[] courbeTonale = new int[256];
+            
+            for(int i = 0; i < 256; i++){
+                courbeTonale[i] = 255 - i;
+            }
+            
+            return courbeTonale;
         }
         
-        return courbeTonale;
-    }
-    
-    public static int[] creeCourbeTonaleNegatif(){
-        int[] courbeTonale = new int[256];
-        
-        for(int i = 0; i < 256; i++){
-            courbeTonale[i] = 255 - i;
-        }
-        
-        return courbeTonale;
-    }
-    
-    public static int[] creeCourbeTonaleEgalisation(int[][] image){
-        int[] histogram = Histogramme.Histogramme256(image);
-        int totalPixels = image.length * image[0].length;
+        public static int[] creeCourbeTonaleEgalisation(int[][] image){
+            int[] histogram = Histogramme.Histogramme256(image);
+            int totalPixels = image.length * image[0].length;
 
         // Calcul de l'histogramme cumulé
-        int[] cumulativeHistogram = new int[256];
-        cumulativeHistogram[0] = histogram[0];
-        for (int i = 1; i < 256; i++) {
-            cumulativeHistogram[i] = cumulativeHistogram[i - 1] + histogram[i];
-        }
+            int[] cumulativeHistogram = new int[256];
+            cumulativeHistogram[0] = histogram[0];
+            for (int i = 1; i < 256; i++) {
+                cumulativeHistogram[i] = cumulativeHistogram[i - 1] + histogram[i];
+            }
 
-        int[] tonalCurve = new int[256];
-        for (int i = 0; i < 256; i++) {
-            tonalCurve[i] = (int) (((double) cumulativeHistogram[i] / totalPixels) * 255);
-        }
+            int[] tonalCurve = new int[256];
+            for (int i = 0; i < 256; i++) {
+                tonalCurve[i] = (int) (((double) cumulativeHistogram[i] / totalPixels) * 255);
+            }
 
-        return tonalCurve;
+            return tonalCurve;
+        }
+        
     }
-    
-}

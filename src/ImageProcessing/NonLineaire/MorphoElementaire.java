@@ -1,97 +1,90 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package ImageProcessing.NonLineaire;
+    package ImageProcessing.NonLineaire;
 
-import ImageProcessing.Lineaire.FiltrageLineaireLocal;
+    import ImageProcessing.Lineaire.FiltrageLineaireLocal;
 
-/**
- *
- * @author fred
- */
-public class MorphoElementaire {
-    
-    public static int[][] erosion(int[][] image, int tailleMasque){
-        if(tailleMasque % 2 == 0){
-            System.out.println("Le masque doit être de taille impaire !");
-            return image;
-        }
 
-        int imageHeight = image.length;
-        int imageWidth = image[0].length;
-        int offset = tailleMasque / 2;
+    public class MorphoElementaire {
+        
+        public static int[][] erosion(int[][] image, int tailleMasque){
+            if(tailleMasque % 2 == 0){
+                System.out.println("Le masque doit être de taille impaire !");
+                return image;
+            }
 
-        int[][] output = new int[imageHeight][imageWidth];
+            int imageHeight = image.length;
+            int imageWidth = image[0].length;
+            int offset = tailleMasque / 2;
 
-        for (int imageY = 0; imageY < imageHeight; imageY++) {
-            for (int imageX = 0; imageX < imageWidth; imageX++) {
-                int minValue = 255;
+            int[][] output = new int[imageHeight][imageWidth];
 
-                for (int offsetY = -offset; offsetY <= offset; offsetY++) {
-                    for (int offsetX = -offset; offsetX <= offset; offsetX++) {
-                        int pixelY = imageY + offsetY;
-                        int pixelX = imageX + offsetX;
+            for (int imageY = 0; imageY < imageHeight; imageY++) {
+                for (int imageX = 0; imageX < imageWidth; imageX++) {
+                    int minValue = 255;
 
-                        if (pixelY >= 0 && pixelY < imageHeight && pixelX >= 0 && pixelX < imageWidth) {
-                            minValue = Math.min(minValue, image[pixelY][pixelX]);
+                    for (int offsetY = -offset; offsetY <= offset; offsetY++) {
+                        for (int offsetX = -offset; offsetX <= offset; offsetX++) {
+                            int pixelY = imageY + offsetY;
+                            int pixelX = imageX + offsetX;
+
+                            if (pixelY >= 0 && pixelY < imageHeight && pixelX >= 0 && pixelX < imageWidth) {
+                                minValue = Math.min(minValue, image[pixelY][pixelX]);
+                            }
                         }
                     }
+
+                    output[imageY][imageX] = minValue;
                 }
-
-                output[imageY][imageX] = minValue;
             }
+
+            return output;
         }
 
-        return output;
-    }
+        
+        
+        public static int[][] dilatation(int[][] image, int tailleMasque){
+            if(tailleMasque % 2 == 0){
+                System.out.println("Le masque doit être de taille impaire !");
+                return image;
+            }
 
-    
-    
-    public static int[][] dilatation(int[][] image, int tailleMasque){
-        if(tailleMasque % 2 == 0){
-            System.out.println("Le masque doit être de taille impaire !");
-            return image;
-        }
+            int imageHeight = image.length;
+            int imageWidth = image[0].length;
+            int offset = tailleMasque / 2;
 
-        int imageHeight = image.length;
-        int imageWidth = image[0].length;
-        int offset = tailleMasque / 2;
+            int[][] output = new int[imageHeight][imageWidth];
 
-        int[][] output = new int[imageHeight][imageWidth];
+            for (int imageY = 0; imageY < imageHeight; imageY++) {
+                for (int imageX = 0; imageX < imageWidth; imageX++) {
+                    int maxVal = 0;
 
-        for (int imageY = 0; imageY < imageHeight; imageY++) {
-            for (int imageX = 0; imageX < imageWidth; imageX++) {
-                int maxVal = 0;
+                    for (int offsetY = -offset; offsetY <= offset; offsetY++) {
+                        for (int offsetX = -offset; offsetX <= offset; offsetX++) {
+                            int pixelY = imageY + offsetY;
+                            int pixelX = imageX + offsetX;
 
-                for (int offsetY = -offset; offsetY <= offset; offsetY++) {
-                    for (int offsetX = -offset; offsetX <= offset; offsetX++) {
-                        int pixelY = imageY + offsetY;
-                        int pixelX = imageX + offsetX;
-
-                        if (pixelY >= 0 && pixelY < imageHeight && pixelX >= 0 && pixelX < imageWidth) {
-                            maxVal = Math.max(maxVal, image[pixelY][pixelX]);
+                            if (pixelY >= 0 && pixelY < imageHeight && pixelX >= 0 && pixelX < imageWidth) {
+                                maxVal = Math.max(maxVal, image[pixelY][pixelX]);
+                            }
                         }
                     }
-                }
 
-                output[imageY][imageX] = maxVal;
+                    output[imageY][imageX] = maxVal;
+                }
             }
+
+            return output;
         }
 
-        return output;
-    }
-
-    
-    public static int[][] ouverture(int[][] image, int tailleMasque){
+        
+        public static int[][] ouverture(int[][] image, int tailleMasque){
         // Fermeture = dilatation + erosion
-        int[][] output = MorphoElementaire.erosion(image, tailleMasque);
-        return MorphoElementaire.dilatation(output, tailleMasque);
-    }
-    
-    public static int[][] fermeture(int[][] image, int tailleMasque){
+            int[][] output = MorphoElementaire.erosion(image, tailleMasque);
+            return MorphoElementaire.dilatation(output, tailleMasque);
+        }
+        
+        public static int[][] fermeture(int[][] image, int tailleMasque){
         // Fermeture = dilatation + erosion
-        int[][] output = MorphoElementaire.dilatation(image, tailleMasque);
-        return MorphoElementaire.erosion(output, tailleMasque);
+            int[][] output = MorphoElementaire.dilatation(image, tailleMasque);
+            return MorphoElementaire.erosion(output, tailleMasque);
+        }
     }
-}

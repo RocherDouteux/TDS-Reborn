@@ -127,9 +127,9 @@ public class JDialogNouvelleCImageRGB extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonChoisirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChoisirActionPerformed
-            Color newC = JColorChooser.showDialog(this,"Couleur de fond",couleur);
-            if (newC != null) couleur = newC;
-            jPanel.setBackground(couleur);
+        Color newC = JColorChooser.showDialog(this,"Couleur de fond",couleur);
+        if (newC != null) couleur = newC;
+        jPanel.setBackground(couleur);
     }//GEN-LAST:event_jButtonChoisirActionPerformed
 
     private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed

@@ -1,14 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ImageProcessing.Contours;
+
 import ImageProcessing.NonLineaire.MorphoElementaire;
 
-/**
- *
- * @author Axel
- */
 public class ContoursNonLineaire {    
     public static int[][] gradientErosion(int[][] image) {
         int[][] eroded = MorphoElementaire.erosion(image, 3);
@@ -47,14 +40,14 @@ public class ContoursNonLineaire {
         
         if (inverse) {
             for (int i = 0; i < imageHeight; i++) {
-            for (int j = 0; j < imageWidth; j++) {
-                output[i][j] = eroded[i][j] - dilated[i][j];
+                for (int j = 0; j < imageWidth; j++) {
+                    output[i][j] = eroded[i][j] - dilated[i][j];
                 }
             }
         } else {
             for (int i = 0; i < imageHeight; i++) {
-            for (int j = 0; j < imageWidth; j++) {
-                output[i][j] = dilated[i][j] - eroded[i][j];
+                for (int j = 0; j < imageWidth; j++) {
+                    output[i][j] = dilated[i][j] - eroded[i][j];
                 }
             }
         }
@@ -70,14 +63,14 @@ public class ContoursNonLineaire {
         
         if (inverse) {
             for (int i = 0; i < imageHeight; i++) {
-            for (int j = 0; j < imageWidth; j++) {
-                output[i][j] = gradienterosion[i][j] - gradientdilatation[i][j];
+                for (int j = 0; j < imageWidth; j++) {
+                    output[i][j] = gradienterosion[i][j] - gradientdilatation[i][j];
                 }
             }
         } else {
             for (int i = 0; i < imageHeight; i++) {
-            for (int j = 0; j < imageWidth; j++) {
-                output[i][j] = gradientdilatation[i][j] - gradienterosion[i][j];
+                for (int j = 0; j < imageWidth; j++) {
+                    output[i][j] = gradientdilatation[i][j] - gradienterosion[i][j];
                 }
             }
         }

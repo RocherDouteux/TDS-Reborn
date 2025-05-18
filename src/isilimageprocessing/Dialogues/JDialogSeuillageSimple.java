@@ -1,14 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package isilimageprocessing.Dialogues;
 import javax.swing.SpinnerNumberModel;
 
-/**
- *
- * @author Axel
- */
 public class JDialogSeuillageSimple extends javax.swing.JDialog {
     
     private int seuil;

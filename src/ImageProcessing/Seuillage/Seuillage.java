@@ -1,13 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ImageProcessing.Seuillage;
 
-/**
- *
- * @author Admin
- */
+
 public class Seuillage {
     public static int[][] seuillageSimple(int[][] image, int seuil){
         int rows = image.length;

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Application;
 
 import CImage.CImage;
@@ -15,10 +11,7 @@ import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Axel
- */
+
 public class Application {
     
     private static final Logger logger = Logger.getLogger(Application.class.getName());
@@ -70,48 +63,57 @@ public class Application {
         return sequence;
     }
     
-    public static int[][] question1B(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question1B(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
     
-    public static int[][] question2A(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question2A(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
     
-    public static int[][] question2B(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question2B(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
     
-    public static int[][] question3(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question3(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
     
-    public static int[][] question4(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question4(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
     
-    public static int[][] question5(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question5(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
     
-    public static int[][] question6A(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question6A(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
     
-    public static int[][] question6B(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question6B(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
     
-    public static int[][] question7(int[][] image){
-        System.out.println("TO DO");
-        return image;
+    public static Queue<CImage> question7(CImage image){
+        Queue<CImage> sequence = new LinkedList();
+        sequence.add(image);
+        return sequence;
     }
 }

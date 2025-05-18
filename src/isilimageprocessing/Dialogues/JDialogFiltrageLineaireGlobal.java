@@ -1,20 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package isilimageprocessing.Dialogues;
 
-/**
- *
- * @author Admin
- */
 public class JDialogFiltrageLineaireGlobal extends javax.swing.JDialog {
 
     private int frequenceDeCoupure;
     private int ordre;
     
     private boolean filled;
-   
+    
     
     /**
      * Creates new form NewJDialogFiltrageLineaire

@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ImageProcessing.NonLineaire;
 
 import ImageProcessing.Utils.Utils;
 
-/**
- *
- * @author lizardman
- */
 public class MorphoComplexe {
     
     
@@ -49,7 +41,7 @@ public class MorphoComplexe {
         return outputImage;
     }
 
-        
+    
 
 
         /**
@@ -95,7 +87,7 @@ public class MorphoComplexe {
 
         return current;
     }
-  
+    
 
         /**
          * Applique un filtre médian sur une image en niveaux de gris.

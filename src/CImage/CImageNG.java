@@ -73,7 +73,7 @@ public class CImageNG extends CImage
         {
             pg.grabPixels();
             ColorModel cm = pg.getColorModel();
-        
+            
             int val = cm.getRed(pixels[0]); // rouge, vert, bleu, c'est pareil !
 
             return val;
@@ -145,63 +145,63 @@ public class CImageNG extends CImage
         {
             pg.grabPixels();
             ColorModel cm = pg.getColorModel();
-        
+            
             int[][] matrice = new int[largeur][hauteur];
             for(int y=0 ; y<hauteur ; y++)
                 for(int x=0 ; x<largeur ; x++)
                 {
                     matrice[x][y] = cm.getRed(pixels[y*largeur+x]);
                 }
-            return matrice;
-        } 
-        catch (InterruptedException ex) 
-        {
-            throw new CImageNGException("Probleme avec PixelGrabber");
+                return matrice;
+            } 
+            catch (InterruptedException ex) 
+            {
+                throw new CImageNGException("Probleme avec PixelGrabber");
+            }
         }
-    }
-    
-    public void setMatrice(int[][] matrice) throws CImageNGException
-    {
-        if (matrice != null)
+        
+        public void setMatrice(int[][] matrice) throws CImageNGException
         {
-            if (matrice.length != largeur || matrice[0].length != hauteur)
-                throw new CImageNGException("La taille de la matrice n'est pas valide");
-            
-            for(int i=0 ; i<largeur ; i++)
-                for(int j=0 ; j<hauteur ; j++)
-                {
-                    verifieNG(matrice[i][j]);
-                    Color c = new Color(matrice[i][j],matrice[i][j],matrice[i][j]);
-                    contexte.setColor(c);
-                    contexte.drawLine(i,j,i,j);
+            if (matrice != null)
+            {
+                if (matrice.length != largeur || matrice[0].length != hauteur)
+                    throw new CImageNGException("La taille de la matrice n'est pas valide");
+                
+                for(int i=0 ; i<largeur ; i++)
+                    for(int j=0 ; j<hauteur ; j++)
+                    {
+                        verifieNG(matrice[i][j]);
+                        Color c = new Color(matrice[i][j],matrice[i][j],matrice[i][j]);
+                        contexte.setColor(c);
+                        contexte.drawLine(i,j,i,j);
+                    }
+                    if (observer != null) observer.update();
                 }
-            if (observer != null) observer.update();
-        }
-    }
-    
-    public void charge(File f) throws IOException
-    {
-        CImageRGB cimagergb = new CImageRGB(f);
-        CImageNG cimageng;
-        cimageng = cimagergb.getCImageNG();
-        largeur = cimageng.getLargeur();
-        hauteur = cimageng.getHauteur();
-        image = cimageng.getImage();
-        contexte = image.getGraphics();
+            }
             
-        if (getObserver() != null) getObserver().update();
-    }
-    
-    public CImageRGB getCImageRGB()
-    {
-        try 
-        {
-            int[][] matrice = getMatrice();
-            CImageRGB cImageRGB = new CImageRGB(matrice,matrice,matrice);
-            return cImageRGB;
-        } 
-        catch (CImageNGException ex) { System.err.println("Erreur interne inexpliq�e..."); }
-        catch (CImageRGBException ex) { System.err.println("Erreur interne inexpliq�e..."); }
-        return null;
-    }
-}
+            public void charge(File f) throws IOException
+            {
+                CImageRGB cimagergb = new CImageRGB(f);
+                CImageNG cimageng;
+                cimageng = cimagergb.getCImageNG();
+                largeur = cimageng.getLargeur();
+                hauteur = cimageng.getHauteur();
+                image = cimageng.getImage();
+                contexte = image.getGraphics();
+                
+                if (getObserver() != null) getObserver().update();
+            }
+            
+            public CImageRGB getCImageRGB()
+            {
+                try 
+                {
+                    int[][] matrice = getMatrice();
+                    CImageRGB cImageRGB = new CImageRGB(matrice,matrice,matrice);
+                    return cImageRGB;
+                } 
+                catch (CImageNGException ex) { System.err.println("Erreur interne inexpliq�e..."); }
+                catch (CImageRGBException ex) { System.err.println("Erreur interne inexpliq�e..."); }
+                return null;
+            }
+        }

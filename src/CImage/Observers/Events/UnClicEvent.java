@@ -6,7 +6,6 @@ public class UnClicEvent extends EventObject
 {
     private int x,y;
     
-    /** Creates a new instance of SourisClicEvent */
     public UnClicEvent(Object source,int x,int y) 
     {
         super(source);

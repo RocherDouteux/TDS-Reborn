@@ -34,7 +34,6 @@ public class JLabelBeanCImage extends JLabel implements Observer, MouseListener,
     
     private int mode;
     
-    /** Creates a new instance of JLabelCImage */
     public JLabelBeanCImage() 
     {
         super();
@@ -277,7 +276,7 @@ public class JLabelBeanCImage extends JLabel implements Observer, MouseListener,
                     int rayon = (int)Math.sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
                     getGraphics().fillOval(x1-rayon,y1-rayon,2*rayon,2*rayon);
                 }
-                 
+                
             }
         }
     }

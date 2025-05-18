@@ -6,7 +6,6 @@ public class DeuxClicsEvent extends EventObject
 {
     private int x1,x2,y1,y2;
     
-    /** Creates a new instance of SourisClicEvent */
     public DeuxClicsEvent(Object source,int x1,int y1,int x2,int y2) 
     {
         super(source);

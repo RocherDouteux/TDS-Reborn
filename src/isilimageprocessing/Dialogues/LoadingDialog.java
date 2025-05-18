@@ -64,8 +64,8 @@ public class LoadingDialog extends JDialog {
                 } catch (InterruptedException | ExecutionException e) {
                     logger.log(Level.SEVERE, "Error during task execution", e);
                     JOptionPane.showMessageDialog(LoadingDialog.this, 
-                            "Error processing images: " + e.getMessage(), 
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                        "Error processing images: " + e.getMessage(), 
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 return null;
             }

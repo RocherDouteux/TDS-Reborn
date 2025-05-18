@@ -1,13 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package isilimageprocessing.Dialogues;
 
-/**
- *
- * @author Fred
- */
+
 public class JDialogAfficheInformationImage extends javax.swing.JDialog {
 
     /**

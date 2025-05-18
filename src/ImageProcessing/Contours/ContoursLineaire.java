@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ImageProcessing.Contours;
 
-/**
- *
- * @author Axel
- */
 public class ContoursLineaire {
     public static int[][] gradientPrewitt(int[][] image, int dir){
         int[][] masque;
@@ -95,9 +87,9 @@ public class ContoursLineaire {
         int[][] masque;
         
         masque = new int[][]{
-                {0, 1, 0},
-                {1, -4, 1},
-                {0, 1, 0}
+            {0, 1, 0},
+            {1, -4, 1},
+            {0, 1, 0}
         };
         
         int imageHeight = image.length;
@@ -124,9 +116,9 @@ public class ContoursLineaire {
         int[][] masque;
         
         masque = new int[][]{
-                {1, 1, 1},
-                {1, -8, 1},
-                {1, 1, 1}
+            {1, 1, 1},
+            {1, -8, 1},
+            {1, 1, 1}
         };
         
         int imageHeight = image.length;
