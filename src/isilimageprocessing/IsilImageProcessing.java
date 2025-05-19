@@ -163,6 +163,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemUtilsAddition = new javax.swing.JMenuItem();
         jMenuItemUtilsSoustraction = new javax.swing.JMenuItem();
         jMenuItemUtilsRGBToNG = new javax.swing.JMenuItem();
+        jMenuItemUtilsNGToRGB = new javax.swing.JMenuItem();
+        jMenuItemUtilsAdditionRGB = new javax.swing.JMenuItem();
         jMenuLineaire = new javax.swing.JMenu();
         jMenuLineaireGlobal = new javax.swing.JMenu();
         jMenuItemFiltrageLineaireGlobalPasseBas = new javax.swing.JMenuItem();
@@ -510,13 +512,32 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuUtils.add(jMenuItemUtilsSoustraction);
 
-        jMenuItemUtilsRGBToNG.setText("RGB 2 NG");
+        jMenuItemUtilsRGBToNG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/utils_rgb_to_ng_32.png"))); // NOI18N
+        jMenuItemUtilsRGBToNG.setText("RGB -> NG");
         jMenuItemUtilsRGBToNG.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemUtilsRGBToNGActionPerformed(evt);
             }
         });
         jMenuUtils.add(jMenuItemUtilsRGBToNG);
+
+        jMenuItemUtilsNGToRGB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/utils_ng_to_rgb_32.png"))); // NOI18N
+        jMenuItemUtilsNGToRGB.setText("NG -> RGB");
+        jMenuItemUtilsNGToRGB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemUtilsNGToRGBActionPerformed(evt);
+            }
+        });
+        jMenuUtils.add(jMenuItemUtilsNGToRGB);
+
+        jMenuItemUtilsAdditionRGB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/addition_rgb_32.png"))); // NOI18N
+        jMenuItemUtilsAdditionRGB.setText("Addition RGB");
+        jMenuItemUtilsAdditionRGB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemUtilsAdditionRGBActionPerformed(evt);
+            }
+        });
+        jMenuUtils.add(jMenuItemUtilsAdditionRGB);
 
         jMenuBar1.add(jMenuUtils);
 
@@ -2232,6 +2253,67 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             logger.log(Level.SEVERE, "Erreur Conversion RGB to NG : {0}", e.getMessage());
         }
     }//GEN-LAST:event_jMenuItemUtilsRGBToNGActionPerformed
+
+    private void jMenuItemUtilsNGToRGBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUtilsNGToRGBActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageNG)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image NG valide.");
+                return;
+            }
+
+            CImageNG image = (CImageNG) selected;
+            
+            JDialogUtils dialog = new JDialogUtils(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            String couleur = dialog.getCouleur();
+            
+            // Apply filter
+            CImageRGB data = Utils.convertionNGToRGB(image.getMatrice(), couleur);            
+            
+            // Display result
+            showResultImage(data);
+
+        } catch (CImageNGException | CImageRGBException | HeadlessException e) {
+            logger.log(Level.SEVERE, "Erreur Conversion RGB to NG : {0}", e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemUtilsNGToRGBActionPerformed
+
+    private void jMenuItemUtilsAdditionRGBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUtilsAdditionRGBActionPerformed
+        try {
+            CImage[] selectedImages = getAllSelectedImages();
+
+            if (selectedImages == null || selectedImages.length != 2) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner exactement deux images RGB.");
+                return;
+            }
+            
+            for (CImage selectedImage : selectedImages) {
+                if (!(selectedImage instanceof CImageRGB)) {
+                    JOptionPane.showMessageDialog(this, "Les deux images doivent être de type RGB.");
+                    return;
+                }
+            }
+
+            // Extract images
+            CImageRGB image1 = (CImageRGB) selectedImages[0];
+            CImageRGB image2 = (CImageRGB) selectedImages[1];
+
+            CImageRGB data = Utils.additionRGB(image1, image2);
+
+            // Display result
+            showResultImage(data);
+
+        } catch (CImageRGBException | HeadlessException e) {
+            System.out.println("Erreur Addition de 2 images: " + e.getMessage());
+            logger.log(Level.SEVERE, "Erreur Addition de 2 images RGB: {0}", e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemUtilsAdditionRGBActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2610,6 +2692,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireFermeture;
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireOuverture;
     private javax.swing.JMenuItem jMenuItemUtilsAddition;
+    private javax.swing.JMenuItem jMenuItemUtilsAdditionRGB;
+    private javax.swing.JMenuItem jMenuItemUtilsNGToRGB;
     private javax.swing.JMenuItem jMenuItemUtilsRGBToNG;
     private javax.swing.JMenuItem jMenuItemUtilsSoustraction;
     private javax.swing.JMenu jMenuLineaire;

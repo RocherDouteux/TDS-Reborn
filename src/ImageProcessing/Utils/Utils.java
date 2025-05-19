@@ -157,5 +157,61 @@ public class Utils {
         }
         return output;
     }
+    
+    public static CImageRGB convertionNGToRGB(int[][] imageNG, String couleur) throws CImageRGBException {
+        int width = imageNG.length;
+        int height = imageNG[0].length;
+        
+        int[][] red = new int[width][height];
+        int[][] green = new int[width][height];
+        int[][] blue = new int[width][height];
+        
+        switch (couleur.toLowerCase()) {
+            case "red":
+                red = imageNG;
+                break;
+            case "green":
+                green = imageNG;
+                break;
+            case "blue":
+                blue = imageNG;
+                break;
+        }
+        return new CImageRGB(red, green, blue);
+    }
+    
+    public static CImageRGB additionRGB(CImageRGB image1, CImageRGB image2) throws CImageRGBException {
+        int width = image1.getLargeur();
+        int height = image1.getHauteur();
+
+        if (width != image2.getLargeur() || height != image2.getHauteur()) {
+            throw new IllegalArgumentException("Les images doivent avoir les mêmes dimensions");
+        }
+
+        int[][] red1 = new int[width][height];
+        int[][] green1 = new int[width][height];
+        int[][] blue1 = new int[width][height];
+
+        int[][] red2 = new int[width][height];
+        int[][] green2 = new int[width][height];
+        int[][] blue2 = new int[width][height];
+
+        image1.getMatricesRGB(red1, green1, blue1);
+        image2.getMatricesRGB(red2, green2, blue2);
+
+        int[][] redResult = new int[width][height];
+        int[][] greenResult = new int[width][height];
+        int[][] blueResult = new int[width][height];
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                redResult[i][j] = red1[i][j] + red2[i][j];
+                greenResult[i][j] = green1[i][j] + green2[i][j];
+                blueResult[i][j] = blue1[i][j] + blue2[i][j];
+            }
+        }
+
+        return new CImageRGB(redResult, greenResult, blueResult);
+    }
 
 }

@@ -334,10 +334,35 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemUtilsRGBToNG">
               <Properties>
-                <Property name="text" type="java.lang.String" value="RGB 2 NG"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/utils_rgb_to_ng_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="RGB -&gt; NG"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemUtilsRGBToNGActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemUtilsNGToRGB">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/utils_ng_to_rgb_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="NG -&gt; RGB"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemUtilsNGToRGBActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemUtilsAdditionRGB">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Icones/addition_rgb_32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Addition RGB"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemUtilsAdditionRGBActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
