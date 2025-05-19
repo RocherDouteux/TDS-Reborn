@@ -1,5 +1,8 @@
 package ImageProcessing.Utils;
 
+import CImage.CImageNG;
+import CImage.CImageRGB;
+import CImage.Exceptions.CImageRGBException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
@@ -131,6 +134,26 @@ public class Utils {
             for (int j = 0; j < imageWidth; j++) {
                 output[i][j] = image1[i][j] - image2[i][j];
             }
+        }
+        return output;
+    }
+    
+    public static int[][] convertionRGBToNG(CImageRGB imageRGB, String couleur) throws CImageRGBException {
+        int width = imageRGB.getLargeur();
+        int height = imageRGB.getHauteur();
+        
+        int[][] output = new int[width][height];
+        
+        switch (couleur.toLowerCase()) {
+            case "red":
+                imageRGB.getMatricesRGB(output, null, null);
+                break;
+            case "green":
+                imageRGB.getMatricesRGB(null, output, null);
+                break;
+            case "blue":
+                imageRGB.getMatricesRGB(null, null, output);
+                break;
         }
         return output;
     }

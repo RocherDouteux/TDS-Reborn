@@ -162,6 +162,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuUtils = new javax.swing.JMenu();
         jMenuItemUtilsAddition = new javax.swing.JMenuItem();
         jMenuItemUtilsSoustraction = new javax.swing.JMenuItem();
+        jMenuItemUtilsRGBToNG = new javax.swing.JMenuItem();
         jMenuLineaire = new javax.swing.JMenu();
         jMenuLineaireGlobal = new javax.swing.JMenu();
         jMenuItemFiltrageLineaireGlobalPasseBas = new javax.swing.JMenuItem();
@@ -508,6 +509,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
         });
         jMenuUtils.add(jMenuItemUtilsSoustraction);
+
+        jMenuItemUtilsRGBToNG.setText("RGB 2 NG");
+        jMenuItemUtilsRGBToNG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemUtilsRGBToNGActionPerformed(evt);
+            }
+        });
+        jMenuUtils.add(jMenuItemUtilsRGBToNG);
 
         jMenuBar1.add(jMenuUtils);
 
@@ -2118,8 +2127,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
 
             // Extract images
-            CImageNG image1 = (CImageNG) selectedImages[0]; // Image à dilater
-            CImageNG image2 = (CImageNG) selectedImages[1]; // Masque géodésique
+            CImageNG image1 = (CImageNG) selectedImages[0];
+            CImageNG image2 = (CImageNG) selectedImages[1];
 
             int[][] data = Utils.addition(image1.getMatrice(), image2.getMatrice());
             data = Utils.normaliserImage(data, 0, 255);
@@ -2150,8 +2159,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
 
         // Extract images
-        CImageNG image1 = (CImageNG) selectedImages[0]; // Image à dilater
-        CImageNG image2 = (CImageNG) selectedImages[1]; // Masque géodésique
+        CImageNG image1 = (CImageNG) selectedImages[0];
+        CImageNG image2 = (CImageNG) selectedImages[1];
 
         int[][] data = Utils.soustraction(image1.getMatrice(), image2.getMatrice());
         data = Utils.normaliserImage(data, 0, 255);
@@ -2191,6 +2200,38 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
         
     }//GEN-LAST:event_jMenuItemQuestion1AActionPerformed
+
+    private void jMenuItemUtilsRGBToNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUtilsRGBToNGActionPerformed
+        try {
+            // Get the selected image from the grid
+            CImage selected = getSelectedImage();
+            if (selected == null || !(selected instanceof CImageRGB)) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image RGB valide.");
+                return;
+            }
+
+            CImageRGB selectedRGB = (CImageRGB) selected;
+            
+            JDialogUtils dialog = new JDialogUtils(this, true);
+            dialog.setVisible(true);
+            
+            if(!dialog.isFilled())
+                return;
+            
+            String couleur = dialog.getCouleur();
+            
+            // Apply filter
+            int[][] data = Utils.convertionRGBToNG(selectedRGB, couleur);
+            data = Utils.normaliserImage(data, 0, 255);
+            
+            // Display result
+            CImageNG updatedImage = new CImageNG(data);
+            showResultImage(updatedImage);
+
+        } catch (CImageNGException | CImageRGBException | HeadlessException e) {
+            logger.log(Level.SEVERE, "Erreur Conversion RGB to NG : {0}", e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemUtilsRGBToNGActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2569,6 +2610,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireFermeture;
     private javax.swing.JMenuItem jMenuItemTraitementLineaireMorphologieElementaireOuverture;
     private javax.swing.JMenuItem jMenuItemUtilsAddition;
+    private javax.swing.JMenuItem jMenuItemUtilsRGBToNG;
     private javax.swing.JMenuItem jMenuItemUtilsSoustraction;
     private javax.swing.JMenu jMenuLineaire;
     private javax.swing.JMenu jMenuLineaireGlobal;
