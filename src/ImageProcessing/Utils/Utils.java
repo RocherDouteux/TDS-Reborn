@@ -2,10 +2,13 @@ package ImageProcessing.Utils;
 
 import CImage.CImageNG;
 import CImage.CImageRGB;
+import CImage.Exceptions.CImageNGException;
 import CImage.Exceptions.CImageRGBException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Utils {
     public static int clamp(int min, int max, int value){
@@ -118,7 +121,7 @@ public class Utils {
         
         for (int i = 0; i < imageHeight; i++) {
             for (int j = 0; j < imageWidth; j++) {
-                output[i][j] = image1[i][j] + image2[i][j];
+                output[i][j] = Math.min(255, image1[i][j] + image2[i][j]);
             }
         }
         return output;
@@ -132,7 +135,7 @@ public class Utils {
         
         for (int i = 0; i < imageHeight; i++) {
             for (int j = 0; j < imageWidth; j++) {
-                output[i][j] = image1[i][j] - image2[i][j];
+                output[i][j] = Math.max(0, image1[i][j] - image2[i][j]);
             }
         }
         return output;
@@ -145,15 +148,9 @@ public class Utils {
         int[][] output = new int[width][height];
         
         switch (couleur.toLowerCase()) {
-            case "red":
-                imageRGB.getMatricesRGB(output, null, null);
-                break;
-            case "green":
-                imageRGB.getMatricesRGB(null, output, null);
-                break;
-            case "blue":
-                imageRGB.getMatricesRGB(null, null, output);
-                break;
+            case "red" -> imageRGB.getMatricesRGB(output, null, null);
+            case "green" -> imageRGB.getMatricesRGB(null, output, null);
+            case "blue" -> imageRGB.getMatricesRGB(null, null, output);
         }
         return output;
     }
@@ -167,15 +164,9 @@ public class Utils {
         int[][] blue = new int[width][height];
         
         switch (couleur.toLowerCase()) {
-            case "red":
-                red = imageNG;
-                break;
-            case "green":
-                green = imageNG;
-                break;
-            case "blue":
-                blue = imageNG;
-                break;
+            case "red" -> red = imageNG;
+            case "green" -> green = imageNG;
+            case "blue" -> blue = imageNG;
         }
         return new CImageRGB(red, green, blue);
     }
@@ -205,13 +196,95 @@ public class Utils {
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                redResult[i][j] = red1[i][j] + red2[i][j];
-                greenResult[i][j] = green1[i][j] + green2[i][j];
-                blueResult[i][j] = blue1[i][j] + blue2[i][j];
+                redResult[i][j] = Math.min(255, red1[i][j] + red2[i][j]);
+                greenResult[i][j] = Math.min(255, green1[i][j] + green2[i][j]);
+                blueResult[i][j] = Math.min(255, blue1[i][j] + blue2[i][j]);
             }
         }
 
         return new CImageRGB(redResult, greenResult, blueResult);
     }
+    
+    public static CImageRGB andRGBWithMask(CImageRGB rgbImage, CImageNG binaryMask){
+        int[][] mask;
+        try {
+            mask = binaryMask.getMatrice();
+            int width = rgbImage.getLargeur();
+            int height = rgbImage.getHauteur();
+
+            int[][] red = new int[width][height];
+            int[][] green = new int[width][height];
+            int[][] blue = new int[width][height];
+
+            rgbImage.getMatricesRGB(red, green, blue);
+
+            int[][] redResult = new int[width][height];
+            int[][] greenResult = new int[width][height];
+            int[][] blueResult = new int[width][height];
+
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if (mask[i][j] == 255) {
+                        redResult[i][j] = red[i][j];
+                        greenResult[i][j] = green[i][j];
+                        blueResult[i][j] = blue[i][j];
+                    } else {
+                        redResult[i][j] = 0;
+                        greenResult[i][j] = 0;
+                        blueResult[i][j] = 0;
+                    }
+                }
+            }
+
+            return new CImageRGB(redResult, greenResult, blueResult);
+        } catch (CImageNGException | CImageRGBException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return rgbImage;
+    }
+    
+    public static CImageRGB replaceBlackWithWhite(CImageRGB image){
+        return Utils.replaceColorWith(image, 0, 0, 0, 255, 255, 255);
+    }
+    
+    public static CImageRGB replaceColorWith(CImageRGB image, int r, int g, int b, int dr, int dg, int db){
+        try {
+            int width = image.getLargeur();
+            int height = image.getHauteur();
+
+            int[][] red = new int[width][height];
+            int[][] green = new int[width][height];
+            int[][] blue = new int[width][height];
+
+            image.getMatricesRGB(red, green, blue);
+
+            int[][] redResult = new int[width][height];
+            int[][] greenResult = new int[width][height];
+            int[][] blueResult = new int[width][height];
+
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if (red[i][j] == r && green[i][j] == g && blue[i][j] == b){
+                        redResult[i][j] = dr;
+                        greenResult[i][j] = dg;
+                        blueResult[i][j] = db;
+                    }else{
+                        redResult[i][j] = red[i][j];
+                        greenResult[i][j] = green[i][j];
+                        blueResult[i][j] = blue[i][j];
+                    }
+                }
+            }
+
+            return new CImageRGB(redResult, greenResult, blueResult);
+            
+        } catch (CImageRGBException ex) {
+            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return image;
+    }
+
 
 }

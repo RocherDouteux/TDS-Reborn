@@ -165,6 +165,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemUtilsRGBToNG = new javax.swing.JMenuItem();
         jMenuItemUtilsNGToRGB = new javax.swing.JMenuItem();
         jMenuItemUtilsAdditionRGB = new javax.swing.JMenuItem();
+        jMenuItemLogicalAnd = new javax.swing.JMenuItem();
+        jMenuItemReplaceBlackWithWhite = new javax.swing.JMenuItem();
         jMenuLineaire = new javax.swing.JMenu();
         jMenuLineaireGlobal = new javax.swing.JMenu();
         jMenuItemFiltrageLineaireGlobalPasseBas = new javax.swing.JMenuItem();
@@ -203,7 +205,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuApplication1 = new javax.swing.JMenu();
         jMenuItemQuestion1A = new javax.swing.JMenuItem();
         jMenuApplication2 = new javax.swing.JMenu();
-        jMenuApplication3 = new javax.swing.JMenu();
+        jMenuItemQuestion3 = new javax.swing.JMenuItem();
         jMenuApplication4 = new javax.swing.JMenu();
         jMenuApplication5 = new javax.swing.JMenu();
         jMenuApplication6 = new javax.swing.JMenu();
@@ -539,6 +541,22 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuUtils.add(jMenuItemUtilsAdditionRGB);
 
+        jMenuItemLogicalAnd.setText("RGB & BIN");
+        jMenuItemLogicalAnd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLogicalAndActionPerformed(evt);
+            }
+        });
+        jMenuUtils.add(jMenuItemLogicalAnd);
+
+        jMenuItemReplaceBlackWithWhite.setText("NOIR -> BLANC");
+        jMenuItemReplaceBlackWithWhite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemReplaceBlackWithWhiteActionPerformed(evt);
+            }
+        });
+        jMenuUtils.add(jMenuItemReplaceBlackWithWhite);
+
         jMenuBar1.add(jMenuUtils);
 
         jMenuLineaire.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/filtrage_48.png"))); // NOI18N
@@ -812,9 +830,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuApplication2.setText("Question 2");
         jMenuApplication.add(jMenuApplication2);
 
-        jMenuApplication3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/3_32.png"))); // NOI18N
-        jMenuApplication3.setText("Question 3");
-        jMenuApplication.add(jMenuApplication3);
+        jMenuItemQuestion3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/3_32.png"))); // NOI18N
+        jMenuItemQuestion3.setText("Question 3");
+        jMenuItemQuestion3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemQuestion3ActionPerformed(evt);
+            }
+        });
+        jMenuApplication.add(jMenuItemQuestion3);
 
         jMenuApplication4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/4_32.png"))); // NOI18N
         jMenuApplication4.setText("Question 4");
@@ -888,7 +911,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         frame.setVisible(true);
     }//GEN-LAST:event_jMenuHistogrammeAfficherActionPerformed
 
-    private void activeMenusNG()
+    private void activeMenus()
     {
         jMenuDessiner.setEnabled(false);
         jMenuFourier.setEnabled(true);
@@ -900,19 +923,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuUtils.setEnabled(true);
         jMenuApplication.setEnabled(true);
     }
-    
-    private void activeMenusRGB()
-    {
-        jMenuDessiner.setEnabled(false);
-        jMenuFourier.setEnabled(false);
-        jMenuHistogramme.setEnabled(false);
-        jMenuLineaire.setEnabled(false);
-        jMenuTraitement.setEnabled(false);
-        jMenuContours.setEnabled(false);
-        jMenuSeuillage.setEnabled(false);
-        jMenuUtils.setEnabled(true);
-        jMenuApplication.setEnabled(true);
-    }
+   
     
     private void desactiveMenus(){
         jMenuDessiner.setEnabled(false);
@@ -1078,7 +1089,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 {
                     
                     CImage selected = getSelectedImage();
-                    if (selected == null || !(selected instanceof CImageNG) || !(selected instanceof CImageRGB)) {
+                    if (selected == null) {
                         JOptionPane.showMessageDialog(this, "Veuillez sélectionner une image.");
                         return;
                     }
@@ -1123,7 +1134,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                         JOptionPane.showMessageDialog(this, "Aucune case disponible !", "Erreur", JOptionPane.WARNING_MESSAGE);
                     }
 
-                    activeMenusNG();
+                    activeMenus();
                 } catch (IOException ex) {
                     System.err.println("Erreur I/O : " + ex.getMessage());
                 }
@@ -1174,7 +1185,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                         setImageToSlot(targetSlot, imageRGB);
                         clearAllSelections();
                     }
-                    activeMenusRGB();
+                    activeMenus();
                 } catch (IOException ex) {
                     System.err.println("Erreur I/O : " + ex.getMessage());
                 }
@@ -2314,6 +2325,79 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             logger.log(Level.SEVERE, "Erreur Addition de 2 images RGB: {0}", e.getMessage());
         }
     }//GEN-LAST:event_jMenuItemUtilsAdditionRGBActionPerformed
+
+    private void jMenuItemLogicalAndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogicalAndActionPerformed
+        try {
+            CImage[] selectedImages = getAllSelectedImages();
+
+            if (selectedImages == null || selectedImages.length != 2) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner exactement deux images RGB.");
+                return;
+            }
+            
+            // Extract images
+            CImageRGB image1 = (CImageRGB) selectedImages[0];
+            CImageNG image2 = (CImageNG) selectedImages[1];
+
+            CImageRGB data = Utils.andRGBWithMask(image1, image2);
+
+            // Display result
+            showResultImage(data);
+
+        } catch (HeadlessException e) {
+            System.out.println("Erreur logical and de 2 images: " + e.getMessage());
+            logger.log(Level.SEVERE, "Erreur logical and de 2 images RGB: {0}", e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemLogicalAndActionPerformed
+
+    private void jMenuItemReplaceBlackWithWhiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemReplaceBlackWithWhiteActionPerformed
+        try {
+            CImage[] selectedImages = getAllSelectedImages();
+
+            if (selectedImages == null ) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner exactement une image RGB.");
+                return;
+            }
+            
+            // Extract images
+            CImageRGB image1 = (CImageRGB) selectedImages[0];
+
+            CImageRGB data = Utils.replaceBlackWithWhite(image1);
+
+            // Display result
+            showResultImage(data);
+
+        } catch (HeadlessException e) {
+            System.out.println("Erreur remplacement noir par blanc: " + e.getMessage());
+            logger.log(Level.SEVERE, "Erreur remplacement noir par blanc: {0}", e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemReplaceBlackWithWhiteActionPerformed
+
+    private void jMenuItemQuestion3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion3ActionPerformed
+        try{
+            
+            LoadingDialog loadingDialog = new LoadingDialog(this, "Question 3");
+            
+            Callable<Queue<CImage>> task = () -> {
+                clearAllImages();
+                CImage source = new CImageRGB(new File("res/Images/ImagesEtape5/petitsPois.png"));
+                return Application.question3(source);
+            };
+            
+            Queue<CImage> sequence = loadingDialog.executeTask(task);
+            
+            CImage current = sequence.poll();
+            while (current != null){
+                
+                int firstAvailableSlot = getFirstAvailableSlot();
+                setImageToSlot(firstAvailableSlot, current);
+                current = sequence.poll();
+            }
+            
+        }catch(Exception ex){
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemQuestion3ActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2636,7 +2720,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuApplication;
     private javax.swing.JMenu jMenuApplication1;
     private javax.swing.JMenu jMenuApplication2;
-    private javax.swing.JMenu jMenuApplication3;
     private javax.swing.JMenu jMenuApplication4;
     private javax.swing.JMenu jMenuApplication5;
     private javax.swing.JMenu jMenuApplication6;
@@ -2676,11 +2759,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieImaginaire;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieReelle;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPhase;
+    private javax.swing.JMenuItem jMenuItemLogicalAnd;
     private javax.swing.JMenuItem jMenuItemNouvelleNG;
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
     private javax.swing.JMenuItem jMenuItemOuvrirNG;
     private javax.swing.JMenuItem jMenuItemOuvrirRGB;
     private javax.swing.JMenuItem jMenuItemQuestion1A;
+    private javax.swing.JMenuItem jMenuItemQuestion3;
+    private javax.swing.JMenuItem jMenuItemReplaceBlackWithWhite;
     private javax.swing.JMenuItem jMenuItemSeuillageAutomatique;
     private javax.swing.JMenuItem jMenuItemSeuillageDouble;
     private javax.swing.JMenuItem jMenuItemSeuillageSimple;

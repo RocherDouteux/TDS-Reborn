@@ -365,6 +365,22 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemUtilsAdditionRGBActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemLogicalAnd">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="RGB &amp; BIN"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemLogicalAndActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemReplaceBlackWithWhite">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="NOIR -&gt; BLANC"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemReplaceBlackWithWhiteActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuLineaire">
@@ -706,14 +722,17 @@
                 <Property name="text" type="java.lang.String" value="Question 2"/>
               </Properties>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenuApplication3">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemQuestion3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/Icones/3_32.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Question 3"/>
               </Properties>
-            </Menu>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemQuestion3ActionPerformed"/>
+              </Events>
+            </MenuItem>
             <Menu class="javax.swing.JMenu" name="jMenuApplication4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
