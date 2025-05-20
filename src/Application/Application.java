@@ -132,16 +132,118 @@ public class Application {
     }
     
     public static Queue<CImage> question4(CImage image){
-        Queue<CImage> sequence = new LinkedList();
+        Queue<CImage> sequence = new LinkedList<>();
         sequence.add(image);
+
+        try {
+            if (image instanceof CImageNG imageNG) {
+
+                // Step 1 – Seuillage automatique
+                int[][] seuil = Seuillage.seuillageAutomatique(imageNG.getMatrice());
+                CImageNG imgSeuil = new CImageNG(seuil);
+                sequence.add(imgSeuil);
+
+                // Step 2 – Érosion (filtre 13)
+                int[][] eroded = MorphoElementaire.erosion(seuil, 13);
+                CImageNG imgEroded = new CImageNG(eroded);
+                sequence.add(imgEroded);
+
+                // Step 3 – Reconstruction géodésique (grandes balanes binaires)
+                int[][] grandesBin = MorphoComplexe.reconstructionGeodesique(eroded, seuil);
+                CImageNG imgGrandesBin = new CImageNG(grandesBin);
+                sequence.add(imgGrandesBin);
+
+                // Step 4 – Soustraction = petites balanes brutes
+                int[][] petitesBin = Utils.soustraction(seuil, grandesBin);
+                CImageNG imgPetitesRaw = new CImageNG(petitesBin);
+                sequence.add(imgPetitesRaw);
+
+                // Step 5 – Nettoyage (ouverture légère, filtre 3)
+                petitesBin = MorphoElementaire.ouverture(petitesBin, 3);
+                CImageNG imgPetitesClean = new CImageNG(petitesBin);
+                sequence.add(imgPetitesClean);
+
+                // Step 6 – Reconstruction géodésique en niveaux de gris
+                int[][] grandesNG = MorphoComplexe.reconstructionGeodesique(imageNG.getMatrice(), grandesBin);
+                int[][] petitesNG = MorphoComplexe.reconstructionGeodesique(imageNG.getMatrice(), petitesBin);
+
+                CImageNG imgGrandesNG = new CImageNG(grandesNG);
+                CImageNG imgPetitesNG = new CImageNG(petitesNG);
+
+                sequence.add(imgGrandesNG);
+                sequence.add(imgPetitesNG);
+            }
+
+        } catch (CImageNGException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+
         return sequence;
     }
     
-    public static Queue<CImage> question5(CImage image){
-        Queue<CImage> sequence = new LinkedList();
+    public static Queue<CImage> question5(CImage image) {
+        Queue<CImage> sequence = new LinkedList<>();
         sequence.add(image);
+
+        try {
+            if (image instanceof CImageNG imageNG) {
+
+                // Step 1 – Histogram equalization
+                int[] courbe = Histogramme.creeCourbeTonaleEgalisation(imageNG.getMatrice());
+                int[][] eq = Histogramme.rehaussement(imageNG.getMatrice(), courbe);
+                CImageNG imgEq = new CImageNG(eq);
+                sequence.add(imgEq);
+
+                // Step 2 – Seuillage 220 (zones très claires)
+                int[][] seuil220 = Seuillage.seuillageSimple(eq, 220);
+                CImageNG imgSeuil220 = new CImageNG(seuil220);
+                sequence.add(imgSeuil220);
+
+                // Step 3 – Seuillage 160 (pour la clé)
+                int[][] seuil160 = Seuillage.seuillageSimple(eq, 160);
+                CImageNG imgSeuil160 = new CImageNG(seuil160);
+                sequence.add(imgSeuil160);
+
+                // Step 4 – Ouverture géodésique (filtre 15)
+                int[][] ouvert = MorphoElementaire.ouverture(seuil160, 15);
+                CImageNG imgOuvert = new CImageNG(ouvert);
+                sequence.add(imgOuvert);
+
+                // Step 5 – Reconstruction géodésique
+                int[][] recon = MorphoComplexe.reconstructionGeodesique(ouvert, seuil160);
+                CImageNG imgRecon = new CImageNG(recon);
+                sequence.add(imgRecon);
+
+                // Step 6 – Soustraction pour isoler la clé
+                int[][] cle = Utils.soustraction(seuil160, recon);
+                CImageNG imgCle = new CImageNG(cle);
+                sequence.add(imgCle);
+
+                // Step 7 – Fusion outils = clé + seuil220
+                int[][] outils = Utils.addition(seuil220, cle);
+                CImageNG imgFusion = new CImageNG(outils);
+                sequence.add(imgFusion);
+
+                // Step 8 – Seuillage à 20 (binarisation)
+                int[][] binarise = Seuillage.seuillageSimple(outils, 20);
+                //CImageNG imgBinarise = new CImageNG(binarise);
+                //sequence.add(imgBinarise);
+
+                // Step 9 – Ouverture 3 (nettoyage final)
+                int[][] nettoye = MorphoElementaire.ouverture(binarise, 3);
+                CImageNG imgFinal = new CImageNG(nettoye);
+                sequence.add(imgFinal);
+
+            }
+
+        } catch (CImageNGException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+
         return sequence;
     }
+
+
     
     public static Queue<CImage> question6A(CImage image){
         Queue<CImage> sequence = new LinkedList();

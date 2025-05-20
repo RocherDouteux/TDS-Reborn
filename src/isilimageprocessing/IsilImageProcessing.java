@@ -206,8 +206,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemQuestion1A = new javax.swing.JMenuItem();
         jMenuApplication2 = new javax.swing.JMenu();
         jMenuItemQuestion3 = new javax.swing.JMenuItem();
-        jMenuApplication4 = new javax.swing.JMenu();
-        jMenuApplication5 = new javax.swing.JMenu();
+        jMenuItemQuestion4 = new javax.swing.JMenuItem();
+        jMenuItemQuestion5 = new javax.swing.JMenuItem();
         jMenuApplication6 = new javax.swing.JMenu();
         jMenuApplication7 = new javax.swing.JMenu();
 
@@ -839,13 +839,23 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuApplication.add(jMenuItemQuestion3);
 
-        jMenuApplication4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/4_32.png"))); // NOI18N
-        jMenuApplication4.setText("Question 4");
-        jMenuApplication.add(jMenuApplication4);
+        jMenuItemQuestion4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/4_32.png"))); // NOI18N
+        jMenuItemQuestion4.setText("Question 4");
+        jMenuItemQuestion4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemQuestion4ActionPerformed(evt);
+            }
+        });
+        jMenuApplication.add(jMenuItemQuestion4);
 
-        jMenuApplication5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/5_32.png"))); // NOI18N
-        jMenuApplication5.setText("Question 5");
-        jMenuApplication.add(jMenuApplication5);
+        jMenuItemQuestion5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/5_32.png"))); // NOI18N
+        jMenuItemQuestion5.setText("Question 5");
+        jMenuItemQuestion5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemQuestion5ActionPerformed(evt);
+            }
+        });
+        jMenuApplication.add(jMenuItemQuestion5);
 
         jMenuApplication6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/6_32.png"))); // NOI18N
         jMenuApplication6.setText("Question 6");
@@ -2398,6 +2408,51 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             logger.log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemQuestion3ActionPerformed
+
+    private void jMenuItemQuestion4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion4ActionPerformed
+        try {
+            LoadingDialog loadingDialog = new LoadingDialog(this, "Question 4");
+
+            Callable<Queue<CImage>> task = () -> {
+                clearAllImages();
+                CImage source = new CImageNG(new File("res/Images/ImagesEtape5/balanes.png"));
+                return Application.question4(source);
+            };
+
+            Queue<CImage> sequence = loadingDialog.executeTask(task);
+            CImage current = sequence.poll();
+            while (current != null) {
+                int firstAvailableSlot = getFirstAvailableSlot();
+                setImageToSlot(firstAvailableSlot, current);
+                current = sequence.poll();
+            }
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemQuestion4ActionPerformed
+
+    private void jMenuItemQuestion5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion5ActionPerformed
+        try {
+            LoadingDialog loadingDialog = new LoadingDialog(this, "Question 5");
+
+            Callable<Queue<CImage>> task = () -> {
+                clearAllImages();
+                CImage source = new CImageNG(new File("res/Images/ImagesEtape5/tools.png"));
+                return Application.question5(source);
+            };
+
+            Queue<CImage> sequence = loadingDialog.executeTask(task);
+            CImage current = sequence.poll();
+            while (current != null) {
+                int firstAvailableSlot = getFirstAvailableSlot();
+                setImageToSlot(firstAvailableSlot, current);
+                current = sequence.poll();
+            }
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemQuestion5ActionPerformed
+    
     
     /**
      * @param args the command line arguments
@@ -2720,8 +2775,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuApplication;
     private javax.swing.JMenu jMenuApplication1;
     private javax.swing.JMenu jMenuApplication2;
-    private javax.swing.JMenu jMenuApplication4;
-    private javax.swing.JMenu jMenuApplication5;
     private javax.swing.JMenu jMenuApplication6;
     private javax.swing.JMenu jMenuApplication7;
     private javax.swing.JMenuBar jMenuBar1;
@@ -2766,6 +2819,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemOuvrirRGB;
     private javax.swing.JMenuItem jMenuItemQuestion1A;
     private javax.swing.JMenuItem jMenuItemQuestion3;
+    private javax.swing.JMenuItem jMenuItemQuestion4;
+    private javax.swing.JMenuItem jMenuItemQuestion5;
     private javax.swing.JMenuItem jMenuItemReplaceBlackWithWhite;
     private javax.swing.JMenuItem jMenuItemSeuillageAutomatique;
     private javax.swing.JMenuItem jMenuItemSeuillageDouble;
