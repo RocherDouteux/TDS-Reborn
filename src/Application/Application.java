@@ -21,34 +21,7 @@ public class Application {
     
     private static final Logger logger = Logger.getLogger(Application.class.getName());
     
-    private static CImage questionTemplate(CImage image){
-        try{
-            if(image instanceof CImageNG cImageNG){
-                int[][] data = cImageNG.getMatrice();
-                
-                return new CImageNG(data);
-            }
-            
-            if(image instanceof CImageRGB cImageRGB){
-                int height = cImageRGB.getHauteur();
-                int width = cImageRGB.getLargeur();
-                
-                int[][] red = new int[height][width];
-                int[][] green = new int[height][width];
-                int[][] blue = new int[height][width];
-                
-                cImageRGB.getMatricesRGB(red, green, blue);
-                
-                return new CImageRGB(red, green, blue);
-            }
-        } catch (CImageNGException | CImageRGBException ex) {
-            Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        return image;
-    }
-
+    
     public static Queue<CImage> question1A(CImage image){
         Queue<CImage> sequence = new LinkedList();
         sequence.add(image);
@@ -93,6 +66,49 @@ public class Application {
     public static Queue<CImage> question2A(CImage image){
         Queue<CImage> sequence = new LinkedList();
         sequence.add(image);
+        
+        try {
+            if(image instanceof CImageRGB imageRGB){
+                int[][] redChannel = Utils.extraireCanal(imageRGB, "red");
+                int[][] greenChannel = Utils.extraireCanal(imageRGB, "green");
+                int[][] blueChannel = Utils.extraireCanal(imageRGB, "blue");
+                
+                int[] redCurve = Histogramme.creeCourbeTonaleEgalisation(redChannel);
+                int[] greenCurve = Histogramme.creeCourbeTonaleEgalisation(greenChannel);
+                int[] blueCurve = Histogramme.creeCourbeTonaleEgalisation(blueChannel);
+                
+                int[][] egalisationRed = Histogramme.rehaussement(redChannel, redCurve);
+                egalisationRed = Utils.normaliserImage(egalisationRed, 0, 255);
+                
+                int[][] egalisationGreen = Histogramme.rehaussement(greenChannel, greenCurve);
+                egalisationGreen = Utils.normaliserImage(egalisationGreen, 0, 255);
+                
+                int[][] egalisationBlue = Histogramme.rehaussement(blueChannel, blueCurve);
+                egalisationBlue = Utils.normaliserImage(egalisationBlue, 0, 255);
+                
+                sequence.add(new CImageNG(egalisationRed));
+                sequence.add(new CImageNG(egalisationGreen));
+                sequence.add(new CImageNG(egalisationBlue));
+                
+                CImageRGB backToRed = Utils.convertionNGToRGB(egalisationRed, "red");
+                CImageRGB backToGreen = Utils.convertionNGToRGB(egalisationGreen, "green");
+                CImageRGB backToBlue = Utils.convertionNGToRGB(egalisationBlue, "blue");
+                
+                sequence.add(backToRed);
+                sequence.add(backToGreen);
+                sequence.add(backToBlue);
+                
+                CImageRGB fusionRedAndGreen = Utils.additionRGB(backToRed, backToGreen);
+                sequence.add(fusionRedAndGreen);
+                
+                CImageRGB fusionYellowAndBlue = Utils.additionRGB(fusionRedAndGreen, backToBlue);
+                sequence.add(fusionYellowAndBlue);
+
+            }
+        }catch(CImageRGBException | CImageNGException ex){
+            logger.log(Level.SEVERE, null, ex);
+        }
+        
         return sequence;
     }
     
@@ -108,7 +124,7 @@ public class Application {
         
         try {
             if(image instanceof CImageRGB imageRGB){
-                CImageNG selectGreen = new CImageNG(Utils.convertionRGBToNG(imageRGB, "green"));
+                CImageNG selectGreen = new CImageNG(Utils.extraireCanal(imageRGB, "green"));
                 sequence.add(selectGreen);
                 
                 int[] courbeTonaleNegative = Histogramme.creeCourbeTonaleNegatif();
@@ -124,8 +140,8 @@ public class Application {
                 CImageRGB combinaison = Utils.andRGBWithMask(imageRGB, erosion5);
                 sequence.add(combinaison);
                 
-                CImageNG selectBlue = new CImageNG(Utils.convertionRGBToNG(combinaison, "blue"));
-                CImageNG selectRed = new CImageNG(Utils.convertionRGBToNG(combinaison, "red"));
+                CImageNG selectBlue = new CImageNG(Utils.extraireCanal(combinaison, "blue"));
+                CImageNG selectRed = new CImageNG(Utils.extraireCanal(combinaison, "red"));
                 
                 sequence.add(selectBlue);
                 sequence.add(selectRed);

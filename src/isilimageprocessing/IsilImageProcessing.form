@@ -718,11 +718,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="A"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemQuestion2AActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemQuestion2B">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="B"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemQuestion2BActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

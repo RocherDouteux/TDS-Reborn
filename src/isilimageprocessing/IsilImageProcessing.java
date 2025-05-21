@@ -825,9 +825,19 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuApplication2.setText("Question 2");
 
         jMenuItemQuestion2A.setText("A");
+        jMenuItemQuestion2A.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemQuestion2AActionPerformed(evt);
+            }
+        });
         jMenuApplication2.add(jMenuItemQuestion2A);
 
         jMenuItemQuestion2B.setText("B");
+        jMenuItemQuestion2B.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemQuestion2BActionPerformed(evt);
+            }
+        });
         jMenuApplication2.add(jMenuItemQuestion2B);
 
         jMenuApplication.add(jMenuApplication2);
@@ -2277,7 +2287,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             String couleur = dialog.getCouleur();
             
             // Apply filter
-            int[][] data = Utils.convertionRGBToNG(selectedRGB, couleur);
+            int[][] data = Utils.extraireCanal(selectedRGB, couleur);
             data = Utils.normaliserImage(data, 0, 255);
             
             // Display result
@@ -2464,6 +2474,53 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             logger.log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemQuestion7ActionPerformed
+
+    private void jMenuItemQuestion2AActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion2AActionPerformed
+        try {
+            LoadingDialog loadingDialog = new LoadingDialog(this, "Question 2A");
+
+            Callable<Queue<CImage>> task = () -> {
+                clearAllImages();
+                CImage source = new CImageRGB(new File("res/Images/ImagesEtape5/lenaAEgaliser.jpg"));
+                return Application.question2A(source);
+            };
+
+            Queue<CImage> sequence = loadingDialog.executeTask(task);
+            
+            this.activeMenus();
+            
+            CImage current = sequence.poll();
+            while (current != null) {
+                int firstAvailableSlot = getFirstAvailableSlot();
+                setImageToSlot(firstAvailableSlot, current);
+                current = sequence.poll();
+            }
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemQuestion2AActionPerformed
+
+    private void jMenuItemQuestion2BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion2BActionPerformed
+        try {
+            LoadingDialog loadingDialog = new LoadingDialog(this, "Question 2B");
+
+            Callable<Queue<CImage>> task = () -> {
+                clearAllImages();
+                CImage source = new CImageRGB(new File("res/Images/ImagesEtape5/lenaAEgaliser.jpg"));
+                return Application.question2B(source);
+            };
+
+            Queue<CImage> sequence = loadingDialog.executeTask(task);
+            CImage current = sequence.poll();
+            while (current != null) {
+                int firstAvailableSlot = getFirstAvailableSlot();
+                setImageToSlot(firstAvailableSlot, current);
+                current = sequence.poll();
+            }
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItemQuestion2BActionPerformed
     
     
     /**
