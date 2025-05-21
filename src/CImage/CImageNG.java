@@ -28,7 +28,10 @@ public class CImageNG extends CImage
         image = new BufferedImage(largeur,hauteur,BufferedImage.TYPE_INT_ARGB);
         contexte = image.getGraphics();
         try { setMatrice(matrice); } 
-        catch (CImageNGException ex) { throw new CImageNGException("Erreur interne inexpliquee..."); }
+        catch (CImageNGException ex) {
+            System.out.println(ex);
+            throw new CImageNGException("Erreur interne inexpliquee...");
+        }
     }
     
     public CImageNG(File f) throws IOException

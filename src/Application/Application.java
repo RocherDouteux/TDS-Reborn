@@ -9,6 +9,7 @@ import ImageProcessing.Histogramme.Histogramme;
 import ImageProcessing.NonLineaire.MorphoComplexe;
 import ImageProcessing.NonLineaire.MorphoElementaire;
 import ImageProcessing.Seuillage.Seuillage;
+import ImageProcessing.Contours.ContoursLineaire;
 import ImageProcessing.Utils.Utils;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -73,6 +74,19 @@ public class Application {
     public static Queue<CImage> question1B(CImage image){
         Queue<CImage> sequence = new LinkedList();
         sequence.add(image);
+        
+        try {
+            if(image instanceof CImageNG imageNG){
+                int[][] median3 = MorphoComplexe.filtreMedian(imageNG.getMatrice(), 3);
+                sequence.add(new CImageNG(median3));
+                
+                median3 = MorphoComplexe.filtreMedian(median3, 3);
+                sequence.add(new CImageNG(median3));
+            }
+        }catch(CImageNGException ex){
+            logger.log(Level.SEVERE, null, ex);
+        }
+        
         return sequence;
     }
     
@@ -257,9 +271,38 @@ public class Application {
         return sequence;
     }
     
-    public static Queue<CImage> question7(CImage image){
+    public static Queue<CImage> question7(CImage image, CImage output){
         Queue<CImage> sequence = new LinkedList();
         sequence.add(image);
+        
+        try {
+            if(image instanceof CImageNG imageNG && output instanceof CImageRGB imageRGB){
+                int[][] prewittH = ContoursLineaire.gradientPrewitt(imageNG.getMatrice(), 1);
+                prewittH = Utils.normaliserImage(prewittH, 0, 255);
+                int[][] prewittV = ContoursLineaire.gradientPrewitt(imageNG.getMatrice(), 2);
+                prewittV = Utils.normaliserImage(prewittV, 0, 255);
+                int[][] addition = Utils.addition(prewittH, prewittV);
+                
+                sequence.add(new CImageNG(prewittH));
+                sequence.add(new CImageNG(prewittV));
+                sequence.add(new CImageNG(addition));
+                
+                int[][] seuillage = Seuillage.seuillageDouble(addition, 80, 90);
+                sequence.add(new CImageNG(seuillage));
+                
+                int[][] dilatation = MorphoElementaire.dilatation(seuillage, 3);
+                sequence.add(new CImageNG(dilatation));
+                
+                CImageRGB contoursVerts = Utils.convertionNGToRGB(dilatation, "green");
+                sequence.add(contoursVerts);
+                
+                CImageRGB fusion = Utils.additionRGB(imageRGB, contoursVerts);
+                sequence.add(fusion);
+            }
+        }catch(CImageNGException | CImageRGBException ex){
+            logger.log(Level.SEVERE, null, ex);
+        }
+        
         return sequence;
     }
 }
