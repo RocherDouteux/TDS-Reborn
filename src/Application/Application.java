@@ -274,18 +274,111 @@ public class Application {
     }
 
 
-    
-    public static Queue<CImage> question6A(CImage image){
-        Queue<CImage> sequence = new LinkedList();
-        sequence.add(image);
-        return sequence;
+public static Queue<CImage> question6A(CImage image, CImage RGBImage, CImage second) {
+    Queue<CImage> sequence = new LinkedList<>();
+    sequence.add(image);
+    sequence.add(RGBImage);
+    sequence.add(second);
+
+    try {
+        if (image instanceof CImageNG imageNG && RGBImage instanceof CImageRGB shipRGB && second instanceof CImageRGB planetRGB) {
+            // Step 1 – Get grayscale matrix
+            int[][] vaissGray = imageNG.getMatrice();
+
+            // Step 2 – Threshold to isolate bright parts (ships)
+            int[][] seuil60 = Seuillage.seuillageSimple(vaissGray, 60);
+            //sequence.add(new CImageNG(seuil60));
+
+            // Step 3 – Erosion to remove small ship
+            int[][] eroded = MorphoElementaire.erosion(seuil60, 21);
+            sequence.add(new CImageNG(eroded));
+
+            // Step 4 – Reconstruction to recover big ship
+            int[][] recon = MorphoComplexe.reconstructionGeodesique(eroded, seuil60);
+            sequence.add(new CImageNG(recon));
+
+            // Step 5 – Subtraction to isolate small ship
+            int[][] sub = Utils.soustraction(seuil60, recon);
+            //sequence.add(new CImageNG(sub));
+
+            // Step 6 – Opening to clean shape
+            int[][] opened = MorphoElementaire.ouverture(sub, 11);
+            //sequence.add(new CImageNG(opened));
+
+            // Step 7 – Final geodesic reconstruction for smooth mask
+            int[][] finalMask = MorphoComplexe.reconstructionGeodesique(opened, vaissGray);
+            CImageNG mask = new CImageNG(finalMask);
+            sequence.add(mask);
+            
+            //Step 8 recolored the ship
+            int[][] shipMask = Seuillage.seuillageSimple(mask.getMatrice(), 60);
+            CImageRGB shipOnly = Utils.andRGBWithMask(shipRGB, new CImageNG(shipMask));
+            sequence.add(shipOnly);  
+
+            // Step 9 – Add the colored ship onto the planet image
+            CImageRGB fusion = Utils.additionRGB(planetRGB, shipOnly);
+            sequence.add(fusion);
+        }
+
+    } catch (CImageNGException | CImageRGBException ex) {
+        logger.log(Level.SEVERE, null, ex);
     }
-    
-    public static Queue<CImage> question6B(CImage image){
-        Queue<CImage> sequence = new LinkedList();
-        sequence.add(image);
-        return sequence;
+
+    return sequence;
+}
+
+public static Queue<CImage> question6B(CImage image, CImage RGBImage, CImage second) {
+    Queue<CImage> sequence = new LinkedList<>();
+    sequence.add(image);
+    sequence.add(RGBImage);
+    sequence.add(second);
+
+    try {
+        if (image instanceof CImageNG imageNG && RGBImage instanceof CImageRGB shipRGB && second instanceof CImageRGB planetRGB) {
+            // Same same as Question6A sadly
+            int[][] vaissGray = imageNG.getMatrice();
+            int[][] seuil60 = Seuillage.seuillageSimple(vaissGray, 60);
+            int[][] eroded = MorphoElementaire.erosion(seuil60, 21);
+            int[][] recon = MorphoComplexe.reconstructionGeodesique(eroded, seuil60);
+            int[][] sub = Utils.soustraction(seuil60, recon);
+            int[][] opened = MorphoElementaire.ouverture(sub, 11);
+            int[][] finalMask = MorphoComplexe.reconstructionGeodesique(opened, vaissGray);
+            CImageNG mask = new CImageNG(finalMask);
+            sequence.add(mask);  // Optional: show binary mask
+
+            // Compute red contour around the ship
+            int[][] gradH = ContoursLineaire.gradientPrewitt(finalMask, 1);
+            int[][] gradV = ContoursLineaire.gradientPrewitt(finalMask, 2);
+            int[][] edge = Utils.addition(gradH, gradV);
+            edge = Utils.normaliserImage(edge, 0, 255);
+            int[][] contour = Seuillage.seuillageSimple(edge, 50);
+            CImageNG contourNG = new CImageNG(contour);
+            sequence.add(contourNG);  // Optional: white edge view
+
+            // Convert contour to red
+            CImageRGB redContour = Utils.convertionNGToRGB(contour, "red");
+            sequence.add(redContour);
+
+            // 🪐 Fusion: reconstruct the colored ship
+            int[][] shipMask = Seuillage.seuillageSimple(finalMask, 60);
+            CImageRGB shipOnly = Utils.andRGBWithMask(shipRGB, new CImageNG(shipMask));
+            sequence.add(shipOnly);  // Optional
+
+            CImageRGB fusion = Utils.additionRGB(planetRGB, shipOnly);
+            sequence.add(fusion);
+
+            // Add red contour to fusion
+            CImageRGB finalResult = Utils.additionRGB(fusion, redContour);
+            sequence.add(finalResult);
+        }
+
+    } catch (CImageNGException | CImageRGBException ex) {
+        logger.log(Level.SEVERE, null, ex);
     }
+
+    return sequence;
+}
+
     
     public static Queue<CImage> question7(CImage image, CImage output){
         Queue<CImage> sequence = new LinkedList();
