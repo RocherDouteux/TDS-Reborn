@@ -726,6 +726,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="B"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemQuestion2BActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

@@ -141,7 +141,7 @@ public class Utils {
         return output;
     }
     
-    public static int[][] convertionRGBToNG(CImageRGB imageRGB, String couleur) throws CImageRGBException {
+    public static int[][] extraireCanal(CImageRGB imageRGB, String couleur) throws CImageRGBException {
         int width = imageRGB.getLargeur();
         int height = imageRGB.getHauteur();
         
