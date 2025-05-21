@@ -2486,7 +2486,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemQuestion7ActionPerformed
 
 
-    private void jMenuItemQuestion6AActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion6AActionPerformed
+    private void jMenuItemQuestion6AActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         try {
             LoadingDialog loadingDialog = new LoadingDialog(this, "Question 6A");
 
@@ -2499,7 +2499,17 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             };
 
             Queue<CImage> sequence = loadingDialog.executeTask(task);
+            CImage current = sequence.poll();
+            while (current != null){
+                int firstAvailableSlot =  getFirstAvailableSlot();
+                setImageToSlot(firstAvailableSlot, current);
+                current = sequence.poll();
             }
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }    
+                                                 
 
     private void jMenuItemQuestion2AActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion2AActionPerformed
         try {
@@ -2525,15 +2535,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-
-
-    }//GEN-LAST:event_jMenuItemQuestion6AActionPerformed
-
-    private void jMenuItemQuestion2AActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion2AActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItemQuestion2AActionPerformed
 
-    private void jMenuItemQuestion6BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion6BActionPerformed
+    private void jMenuItemQuestion6BActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         try {
             LoadingDialog loadingDialog = new LoadingDialog(this, "Question 6B");
 
@@ -2543,10 +2547,21 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 CImage sourceColor = new CImageRGB(new File("res/Images/ImagesEtape5/vaisseaux.jpg"));
                 CImage second = new CImageRGB(new File("res/Images/ImagesEtape5/planete.jpg"));
                 return Application.question6B(source, sourceColor, second);
+            };
 
-    }//GEN-LAST:event_jMenuItemQuestion2AActionPerformed
+            Queue<CImage> sequence = loadingDialog.executeTask(task);
+            CImage current = sequence.poll();
+            while (current != null){
+                int firstAvailableSlot =  getFirstAvailableSlot();
+                setImageToSlot(firstAvailableSlot, current);
+                current = sequence.poll();
+            }
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }    
 
-    private void jMenuItemQuestion2BActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQuestion2BActionPerformed
+    private void jMenuItemQuestion2BActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         try {
             LoadingDialog loadingDialog = new LoadingDialog(this, "Question 2B");
 
@@ -2566,10 +2581,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);
         }
-
-    //GEN-LAST:event_jMenuItemQuestion6BActionPerformed
-
-    }//GEN-LAST:event_jMenuItemQuestion2BActionPerformed
+                                                
+    }                                                
 
     
     
