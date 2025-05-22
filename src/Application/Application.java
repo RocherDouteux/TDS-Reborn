@@ -315,15 +315,18 @@ public static Queue<CImage> question6A(CImage image, CImage RGBImage, CImage sec
             
             
             int[][] additionPrewitt = Utils.addition(prewittH, prewittV);
-            additionPrewitt = MorphoElementaire.fermeture(additionPrewitt, 7);
+            additionPrewitt = Seuillage.seuillageSimple(additionPrewitt, 50);
             
-            sequence.add(new CImageNG(additionPrewitt));
+            additionPrewitt = MorphoElementaire.fermeture(additionPrewitt, 7);
+            additionPrewitt = MorphoElementaire.erosion(additionPrewitt, 3);
+            
+            //sequence.add(new CImageNG(additionPrewitt));
 
             int[] negative = Histogramme.creeCourbeTonaleNegatif();
             int[][] additionPrewittNegative = Histogramme.rehaussement(additionPrewitt, negative);
             
             CImageRGB holed = Utils.andRGBWithMask(planetRGB, new CImageNG(additionPrewittNegative));
-            sequence.add(holed);
+            //sequence.add(holed);
             
             //Step 8 recolored the ship
             int[][] shipMask = Seuillage.seuillageSimple(mask.getMatrice(), 60);
@@ -350,7 +353,7 @@ public static Queue<CImage> question6B(CImage image, CImage RGBImage, CImage sec
 
     try {
         if (image instanceof CImageNG imageNG && RGBImage instanceof CImageRGB shipRGB && second instanceof CImageRGB planetRGB) {
-            // Same same as Question6A sadly
+                        // Same same as Question6A sadly
             int[][] vaissGray = imageNG.getMatrice();
             int[][] seuil60 = Seuillage.seuillageSimple(vaissGray, 60);
             int[][] eroded = MorphoElementaire.erosion(seuil60, 21);
