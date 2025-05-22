@@ -358,8 +358,6 @@ public static Queue<CImage> question6B(CImage image, CImage RGBImage, CImage sec
             int[][] sub = Utils.soustraction(seuil60, recon);
             int[][] opened = MorphoElementaire.ouverture(sub, 11);
             int[][] finalMask = MorphoComplexe.reconstructionGeodesique(opened, vaissGray);
-            CImageNG mask = new CImageNG(finalMask);
-            sequence.add(mask);  // Optional: show binary mask
 
             // Compute red contour around the ship
             int[][] gradH = ContoursLineaire.gradientPrewitt(finalMask, 1);
@@ -369,17 +367,21 @@ public static Queue<CImage> question6B(CImage image, CImage RGBImage, CImage sec
             int[][] contour = Seuillage.seuillageSimple(edge, 50);
             CImageNG contourNG = new CImageNG(contour);
             sequence.add(contourNG);  // Optional: white edge view
-
+            
+            int[][] filledContourNG = MorphoElementaire.fermeture(contour, 9);
+            // sequence.add(new CImageNG(filledContourNG));
+            
+            int[] negativeCurve = Histogramme.creeCourbeTonaleNegatif();
+            int[][] negative = Histogramme.rehaussement(filledContourNG, negativeCurve);
+            
+            CImageRGB smallShip = Utils.andRGBWithMask(shipRGB, new CImageNG(filledContourNG));
+            CImageRGB holed = Utils.andRGBWithMask(planetRGB, new CImageNG(negative));
+            
             // Convert contour to red
             CImageRGB redContour = Utils.convertionNGToRGB(contour, "red");
             sequence.add(redContour);
 
-            // 🪐 Fusion: reconstruct the colored ship
-            int[][] shipMask = Seuillage.seuillageSimple(finalMask, 60);
-            CImageRGB shipOnly = Utils.andRGBWithMask(shipRGB, new CImageNG(shipMask));
-            sequence.add(shipOnly);  // Optional
-
-            CImageRGB fusion = Utils.additionRGB(planetRGB, shipOnly);
+            CImageRGB fusion = Utils.additionRGB(holed, smallShip);
             sequence.add(fusion);
 
             // Add red contour to fusion
