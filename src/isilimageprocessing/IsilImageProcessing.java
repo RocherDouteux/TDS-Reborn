@@ -165,6 +165,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemUtilsRGBToNG = new javax.swing.JMenuItem();
         jMenuItemUtilsNGToRGB = new javax.swing.JMenuItem();
         jMenuItemUtilsAdditionRGB = new javax.swing.JMenuItem();
+        jMenuItemAndNGEtRGB = new javax.swing.JMenuItem();
         jMenuLineaire = new javax.swing.JMenu();
         jMenuLineaireGlobal = new javax.swing.JMenu();
         jMenuItemFiltrageLineaireGlobalPasseBas = new javax.swing.JMenuItem();
@@ -543,6 +544,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
         });
         jMenuUtils.add(jMenuItemUtilsAdditionRGB);
+
+        jMenuItemAndNGEtRGB.setText("And");
+        jMenuItemAndNGEtRGB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAndNGEtRGBActionPerformed(evt);
+            }
+        });
+        jMenuUtils.add(jMenuItemAndNGEtRGB);
 
         jMenuBar1.add(jMenuUtils);
 
@@ -2499,6 +2508,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             };
 
             Queue<CImage> sequence = loadingDialog.executeTask(task);
+            
+            this.activeMenus();
             CImage current = sequence.poll();
             while (current != null){
                 int firstAvailableSlot =  getFirstAvailableSlot();
@@ -2535,6 +2546,29 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             logger.log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItemQuestion2AActionPerformed
+
+    private void jMenuItemAndNGEtRGBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAndNGEtRGBActionPerformed
+        try {
+            CImage[] selectedImages = getAllSelectedImages();
+
+            if (selectedImages == null || selectedImages.length != 2) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner exactement deux images.");
+                return;
+            }
+            
+            // Extract images
+            CImageRGB image1 = (CImageRGB) selectedImages[0];
+            CImageNG image2 = (CImageNG) selectedImages[1];
+
+            CImageRGB data = Utils.andRGBWithMask(image1, image2);
+
+            // Display result
+            showResultImage(data);
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Erreur Addition de 2 images: {0}", e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemAndNGEtRGBActionPerformed
 
     private void jMenuItemQuestion6BActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         try {
@@ -2919,6 +2953,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuHistogramme;
     private javax.swing.JMenuItem jMenuHistogrammeAfficher;
     private javax.swing.JMenu jMenuImage;
+    private javax.swing.JMenuItem jMenuItemAndNGEtRGB;
     private javax.swing.JMenuItem jMenuItemContoursLineaireLaplacien4;
     private javax.swing.JMenuItem jMenuItemContoursLineaireLaplacien8;
     private javax.swing.JMenuItem jMenuItemContoursLineairePrewitt;

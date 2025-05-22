@@ -302,13 +302,28 @@ public static Queue<CImage> question6A(CImage image, CImage RGBImage, CImage sec
             //sequence.add(new CImageNG(sub));
 
             // Step 6 – Opening to clean shape
-            int[][] opened = MorphoElementaire.ouverture(sub, 11);
-            //sequence.add(new CImageNG(opened));
-
+            int[][] opened = MorphoElementaire.ouverture(sub, 13);
+            sequence.add(new CImageNG(opened));
+            
             // Step 7 – Final geodesic reconstruction for smooth mask
             int[][] finalMask = MorphoComplexe.reconstructionGeodesique(opened, vaissGray);
             CImageNG mask = new CImageNG(finalMask);
             sequence.add(mask);
+            
+            int[][] prewittH = ContoursLineaire.gradientPrewitt(finalMask, 1);
+            int[][] prewittV = ContoursLineaire.gradientPrewitt(finalMask, 2);
+            
+            
+            int[][] additionPrewitt = Utils.addition(prewittH, prewittV);
+            additionPrewitt = MorphoElementaire.fermeture(additionPrewitt, 7);
+            
+            sequence.add(new CImageNG(additionPrewitt));
+
+            int[] negative = Histogramme.creeCourbeTonaleNegatif();
+            int[][] additionPrewittNegative = Histogramme.rehaussement(additionPrewitt, negative);
+            
+            CImageRGB holed = Utils.andRGBWithMask(planetRGB, new CImageNG(additionPrewittNegative));
+            sequence.add(holed);
             
             //Step 8 recolored the ship
             int[][] shipMask = Seuillage.seuillageSimple(mask.getMatrice(), 60);
@@ -316,7 +331,7 @@ public static Queue<CImage> question6A(CImage image, CImage RGBImage, CImage sec
             sequence.add(shipOnly);  
 
             // Step 9 – Add the colored ship onto the planet image
-            CImageRGB fusion = Utils.additionRGB(planetRGB, shipOnly);
+            CImageRGB fusion = Utils.additionRGB(holed, shipOnly);
             sequence.add(fusion);
         }
 
