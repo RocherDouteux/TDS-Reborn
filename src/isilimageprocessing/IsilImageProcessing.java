@@ -2525,7 +2525,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             
             this.activeMenus();
             
-
             CImage current = sequence.poll();
             while (current != null) {
                 int firstAvailableSlot = getFirstAvailableSlot();
@@ -2548,8 +2547,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 CImage second = new CImageRGB(new File("res/Images/ImagesEtape5/planete.jpg"));
                 return Application.question6B(source, sourceColor, second);
             };
-
+            
             Queue<CImage> sequence = loadingDialog.executeTask(task);
+            
+            this.activeMenus();
             CImage current = sequence.poll();
             while (current != null){
                 int firstAvailableSlot =  getFirstAvailableSlot();
