@@ -369,7 +369,16 @@ public static Queue<CImage> question6B(CImage image, CImage RGBImage, CImage sec
             edge = Utils.normaliserImage(edge, 0, 255);
             int[][] contour = Seuillage.seuillageSimple(edge, 50);
             CImageNG contourNG = new CImageNG(contour);
-            sequence.add(contourNG);  // Optional: white edge view
+            sequence.add(contourNG);
+            
+            // Get spaceship contour
+            int [][]uniShip = MorphoElementaire.fermeture(contour, 7);
+            int[][] prewittH = ContoursLineaire.gradientPrewitt(uniShip, 1);
+            int[][] prewittV = ContoursLineaire.gradientPrewitt(uniShip, 2);
+            
+            
+            int[][] additionPrewitt = Utils.addition(prewittH, prewittV);
+            sequence.add(new CImageNG(additionPrewitt));
             
             int[][] filledContourNG = MorphoElementaire.fermeture(contour, 9);
             // sequence.add(new CImageNG(filledContourNG));
@@ -381,8 +390,8 @@ public static Queue<CImage> question6B(CImage image, CImage RGBImage, CImage sec
             CImageRGB holed = Utils.andRGBWithMask(planetRGB, new CImageNG(negative));
             
             // Convert contour to red
-            CImageRGB redContour = Utils.convertionNGToRGB(contour, "red");
-            sequence.add(redContour);
+            CImageRGB redContour = Utils.convertionNGToRGB(additionPrewitt, "red");
+            //sequence.add(redContour);
 
             CImageRGB fusion = Utils.additionRGB(holed, smallShip);
             sequence.add(fusion);
