@@ -112,9 +112,53 @@ public class Application {
         return sequence;
     }
     
-    public static Queue<CImage> question2B(CImage image){
+    public static Queue<CImage> question2B(CImage image, CImageNG imageNG){
         Queue<CImage> sequence = new LinkedList();
         sequence.add(image);
+        
+        try {
+            if(image instanceof CImageRGB imageRGB){
+                // Extraction RGB en NG
+                int[][] redChannel = Utils.extraireCanal(imageRGB, "red");
+                int[][] greenChannel = Utils.extraireCanal(imageRGB, "green");
+                int[][] blueChannel = Utils.extraireCanal(imageRGB, "blue");
+                
+                // Importation de l'image en niveau de gris (luminance)
+                int[][] lenaGrayImport = imageNG.getMatrice();
+                
+                // Egalisation de l'image niveau de gris importé
+                int[] lenaGray = Histogramme.creeCourbeTonaleEgalisation(lenaGrayImport);
+                int[][] lenaGrayEgalise = Histogramme.rehaussement(lenaGrayImport, lenaGray);
+                lenaGrayEgalise = Utils.normaliserImage(lenaGrayEgalise, 0, 255);
+                
+                // Addition de l'image en niveau de gris avec RGB devenu NG
+                int[][] redAddition = Utils.addition(redChannel, lenaGrayEgalise);
+                sequence.add(new CImageNG(redAddition));
+                int[][] greenAddition = Utils.addition(greenChannel, lenaGrayEgalise);
+                sequence.add(new CImageNG(greenAddition));
+                int[][] blueAddition = Utils.addition(blueChannel, lenaGrayEgalise);
+                sequence.add(new CImageNG(blueAddition));
+                
+                // Passage NG vers RGB pour chaque channel
+                CImageRGB backToRed = Utils.convertionNGToRGB(redAddition, "red");
+                sequence.add(backToRed);
+                CImageRGB backToGreen = Utils.convertionNGToRGB(greenAddition, "green");
+                sequence.add(backToGreen);
+                CImageRGB backToBlue = Utils.convertionNGToRGB(blueAddition, "blue");
+                sequence.add(backToBlue);
+                
+                // Fusion des channels RGB pour devenir 1 seul image
+                CImageRGB fusionRedAndGreen = Utils.additionRGB(backToRed, backToGreen);
+                sequence.add(fusionRedAndGreen);
+                
+                CImageRGB fusionYellowAndBlue = Utils.additionRGB(fusionRedAndGreen, backToBlue);
+                sequence.add(fusionYellowAndBlue);
+
+            }
+        }catch(CImageRGBException | CImageNGException ex){
+            logger.log(Level.SEVERE, null, ex);
+        }
+        
         return sequence;
     }
     

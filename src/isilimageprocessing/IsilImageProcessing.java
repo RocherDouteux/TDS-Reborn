@@ -2602,8 +2602,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
             Callable<Queue<CImage>> task = () -> {
                 clearAllImages();
-                CImage source = new CImageRGB(new File("res/Images/ImagesEtape5/lenaAEgaliser.jpg"));
-                return Application.question2B(source);
+                CImageNG source = new CImageNG(new File("res/Images/ImagesEtape5/lenaAEgaliser.jpg"));
+                CImage sourceColor = new CImageRGB(new File("res/Images/ImagesEtape5/lenaAEgaliser.jpg"));
+                return Application.question2B(sourceColor, source);
             };
 
             Queue<CImage> sequence = loadingDialog.executeTask(task);
