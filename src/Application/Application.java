@@ -238,8 +238,8 @@ public class Application {
                 sequence.add(imgPetitesClean);
 
                 // Step 6 – Reconstruction géodésique en niveaux de gris
-                int[][] grandesNG = MorphoComplexe.reconstructionGeodesique(imageNG.getMatrice(), grandesBin);
-                int[][] petitesNG = MorphoComplexe.reconstructionGeodesique(imageNG.getMatrice(), petitesBin);
+                int[][] grandesNG = MorphoComplexe.reconstructionGeodesique(grandesBin,imageNG.getMatrice());
+                int[][] petitesNG = MorphoComplexe.reconstructionGeodesique(petitesBin, imageNG.getMatrice());
 
                 CImageNG imgGrandesNG = new CImageNG(grandesNG);
                 CImageNG imgPetitesNG = new CImageNG(petitesNG);
