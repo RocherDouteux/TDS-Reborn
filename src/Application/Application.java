@@ -179,46 +179,52 @@ public class Application {
         return sequence;
     }
     
-    public static Queue<CImage> question3(CImage image){
-        Queue<CImage> sequence = new LinkedList();
+    public static Queue<CImage> question3(CImage image) {
+        Queue<CImage> sequence = new LinkedList<>();
         sequence.add(image);
-        
+
         try {
-            if(image instanceof CImageRGB imageRGB){
+            if (image instanceof CImageRGB imageRGB) {
+
+                // Step 1 – Extraction du canal vert de l’image RGB
                 CImageNG selectGreen = new CImageNG(Utils.extraireCanal(imageRGB, "green"));
                 sequence.add(selectGreen);
-                
+
+                // Step 2 – Application d’une courbe tonale négative sur le canal vert
                 int[] courbeTonaleNegative = Histogramme.creeCourbeTonaleNegatif();
                 CImageNG negative = new CImageNG(Histogramme.rehaussement(selectGreen.getMatrice(), courbeTonaleNegative));
                 sequence.add(negative);
-                
+
+                // Step 3 – Seuillage à 255 sur l’image négative
                 CImageNG seuillage255 = new CImageNG(Seuillage.seuillageSimple(negative.getMatrice(), 255));
                 sequence.add(seuillage255);
-                
+
+                // Step 4 – Érosion avec un structurant de taille 5
                 CImageNG erosion5 = new CImageNG(MorphoElementaire.erosion(seuillage255.getMatrice(), 5));
                 sequence.add(erosion5);
-                
+
+                // Step 5 – Application du masque érodé sur l’image RGB originale
                 CImageRGB combinaison = Utils.andRGBWithMask(imageRGB, erosion5);
                 sequence.add(combinaison);
-                
+
+                // Step 6 – Extraction du canal bleu de l’image masquée
                 CImageNG selectBlue = new CImageNG(Utils.extraireCanal(combinaison, "blue"));
-                CImageNG selectRed = new CImageNG(Utils.extraireCanal(combinaison, "red"));
-                
                 sequence.add(selectBlue);
+
+                // Step 7 – Extraction du canal rouge de l’image masquée
+                CImageNG selectRed = new CImageNG(Utils.extraireCanal(combinaison, "red"));
                 sequence.add(selectRed);
-                
+
+                // (Pas important)
                 // CImageRGB maskedBlue = Utils.andRGBWithMask(combinaison, selectBlue);
                 // CImageRGB maskedRed = Utils.andRGBWithMask(combinaison, selectRed);
-                
                 // sequence.add(maskedBlue);
                 // sequence.add(maskedRed);
-                
             }
-        }catch(CImageRGBException | CImageNGException ex){
+        } catch (CImageRGBException | CImageNGException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
 
-        
         return sequence;
     }
     
@@ -335,6 +341,7 @@ public class Application {
     }
 
 
+
 public static Queue<CImage> question6A(CImage image, CImage RGBImage, CImage second) {
     Queue<CImage> sequence = new LinkedList<>();
     sequence.add(image);
@@ -343,58 +350,64 @@ public static Queue<CImage> question6A(CImage image, CImage RGBImage, CImage sec
 
     try {
         if (image instanceof CImageNG imageNG && RGBImage instanceof CImageRGB shipRGB && second instanceof CImageRGB planetRGB) {
-            // Step 1 – Get grayscale matrix
+            
+            // Step 1 – Extraction de la matrice en niveaux de gris
             int[][] vaissGray = imageNG.getMatrice();
 
-            // Step 2 – Threshold to isolate bright parts (ships)
+            // Step 2 – Seuillage à 60 pour détecter les zones claires (vaisseaux)
             int[][] seuil60 = Seuillage.seuillageSimple(vaissGray, 60);
-            //sequence.add(new CImageNG(seuil60));
+            // sequence.add(new CImageNG(seuil60));
 
-            // Step 3 – Erosion to remove small ship
+            // Step 3 – Érosion avec un structurant large pour éliminer le petit vaisseau
             int[][] eroded = MorphoElementaire.erosion(seuil60, 21);
             sequence.add(new CImageNG(eroded));
 
-            // Step 4 – Reconstruction to recover big ship
+            // Step 4 – Reconstruction géodésique pour récupérer uniquement le gros vaisseau
             int[][] recon = MorphoComplexe.reconstructionGeodesique(eroded, seuil60);
             sequence.add(new CImageNG(recon));
 
-            // Step 5 – Subtraction to isolate small ship
+            // Step 5 – Soustraction pour isoler le petit vaisseau
             int[][] sub = Utils.soustraction(seuil60, recon);
-            //sequence.add(new CImageNG(sub));
+            // sequence.add(new CImageNG(sub));
 
-            // Step 6 – Opening to clean shape
+            // Step 6 – Ouverture morphologique pour nettoyer la forme du petit vaisseau
             int[][] opened = MorphoElementaire.ouverture(sub, 13);
             sequence.add(new CImageNG(opened));
-            
-            // Step 7 – Final geodesic reconstruction for smooth mask
+
+            // Step 7 – Reconstruction géodésique finale pour lisser le masque
             int[][] finalMask = MorphoComplexe.reconstructionGeodesique(opened, vaissGray);
             CImageNG mask = new CImageNG(finalMask);
             sequence.add(mask);
-            
+
+            // Step 8 – Détection des contours avec Prewitt (H + V)
             int[][] prewittH = ContoursLineaire.gradientPrewitt(finalMask, 1);
             int[][] prewittV = ContoursLineaire.gradientPrewitt(finalMask, 2);
-            
-            
             int[][] additionPrewitt = Utils.addition(prewittH, prewittV);
-            additionPrewitt = Seuillage.seuillageSimple(additionPrewitt, 50);
-            
-            additionPrewitt = MorphoElementaire.fermeture(additionPrewitt, 7);
-            additionPrewitt = MorphoElementaire.erosion(additionPrewitt, 3);
-            
-            //sequence.add(new CImageNG(additionPrewitt));
 
+            // Step 9 – Seuillage des contours à 50
+            additionPrewitt = Seuillage.seuillageSimple(additionPrewitt, 50);
+
+            // Step 10 – Fermeture pour combler les trous dans le contour
+            additionPrewitt = MorphoElementaire.fermeture(additionPrewitt, 7);
+
+            // Step 11 – Érosion pour affiner les contours
+            additionPrewitt = MorphoElementaire.erosion(additionPrewitt, 3);
+            // sequence.add(new CImageNG(additionPrewitt));
+
+            // Step 12 – Inversion tonale des contours pour créer un trou dans la planète
             int[] negative = Histogramme.creeCourbeTonaleNegatif();
             int[][] additionPrewittNegative = Histogramme.rehaussement(additionPrewitt, negative);
-            
+
+            // Step 13 – Masquage de la planète avec les contours inversés (trou)
             CImageRGB holed = Utils.andRGBWithMask(planetRGB, new CImageNG(additionPrewittNegative));
-            //sequence.add(holed);
-            
-            //Step 8 recolored the ship
+            // sequence.add(holed);
+
+            // Step 14 – Recoloration du petit vaisseau à partir du masque
             int[][] shipMask = Seuillage.seuillageSimple(mask.getMatrice(), 60);
             CImageRGB shipOnly = Utils.andRGBWithMask(shipRGB, new CImageNG(shipMask));
-            sequence.add(shipOnly);  
+            sequence.add(shipOnly);
 
-            // Step 9 – Add the colored ship onto the planet image
+            // Step 15 – Fusion du petit vaisseau recoloré avec la planète trouée
             CImageRGB fusion = Utils.additionRGB(holed, shipOnly);
             sequence.add(fusion);
         }
@@ -415,6 +428,7 @@ public static Queue<CImage> question6A(CImage image, CImage RGBImage, CImage sec
         try {
             if (image instanceof CImageNG imageNG && RGBImage instanceof CImageRGB shipRGB && second instanceof CImageRGB planetRGB) {
 
+                // Done Before, don't worry about it brothers
                 int[][] vaissGray = imageNG.getMatrice();
                 int[][] seuil60 = Seuillage.seuillageSimple(vaissGray, 60);
                 int[][] eroded = MorphoElementaire.erosion(seuil60, 21);
