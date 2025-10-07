@@ -1,6 +1,7 @@
 package isilimageprocessing;
 
 import Application.Application;
+import ApplicationVR.ApplicationVR;
 import CImage.*;
 import CImage.Exceptions.*;
 import CImage.Observers.Events.*;
@@ -214,6 +215,8 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemQuestion6A = new javax.swing.JMenuItem();
         jMenuItemQuestion6B = new javax.swing.JMenuItem();
         jMenuItemQuestion7 = new javax.swing.JMenuItem();
+        jMenuVR = new javax.swing.JMenu();
+        jMenuItemVR = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Isil Image Processing");
@@ -910,9 +913,23 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuApplication);
 
+        jMenuVR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/vr_48.png"))); // NOI18N
+        jMenuVR.setText("VR");
+
+        jMenuItemVR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icones/vr_48.png"))); // NOI18N
+        jMenuItemVR.setText("VR Run All ");
+        jMenuItemVR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemVRActionPerformed(evt);
+            }
+        });
+        jMenuVR.add(jMenuItemVR);
+
+        jMenuBar1.add(jMenuVR);
+
         setJMenuBar(jMenuBar1);
 
-        setSize(new java.awt.Dimension(1302, 782));
+        setSize(new java.awt.Dimension(1448, 782));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -2570,6 +2587,14 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
     }//GEN-LAST:event_jMenuItemAndNGEtRGBActionPerformed
 
+    private void jMenuItemVRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVRActionPerformed
+        try {
+            ApplicationVR.RunAllApplicationVR();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Erreur Application VR", ex.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemVRActionPerformed
+
     private void jMenuItemQuestion6BActionPerformed(java.awt.event.ActionEvent evt) {                                                    
         try {
             LoadingDialog loadingDialog = new LoadingDialog(this, "Question 6B");
@@ -3009,6 +3034,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemUtilsNGToRGB;
     private javax.swing.JMenuItem jMenuItemUtilsRGBToNG;
     private javax.swing.JMenuItem jMenuItemUtilsSoustraction;
+    private javax.swing.JMenuItem jMenuItemVR;
     private javax.swing.JMenu jMenuLineaire;
     private javax.swing.JMenu jMenuLineaireGlobal;
     private javax.swing.JMenu jMenuNouvelle;
@@ -3019,6 +3045,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuTraitementComplexe;
     private javax.swing.JMenu jMenuTraitementElementaire;
     private javax.swing.JMenu jMenuUtils;
+    private javax.swing.JMenu jMenuVR;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel panelGrid;

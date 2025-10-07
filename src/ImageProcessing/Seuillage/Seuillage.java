@@ -94,7 +94,7 @@ public class Seuillage {
             }
         }
         // Seuillage final
-        System.out.print("Seuil trouve : " + T);
+        //System.out.print("Seuil trouve : " + T);
         return seuillageSimple(image, T);
     }
 }
